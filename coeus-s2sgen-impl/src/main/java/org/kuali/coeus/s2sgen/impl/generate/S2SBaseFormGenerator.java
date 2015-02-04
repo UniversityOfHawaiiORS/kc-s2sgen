@@ -161,7 +161,11 @@ public abstract class S2SBaseFormGenerator implements S2SFormGenerator, Initiali
         if(narrative.getNarrativeType()!=null){
             if (narrative.getNarrativeType().isAllowMultiple() &&
                     StringUtils.isNotBlank(narrative.getModuleTitle())) {
-                retVal += "_" + narrative.getModuleTitle().trim();
+                // KC-556 Grants.Gov rejects attachments if description contains 
+            	// special chars such as ampersand "&"
+                // The Kuali Version used the narrative description here which can have special chars
+                // Changing to filename of the narrative seems a safer option
+                retVal += "_" + narrative.getNarrativeAttachment().getName().trim();
             }else{
                 retVal += "_" + narrative.getNarrativeType().getDescription().trim();
             }
@@ -193,9 +197,15 @@ public abstract class S2SBaseFormGenerator implements S2SFormGenerator, Initiali
         String retVal = "B-" + biography.getProposalPersonNumber() + "_" + biography.getBiographyNumber();
         if(biography.getPropPerDocType() != null) 
             retVal += "_" + biography.getPropPerDocType().getDescription().trim();
+        // KC-556 Grants.Gov rejects attachments if description contains special chars such as ampersand "&"
+        // Appending description to this values causes potential issues in Grants.Gov because description
+        // may contain special chars.   This extra code doeson't seem necessary since the first line makes
+        // the contentId unique enough already
+        /*
         if (StringUtils.isNotBlank(biography.getDescription())) {
             retVal += "_" + biography.getDescription().trim();
         }
+        */
         int index = getIndexOfAttachmentAlreadyAdded(retVal);
         if(index > 0){
             retVal+=index;
@@ -430,7 +440,7 @@ public abstract class S2SBaseFormGenerator implements S2SFormGenerator, Initiali
     public void setAttachments(List<AttachmentData> attachments) {
         this.attachments = attachments;
     }
-
+   
     /**
      * Sort the attachments.
      * @param byteArrayInputStream
@@ -472,7 +482,7 @@ public abstract class S2SBaseFormGenerator implements S2SFormGenerator, Initiali
                 attachments.add(tempAttachment);
             } 
         }
-    }
+    }     
 
     /**
      *

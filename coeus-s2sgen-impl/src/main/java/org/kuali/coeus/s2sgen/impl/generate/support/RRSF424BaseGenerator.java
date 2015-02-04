@@ -60,6 +60,8 @@ public abstract class RRSF424BaseGenerator extends CommonSF424BaseGenerator {
     protected static final int PRIMARY_TITLE_MAX_LENGTH = 45;
     protected static final int DIRECTORY_TITLE_MAX_LENGTH = 45;
     protected static final int DEPARTMENT_NAME_MAX_LENGTH = 30;
+    // KC-633 RRSF424 form validation error PDPI Division invalid
+    protected static final int DIVISION_NAME_MAX_LENGTH = 30;
     protected static final int ANSWER_EXPLANATION_MAX_LENGTH = 20; 
     protected static final int SFLLL_OTHEREXPLANATORY = 86;
     protected static final Integer ANSWER_128 = 128;
@@ -228,7 +230,7 @@ public abstract class RRSF424BaseGenerator extends CommonSF424BaseGenerator {
     public SubmissionInfoService getSubmissionInfoService() {
         return submissionInfoService;
     }
-
+    
     public void setSubmissionInfoService(SubmissionInfoService submissionInfoService) {
         this.submissionInfoService = submissionInfoService;
     }

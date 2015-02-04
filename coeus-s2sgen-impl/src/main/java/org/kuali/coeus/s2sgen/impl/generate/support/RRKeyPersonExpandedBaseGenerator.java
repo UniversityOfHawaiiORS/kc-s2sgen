@@ -34,6 +34,10 @@ public abstract class RRKeyPersonExpandedBaseGenerator extends
 	protected static final int DIRECTORY_TITLE_MAX_LENGTH = 45;
 	protected static final int ROLE_DESCRIPTION_MAX_LENGTH = 40;
 
-    protected String pIPersonOrRolodexId = null;
+	protected String pIPersonOrRolodexId = null;
+	//added for KC-398 For non-employees, Organization shows as University of Hawaii on grants.gov forms
+	protected static final int DIVISION_NAME_MAX_LENGTH = 30;
+	protected static final int DEPARTMENT_NAME_MAX_LENGTH = 30;
+	// KC-398 END
 
 }

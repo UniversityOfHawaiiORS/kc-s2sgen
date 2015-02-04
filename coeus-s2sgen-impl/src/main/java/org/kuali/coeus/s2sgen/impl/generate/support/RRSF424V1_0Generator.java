@@ -250,7 +250,7 @@ public class RRSF424V1_0Generator extends RRSF424BaseGenerator {
 				totalCost = totalCost.add(fundsRequested);
 			} else {
 	         	   totalCost=budget.getTotalCost();
-	        }
+			}
 
 			ScaleTwoDecimal fedNonFedCost = ScaleTwoDecimal.ZERO;
 			fedNonFedCost = fedNonFedCost.add(totalCost);
@@ -336,6 +336,10 @@ public class RRSF424V1_0Generator extends RRSF424BaseGenerator {
 			// divisionName
 			String divisionName = getDivisionName(pdDoc);
 			if (divisionName != null) {
+				// KC-633 RRSF424 form validation error PDPI Division invalid
+				if (divisionName.length() > DIVISION_NAME_MAX_LENGTH) {
+				    divisionName = divisionName.substring(0, DIVISION_NAME_MAX_LENGTH);	
+				}
 				orgType.setDivisionName(divisionName);
 			}
 		}
@@ -575,6 +579,10 @@ public class RRSF424V1_0Generator extends RRSF424BaseGenerator {
 				// divisionName
 				String divisionName=proposalPerson.getDivision();
 				if (divisionName != null) {
+					// KC-633 RRSF424 form validation error PDPI Division invalid
+					if (divisionName.length() > DIVISION_NAME_MAX_LENGTH) {
+						divisionName = divisionName.substring(0, DIVISION_NAME_MAX_LENGTH);	
+					}
 					PDPI.setDivisionName(divisionName);
 				}
 				if (organization != null) {
@@ -614,12 +622,17 @@ public class RRSF424V1_0Generator extends RRSF424BaseGenerator {
 					.getAddressRequireCountryDataType(departmentalPerson));
 			aorInfoType.setPhone(departmentalPerson.getOfficePhone());
             if (StringUtils.isNotEmpty(departmentalPerson.getFaxNumber())) {
-			    aorInfoType.setFax(departmentalPerson.getFaxNumber());
+			aorInfoType.setFax(departmentalPerson.getFaxNumber());
             }
 			aorInfoType.setDepartmentName(departmentalPerson.getDirDept());
 			aorInfoType.setEmail(departmentalPerson.getEmailAddress());
-			if (departmentalPerson.getHomeUnit() != null) {
-				aorInfoType.setDivisionName(departmentalPerson.getHomeUnit());
+			// KC-633 RRSF424 form validation error PDPI Division invalid
+			String homeUnit=departmentalPerson.getHomeUnit();
+			if (homeUnit != null) {
+				if (homeUnit.length() > DIVISION_NAME_MAX_LENGTH) {
+					homeUnit = homeUnit.substring(0, DIVISION_NAME_MAX_LENGTH);	
+			}
+				aorInfoType.setDivisionName(homeUnit);
 			}
 
 		}
@@ -865,5 +878,5 @@ public class RRSF424V1_0Generator extends RRSF424BaseGenerator {
 
     public void setSortIndex(int sortIndex) {
         this.sortIndex = sortIndex;
-    }
+	}
 }

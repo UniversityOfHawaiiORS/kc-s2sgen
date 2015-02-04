@@ -109,7 +109,7 @@ public class RRSF424V1_2Generator extends RRSF424BaseGenerator {
 	 */
 	private RRSF42412Document getRRSF424() {
         answerHeaders = getPropDevQuestionAnswerService().getQuestionnaireAnswerHeaders(pdDoc.getDevelopmentProposal().getProposalNumber());
-        RRSF42412Document rrSF424Document = RRSF42412Document.Factory
+		RRSF42412Document rrSF424Document = RRSF42412Document.Factory
 				.newInstance();
 		RRSF42412 rrsf42412 = RRSF42412.Factory.newInstance();
 		rrsf42412.setFormVersion(FormVersion.v1_2.getVersion());
@@ -169,7 +169,7 @@ public class RRSF424V1_2Generator extends RRSF424BaseGenerator {
 		if (budget != null) {
 
             ScaleTwoDecimal totalCost = ScaleTwoDecimal.ZERO;
-            if (budget.getModularBudgetFlag()) {
+			if (budget.getModularBudgetFlag()) {
                 ScaleTwoDecimal fundsRequested = ScaleTwoDecimal.ZERO;
                 ScaleTwoDecimal totalDirectCost = ScaleTwoDecimal.ZERO;
 
@@ -192,33 +192,33 @@ public class RRSF424V1_2Generator extends RRSF424BaseGenerator {
 				totalCost = totalCost.add(fundsRequested);
 			} else {
             	 totalCost=budget.getTotalCost();
-            }
+			}
             ScaleTwoDecimal fedNonFedCost = totalCost;
             ScaleTwoDecimal costSharingAmount = ScaleTwoDecimal.ZERO;
 
             for (BudgetPeriodContract budgetPeriod : budget.getBudgetPeriods()) {
                 for (BudgetLineItemContract lineItem : budgetPeriod.getBudgetLineItems()) {
-                    hasBudgetLineItem = true;
-                    if (budget.getSubmitCostSharingFlag() && lineItem.getSubmitCostSharingFlag()) {
+			        hasBudgetLineItem = true;
+			        if (budget.getSubmitCostSharingFlag() && lineItem.getSubmitCostSharingFlag()) {
                         costSharingAmount =  costSharingAmount.add(lineItem.getCostSharingAmount());
                         List<? extends BudgetLineItemCalculatedAmountContract> calculatedAmounts = lineItem.getBudgetLineItemCalculatedAmounts();
                         for (BudgetLineItemCalculatedAmountContract budgetLineItemCalculatedAmount : calculatedAmounts) {
-                             costSharingAmount =  costSharingAmount.add(budgetLineItemCalculatedAmount.getCalculatedCostSharing());
+		                     costSharingAmount =  costSharingAmount.add(budgetLineItemCalculatedAmount.getCalculatedCostSharing());
                         }
-
-                    }
-                }
+			            
+			        }
+			    }
             }
-            if(!hasBudgetLineItem && budget.getSubmitCostSharingFlag()){
-                costSharingAmount = budget.getCostSharingAmount();
+			if(!hasBudgetLineItem && budget.getSubmitCostSharingFlag()){
+			    costSharingAmount = budget.getCostSharingAmount();		
             }
-            fedNonFedCost = fedNonFedCost.add(costSharingAmount);
-            funding = EstimatedProjectFunding.Factory.newInstance();
+			fedNonFedCost = fedNonFedCost.add(costSharingAmount);
+			funding = EstimatedProjectFunding.Factory.newInstance();
             funding.setTotalEstimatedAmount(totalCost
-                    .bigDecimalValue());
-            funding.setTotalNonfedrequested(costSharingAmount.bigDecimalValue());
-            funding.setTotalfedNonfedrequested(fedNonFedCost.bigDecimalValue());
-            funding.setEstimatedProgramIncome(getTotalProjectIncome(budget));
+					.bigDecimalValue());
+			funding.setTotalNonfedrequested(costSharingAmount.bigDecimalValue());
+			funding.setTotalfedNonfedrequested(fedNonFedCost.bigDecimalValue());
+			funding.setEstimatedProgramIncome(getTotalProjectIncome(budget));
 		}
 		return funding;
 	}
@@ -303,6 +303,10 @@ public class RRSF424V1_2Generator extends RRSF424BaseGenerator {
 			// divisionName
 			String divisionName = getDivisionName(pdDoc);
 			if (divisionName != null) {
+				// KC-633 RRSF424 form validation error PDPI Division invalid
+				if (divisionName.length() > DIVISION_NAME_MAX_LENGTH) {
+				    divisionName = divisionName.substring(0, DIVISION_NAME_MAX_LENGTH);	
+				}
 				orgType.setDivisionName(divisionName);
 			}
 		}
@@ -420,8 +424,8 @@ public class RRSF424V1_2Generator extends RRSF424BaseGenerator {
 
         if (answer != null && answer.equals(YesNoDataType.Y_YES)) {
             applicationType.setOtherAgencySubmissionExplanation(getOtherAgencySubmissionExplanation());
-        }
-	}
+                    }
+                }
 
 	private Enum getApplicationTypeCodeDataType() {
 		return ApplicationTypeCodeDataType.Enum.forInt(Integer.parseInt(pdDoc
@@ -507,7 +511,12 @@ public class RRSF424V1_2Generator extends RRSF424BaseGenerator {
 
 	private void setDivisionName(OrganizationContactPersonDataType PDPI,ProposalPersonContract PI) {
 		String divisionName = PI.getDivision();
+
 		if (divisionName != null) {
+			// KC-633 RRSF424 form validation error PDPI Division invalid
+			if (divisionName.length() > DIVISION_NAME_MAX_LENGTH) {
+				divisionName = divisionName.substring(0, DIVISION_NAME_MAX_LENGTH);	
+			}
 			PDPI.setDivisionName(divisionName);
 		}
 	}
@@ -621,7 +630,7 @@ public class RRSF424V1_2Generator extends RRSF424BaseGenerator {
 		aorInfoType.setAddress(address);
 		aorInfoType.setPhone(departmentalPerson.getOfficePhone());
         if (StringUtils.isNotEmpty(departmentalPerson.getFaxNumber())) {
-		    aorInfoType.setFax(departmentalPerson.getFaxNumber());
+		aorInfoType.setFax(departmentalPerson.getFaxNumber());
         }
 		String departmentName = departmentalPerson.getDirDept();
 		if (departmentName != null
@@ -634,8 +643,13 @@ public class RRSF424V1_2Generator extends RRSF424BaseGenerator {
 	}
 
 	private void setDivisionName(AORInfoType aorInfoType) {
-		if (departmentalPerson.getHomeUnit() != null) {
-			aorInfoType.setDivisionName(departmentalPerson.getHomeUnit());
+		// KC-633 RRSF424 form validation error PDPI Division invalid
+		String homeUnit=departmentalPerson.getHomeUnit();
+		if (homeUnit != null) {
+			if (homeUnit.length() > DIVISION_NAME_MAX_LENGTH) {
+				homeUnit = homeUnit.substring(0, DIVISION_NAME_MAX_LENGTH);	
+			}
+			aorInfoType.setDivisionName(homeUnit);
 		}
 	}
 
@@ -769,19 +783,19 @@ public class RRSF424V1_2Generator extends RRSF424BaseGenerator {
 	}
 
 	private String getEmployerId() {
-        String employerId = "";
+		String employerId = "";
         ProposalSiteContract applicantOrganization = pdDoc.getDevelopmentProposal().getApplicantOrganization();
         boolean isNih  = isSponsorInHierarchy(pdDoc.getDevelopmentProposal(), SPONSOR_GROUPS,SPONSOR_NIH);
-        if (applicantOrganization != null) {
+		if (applicantOrganization != null) {
             if (applicantOrganization.getOrganization().getPhsAccount() != null && isNih) {
                 employerId = applicantOrganization.getOrganization().getPhsAccount();
             } else {
                 employerId = applicantOrganization.getOrganization().getFederalEmployerId();
             }
-        }
+		}
 
-        return employerId;
-    }
+		return employerId;
+	}
 
 
 	private String getFederalAgencyName() {
@@ -939,5 +953,5 @@ public class RRSF424V1_2Generator extends RRSF424BaseGenerator {
 
     public void setSortIndex(int sortIndex) {
         this.sortIndex = sortIndex;
-    }
+	}
 }

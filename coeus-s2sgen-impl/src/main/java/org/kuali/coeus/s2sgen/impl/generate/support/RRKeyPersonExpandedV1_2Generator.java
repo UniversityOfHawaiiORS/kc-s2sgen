@@ -25,11 +25,13 @@ import gov.grants.apply.forms.rrKeyPersonExpanded12V12.RRKeyPersonExpanded12Docu
 import gov.grants.apply.forms.rrKeyPersonExpanded12V12.RRKeyPersonExpanded12Document.RRKeyPersonExpanded12.BioSketchsAttached;
 import gov.grants.apply.forms.rrKeyPersonExpanded12V12.RRKeyPersonExpanded12Document.RRKeyPersonExpanded12.SupportsAttached;
 import gov.grants.apply.system.attachmentsV10.AttachedFileDataType;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xmlbeans.XmlObject;
 import org.kuali.coeus.common.api.person.KcPersonContract;
 import org.kuali.coeus.common.api.rolodex.RolodexContract;
 import org.kuali.coeus.common.api.rolodex.RolodexService;
+import org.kuali.coeus.common.api.unit.UnitContract;
 import org.kuali.coeus.propdev.api.core.DevelopmentProposalContract;
 import org.kuali.coeus.propdev.api.person.ProposalPersonContract;
 import org.kuali.coeus.propdev.api.person.ProposalPersonDegreeContract;
@@ -39,7 +41,6 @@ import org.kuali.coeus.s2sgen.impl.generate.FormGenerator;
 import org.kuali.coeus.s2sgen.api.core.AuditError;
 import org.kuali.coeus.s2sgen.impl.generate.FormVersion;
 import org.kuali.coeus.s2sgen.impl.util.FieldValueConstants;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -227,13 +228,33 @@ public class RRKeyPersonExpandedV1_2Generator extends
 		}
 		profile.setEmail(PI.getEmailAddress());
 		DevelopmentProposalContract developmentProposal = pdDoc
-				.getDevelopmentProposal();
+				.getDevelopmentProposal();		
 		setOrganizationName(profile, developmentProposal);
 		setDepartmentNameToProfile(profile,PI);
-		String divisionName = PI.getDivision();
+
+			
+		//added for KC-398, KC-421 employee key personnel set their division to their home unit if it exists
+		//otherwise set their division to the proposal's Lead Unit department (see KRACOEUS-5348)
+		//in the future we will need to allow division field population/editing by proposal (see KRACOEUS-5242)
+		String divisionName = null;			
+		if (PI.getHomeUnit() != null) {				
+			divisionName = PI.getDivision();		
+		}			
+		else {				
+			divisionName = getDivisionName(pdDoc);
+		}	
+			
 		if (divisionName != null) {
+			//added for KC-398, KC-421 reopen
+			//need to truncate the department name to 30 characters to avoid
+			//apply.grants.gov-system-GlobalLibrary-V2.0, error: cvc-maxLength-valid.1.1: string length (x) is greater than maxLength facet (30) for DivisionNameDataType
+			if(divisionName.length() > DIVISION_NAME_MAX_LENGTH) {					
+				divisionName = divisionName.substring(0, DIVISION_NAME_MAX_LENGTH);
+			}				
 			profile.setDivisionName(divisionName);
 		}
+		// KC-398, KC-421 END
+
 		if (PI.getEraCommonsUserName() != null) {
 			profile.setCredential(PI.getEraCommonsUserName());
 		} else {
@@ -246,6 +267,33 @@ public class RRKeyPersonExpandedV1_2Generator extends
 		setAttachments(profile, PI);
 		profileDataType.setProfile(profile);
 	}
+	
+	//added for KC-398, KC-421 employee key personnel set their division to their home unit if it exists
+	//otherwise set their division to the proposal's Lead Unit department (see KRACOEUS-5348)
+	//in the future we will need to allow division field population/editing by proposal (see KRACOEUS-5242)
+	/**
+     * This method is to get division name using the OwnedByUnit and traversing through the parent units till the top level
+     *
+     * @param pdDoc Proposal development document.
+     * @return divisionName based on the OwnedByUnit.
+     */
+    public String getDivisionName(ProposalDevelopmentDocumentContract pdDoc) {
+        String divisionName = null;
+        if (pdDoc != null && pdDoc.getDevelopmentProposal().getOwnedByUnit() != null) {
+            UnitContract ownedByUnit = pdDoc.getDevelopmentProposal().getOwnedByUnit();
+            // traverse through the parent units till the top level unit
+            while (ownedByUnit.getParentUnit() != null) {
+                ownedByUnit = ownedByUnit.getParentUnit();
+            }
+            divisionName = ownedByUnit.getUnitName();
+            if (divisionName.length() > DIVISION_NAME_MAX_LENGTH) {
+                divisionName = divisionName.substring(0, DIVISION_NAME_MAX_LENGTH);
+            }
+        }
+        return divisionName;
+    }
+    // END KC-398, KC-421
+    
 
 	/*
 	 * This method is used to add department name to profile
@@ -254,12 +302,23 @@ public class RRKeyPersonExpandedV1_2Generator extends
 		if(PI.getHomeUnit() != null) {
             KcPersonContract kcPerson = PI.getPerson();
             String departmentName =  kcPerson.getOrganizationIdentifier();
+            // KC-398 Prevent S2S errors because length is too long
+            if(departmentName.length() > DEPARTMENT_NAME_MAX_LENGTH) {
+            	departmentName = departmentName.substring(0, DEPARTMENT_NAME_MAX_LENGTH);
+			}
+            // KC-398 END
             profile.setDepartmentName(departmentName);
         }
         else
         {
             DevelopmentProposalContract developmentProposal = pdDoc.getDevelopmentProposal();
-            profile.setDepartmentName(developmentProposal.getOwnedByUnit().getUnitName());
+            // KC-398 Prevent S2S errors because length is too long
+            String departmentName = developmentProposal.getOwnedByUnit().getUnitName();
+            if(departmentName.length() > DEPARTMENT_NAME_MAX_LENGTH) {
+            	departmentName = departmentName.substring(0, DEPARTMENT_NAME_MAX_LENGTH);
+			}
+            // KC-398 END
+            profile.setDepartmentName(departmentName);
         }
 	}
 
@@ -417,12 +476,58 @@ public class RRKeyPersonExpandedV1_2Generator extends
 		profileKeyPerson.setEmail(keyPerson.getEmailAddress());
 		DevelopmentProposalContract developmentProposal = pdDoc
 				.getDevelopmentProposal();
-		setOrganizationName(profileKeyPerson, developmentProposal);
-		setDepartmentNameToProfile(profileKeyPerson,keyPerson);
-		String divisionName = keyPerson.getDivision();
+		
+		// KC-398, KC-421 BEGIN
+		//added for KC-398, KC-421  non-employee key personnel set their organization to their rolodex organization entry
+		//and leave their departname and division blank
+		if( keyPerson.getRolodexId() != null) {		
+			RolodexContract rolo = rolodexService.getRolodex(keyPerson.getRolodexId());						
+			if (rolo.getOrganization() != null) {
+				profileKeyPerson.setOrganizationName(rolo.getOrganization());
+			}
+		} else {		
+			setOrganizationName(profileKeyPerson, developmentProposal);
+			
+			//added for KC-398, KC-421 employee key personnel set their department to their home unit if it exists
+			//otherwise set their department to the proposal's Lead Unit department (see KRACOEUS-5348)
+			if (keyPerson.getHomeUnit() != null) {
+				KcPersonContract kcPerson = keyPerson.getPerson();
+	            String deptName =  kcPerson.getOrganizationIdentifier();
+				if(deptName != null) {
+					//added for KC-398,  KC-421 reopen
+					//need to truncate the department name to 30 characters to avoid
+					//apply.grants.gov-system-GlobalLibrary-V2.0, error: cvc-maxLength-valid.1.1: string length (x) is greater than maxLength facet (30) for DepartmentNameDataType
+					if(deptName.length() > DEPARTMENT_NAME_MAX_LENGTH) {
+						deptName = deptName.substring(0, DEPARTMENT_NAME_MAX_LENGTH);
+					}		
+					profileKeyPerson.setDepartmentName(deptName);
+				}
+			} else {
+				setDepartmentNameToProfile(profileKeyPerson,keyPerson);
+			}
+			
+			//added for KC-398, KC-421 employee key personnel set their division to their home unit if it exists
+			//otherwise set their division to the proposal's Lead Unit department (see KRACOEUS-5348)
+			//in the future we will need to allow division field population/editing by proposal (see KRACOEUS-5242)
+			String divisionName = null;			
+			if (keyPerson.getHomeUnit() != null) {
+				divisionName = keyPerson.getDivision();
+			} else {				
+				divisionName = getDivisionName(pdDoc);
+			}	
 		if (divisionName != null) {
+				//added for KC-398,  KC-421 reopen
+				//need to truncate the department name to 30 characters to avoid
+				//apply.grants.gov-system-GlobalLibrary-V2.0, error: cvc-maxLength-valid.1.1: string length (x) is greater than maxLength facet (30) for DivisionNameDataType
+				if(divisionName.length() > DIVISION_NAME_MAX_LENGTH) {				
+					divisionName = divisionName.substring(0, DIVISION_NAME_MAX_LENGTH);
+				}
 			profileKeyPerson.setDivisionName(divisionName);
 		}
+		}
+		// KC-398, KC-421 END
+		
+
 		if (keyPerson.getEraCommonsUserName() != null) {
 			profileKeyPerson.setCredential(keyPerson.getEraCommonsUserName());
 		} else {
@@ -549,7 +654,7 @@ public class RRKeyPersonExpandedV1_2Generator extends
     @Override
     public int getSortIndex() {
         return sortIndex;
-    }
+	}
 
     public void setSortIndex(int sortIndex) {
         this.sortIndex = sortIndex;

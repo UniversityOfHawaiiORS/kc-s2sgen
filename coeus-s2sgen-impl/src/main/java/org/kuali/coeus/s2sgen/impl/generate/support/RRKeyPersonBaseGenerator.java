@@ -32,6 +32,10 @@ public abstract class RRKeyPersonBaseGenerator extends RRKeyPersonBase {
     protected static final int MAX_KEY_PERSON_COUNT = 8;
     protected static final int DIRECTORY_TITLE_MAX_LENGTH = 45;
     protected static final int ROLE_DESCRIPTION_MAX_LENGTH = 40;
+    //UH KC-647 BEGIN
+    protected static final int DIVISION_NAME_MAX_LENGTH = 30;
+    protected static final int DEPARTMENT_NAME_MAX_LENGTH = 30;
+    //UH KC-647 END
 
     protected String pIPersonOrRolodexId = null;
 }

@@ -186,15 +186,47 @@ public class RRKeyPersonExpandedV1_1Generator extends
 			if(PI.getHomeUnit() != null) {
                 KcPersonContract kcPerson = PI.getPerson();
                 String departmentName =  kcPerson.getOrganizationIdentifier();
-                profile.setDepartmentName(departmentName);
+                //UH KC-647 BEGIN
+				//need to truncate the department name to 30 characters to avoid
+				//apply.grants.gov-system-GlobalLibrary-V2.0, error: cvc-maxLength-valid.1.1: string length (x) is greater than maxLength facet (30) for DepartmentNameDataType
+                if (departmentName != null ) {
+					if(departmentName.length() > DEPARTMENT_NAME_MAX_LENGTH) {
+						departmentName = departmentName.substring(0, DEPARTMENT_NAME_MAX_LENGTH);
+					}
+                }
+                //leave the department name blank for non-employees
+                if(PI.getRolodexId() == null) {
+                    profile.setDepartmentName(departmentName);
+                }
+                //UH KC-647 END
             }
             else
             {
                 DevelopmentProposalContract developmentProposal = pdDoc.getDevelopmentProposal();
-                profile.setDepartmentName(developmentProposal.getOwnedByUnit().getUnitName());
+                //UH KC-647 BEGIN
+				//need to truncate the department name to 30 characters to avoid
+				//apply.grants.gov-system-GlobalLibrary-V2.0, error: cvc-maxLength-valid.1.1: string length (x) is greater than maxLength facet (30) for DepartmentNameDataType
+                String departmentName = developmentProposal.getOwnedByUnit().getUnitName();
+                if (departmentName != null ) {
+					if(departmentName.length() > DEPARTMENT_NAME_MAX_LENGTH) {
+						departmentName = departmentName.substring(0, DEPARTMENT_NAME_MAX_LENGTH);
+                    }
+                }
+                //leave the department name blank for non-employees
+                if(PI.getRolodexId() == null) {
+                	profile.setDepartmentName(departmentName);
+                }
+                //UH KC-647 END
             }
 			String divisionName = PI.getDivision();
 			if (divisionName != null) {
+				//UH KC-647 BEGIN
+				//need to truncate the division name to 30 characters to avoid
+				//apply.grants.gov-system-GlobalLibrary-V2.0, error: cvc-maxLength-valid.1.1: string length (x) is greater than maxLength facet (30) for DivisionNameDataType
+				if(divisionName.length() > DIVISION_NAME_MAX_LENGTH) {					
+					divisionName = divisionName.substring(0, DIVISION_NAME_MAX_LENGTH);
+			    }
+				//UH KC-647 END
 				profile.setDivisionName(divisionName);
 			}
 			if (PI.getEraCommonsUserName() != null) {
@@ -290,15 +322,47 @@ public class RRKeyPersonExpandedV1_1Generator extends
 				if(keyPerson.getHomeUnit() != null) {
                     KcPersonContract kcPerson = keyPerson.getPerson();
                     String departmentName =  kcPerson.getOrganizationIdentifier();
-                    profileKeyPerson.setDepartmentName(departmentName);
+                    //UH KC-647 BEGIN
+    				//need to truncate the department name to 30 characters to avoid
+    				//apply.grants.gov-system-GlobalLibrary-V2.0, error: cvc-maxLength-valid.1.1: string length (x) is greater than maxLength facet (30) for DepartmentNameDataType
+                    if (departmentName != null ) {
+    					if(departmentName.length() > DEPARTMENT_NAME_MAX_LENGTH) {
+    						departmentName = departmentName.substring(0, DEPARTMENT_NAME_MAX_LENGTH);
+    					}
+                    }
+                    //leave department name blank for non-employees
+                    if(keyPerson.getRolodexId() == null) {
+                        profileKeyPerson.setDepartmentName(departmentName);
+                    }
+                    //UH KC-647 END
                 }
                 else
                 {
                     DevelopmentProposalContract developmentProposal = pdDoc.getDevelopmentProposal();
-                    profileKeyPerson.setDepartmentName(developmentProposal.getOwnedByUnit().getUnitName());
+                    //UH KC-647 BEGIN
+    				//need to truncate the department name to 30 characters to avoid
+    				//apply.grants.gov-system-GlobalLibrary-V2.0, error: cvc-maxLength-valid.1.1: string length (x) is greater than maxLength facet (30) for DepartmentNameDataType
+                    String departmentName = developmentProposal.getOwnedByUnit().getUnitName();
+                    if (departmentName != null ) {
+    					if(departmentName.length() > DEPARTMENT_NAME_MAX_LENGTH) {
+    						departmentName = departmentName.substring(0, DEPARTMENT_NAME_MAX_LENGTH);
+    					}
+                    }
+                    //leave department name blank for non-employees
+                    if(keyPerson.getRolodexId() == null) {
+                    	profileKeyPerson.setDepartmentName(departmentName);
+                    }
+                    //UH KC-647 END
                 }
 				String divisionName = keyPerson.getDivision();
 				if (divisionName != null) {
+					//UH KC-647 BEGIN
+					//need to truncate the division name to 30 characters to avoid
+					//apply.grants.gov-system-GlobalLibrary-V2.0, error: cvc-maxLength-valid.1.1: string length (x) is greater than maxLength facet (30) for DivisionNameDataType
+					if(divisionName.length() > DIVISION_NAME_MAX_LENGTH) {					
+						divisionName = divisionName.substring(0, DIVISION_NAME_MAX_LENGTH);
+				    }
+					//UH KC-647 END
 					profileKeyPerson.setDivisionName(divisionName);
 				}
 				if (keyPerson.getEraCommonsUserName() != null) {
@@ -428,7 +492,7 @@ public class RRKeyPersonExpandedV1_1Generator extends
     @Override
     public int getSortIndex() {
         return sortIndex;
-    }
+	}
 
     public void setSortIndex(int sortIndex) {
         this.sortIndex = sortIndex;

@@ -99,7 +99,7 @@ public class RRSF424V1_1Generator extends RRSF424BaseGenerator {
     @Qualifier("rolodexService")
     private RolodexService rolodexService;
 
-    /**
+	/**
 	 * 
 	 * This method gives information of applications that are used in RRSF424
 	 * 
@@ -142,13 +142,13 @@ public class RRSF424V1_1Generator extends RRSF424BaseGenerator {
 		rrsf424.setApplicantType(getApplicantType());
 		rrsf424.setApplicationType(getApplicationType());
 		boolean isNih  = isSponsorInHierarchy(pdDoc.getDevelopmentProposal(), SPONSOR_GROUPS,SPONSOR_NIH);
-        if (applicantOrganization != null) {
+		if (applicantOrganization != null) {
             if (applicantOrganization.getPhsAccount() != null && isNih) {
                 rrsf424.setEmployerID(applicantOrganization.getPhsAccount());
             } else {
                 rrsf424.setEmployerID(applicantOrganization.getFederalEmployerId());
             }
-        }
+		}
 		SponsorContract sponsor = devProp.getSponsor();
 		if (sponsor != null) {
 			rrsf424.setFederalAgencyName(sponsor.getSponsorName());
@@ -234,7 +234,7 @@ public class RRSF424V1_1Generator extends RRSF424BaseGenerator {
 		if (budget != null) {
             ScaleTwoDecimal totalCost = ScaleTwoDecimal.ZERO;
 
-            if (budget.getModularBudgetFlag()) {
+			if (budget.getModularBudgetFlag()) {
 				ScaleTwoDecimal fundsRequested = ScaleTwoDecimal.ZERO;
 				ScaleTwoDecimal totalDirectCost = ScaleTwoDecimal.ZERO;
 
@@ -252,7 +252,7 @@ public class RRSF424V1_1Generator extends RRSF424BaseGenerator {
 				totalCost = totalCost.add(fundsRequested);
 			} else {
           	   totalCost=budget.getTotalCost();
-            }
+			}
 			ScaleTwoDecimal fedNonFedCost = totalCost;
 			
 			BigDecimal totalProjectIncome = BigDecimal.ZERO;
@@ -349,6 +349,10 @@ public class RRSF424V1_1Generator extends RRSF424BaseGenerator {
 			// divisionName
 			String divisionName = getDivisionName(pdDoc);
 			if (divisionName != null) {
+				// KC-633 RRSF424 form validation error PDPI Division invalid
+				if (divisionName.length() > DIVISION_NAME_MAX_LENGTH) {
+				    divisionName = divisionName.substring(0, DIVISION_NAME_MAX_LENGTH);	
+				}
 				orgType.setDivisionName(divisionName);
 			}
 		}
@@ -462,7 +466,7 @@ public class RRSF424V1_1Generator extends RRSF424BaseGenerator {
 
         if (answer != null && answer.equals(YesNoDataType.Y_YES)) {
             applicationType.setOtherAgencySubmissionExplanation(getOtherAgencySubmissionExplanation());
-        }
+                }
 		return applicationType;
 	}
 
@@ -561,6 +565,10 @@ public class RRSF424V1_1Generator extends RRSF424BaseGenerator {
 				// divisionName
 				String divisionName = proposalPerson.getDivision();
 				if (divisionName != null) {
+					// KC-633 RRSF424 form validation error PDPI Division invalid
+					if (divisionName.length() > DIVISION_NAME_MAX_LENGTH) {
+						divisionName = divisionName.substring(0, DIVISION_NAME_MAX_LENGTH);	
+					}
 					PDPI.setDivisionName(divisionName);
 				}
 				if (applicantOrganization != null) {
@@ -612,12 +620,17 @@ public class RRSF424V1_1Generator extends RRSF424BaseGenerator {
 			aorInfoType.setAddress(address);
 			aorInfoType.setPhone(departmentalPerson.getOfficePhone());
             if (StringUtils.isNotEmpty(departmentalPerson.getFaxNumber())) {
-			    aorInfoType.setFax(departmentalPerson.getFaxNumber());
+			aorInfoType.setFax(departmentalPerson.getFaxNumber());
             }
 			aorInfoType.setDepartmentName(departmentalPerson.getDirDept());
 			aorInfoType.setEmail(departmentalPerson.getEmailAddress());
-			if (departmentalPerson.getHomeUnit() != null) {
-				aorInfoType.setDivisionName(departmentalPerson.getHomeUnit());
+			// KC-633 RRSF424 form validation error PDPI Division invalid
+			String homeUnit=departmentalPerson.getHomeUnit();
+			if (homeUnit != null) {
+				if (homeUnit.length() > DIVISION_NAME_MAX_LENGTH) {
+					homeUnit = homeUnit.substring(0, DIVISION_NAME_MAX_LENGTH);	
+				}
+				aorInfoType.setDivisionName(homeUnit);
 			}
 		}
 		if (applicantOrganization != null) {
@@ -634,106 +647,106 @@ public class RRSF424V1_1Generator extends RRSF424BaseGenerator {
 	 * @return applicantType(ApplicantType) type of applicant.
 	 */
 	private ApplicantType getApplicantType() {
-        ApplicantType applicantType = ApplicantType.Factory.newInstance();
-        SmallBusinessOrganizationType smallOrganizationType = SmallBusinessOrganizationType.Factory
-                .newInstance();
-        IsSociallyEconomicallyDisadvantaged isSociallyEconomicallyDisadvantaged = IsSociallyEconomicallyDisadvantaged.Factory
-                .newInstance();
-        IsWomenOwned isWomenOwned = IsWomenOwned.Factory.newInstance();
-        boolean smallBusflag = false;
-        int orgTypeCode = 0;
-        if (pdDoc.getDevelopmentProposal().getApplicantOrganization() != null
-                && pdDoc.getDevelopmentProposal().getApplicantOrganization()
-                .getOrganization().getOrganizationTypes() != null
-                && pdDoc.getDevelopmentProposal().getApplicantOrganization()
-                .getOrganization().getOrganizationTypes().size() > 0) {
-            orgTypeCode = pdDoc.getDevelopmentProposal()
-                    .getApplicantOrganization().getOrganization()
+		ApplicantType applicantType = ApplicantType.Factory.newInstance();
+		SmallBusinessOrganizationType smallOrganizationType = SmallBusinessOrganizationType.Factory
+				.newInstance();
+		IsSociallyEconomicallyDisadvantaged isSociallyEconomicallyDisadvantaged = IsSociallyEconomicallyDisadvantaged.Factory
+				.newInstance();
+		IsWomenOwned isWomenOwned = IsWomenOwned.Factory.newInstance();
+		boolean smallBusflag = false;
+		int orgTypeCode = 0;
+		if (pdDoc.getDevelopmentProposal().getApplicantOrganization() != null
+				&& pdDoc.getDevelopmentProposal().getApplicantOrganization()
+						.getOrganization().getOrganizationTypes() != null
+				&& pdDoc.getDevelopmentProposal().getApplicantOrganization()
+						.getOrganization().getOrganizationTypes().size() > 0) {
+			orgTypeCode = pdDoc.getDevelopmentProposal()
+					.getApplicantOrganization().getOrganization()
                     .getOrganizationTypes().get(0).getOrganizationTypeList().getCode();
-        }
-        ApplicantTypeCodeDataType.Enum applicantTypeCode = null;
+		}
+		ApplicantTypeCodeDataType.Enum applicantTypeCode = null;
 
-        switch (orgTypeCode) {
-            case 1:
-                applicantTypeCode = ApplicantTypeCodeDataType.C_CITY_OR_TOWNSHIP_GOVERNMENT;
-                break;
-            case 2:
-                applicantTypeCode = ApplicantTypeCodeDataType.A_STATE_GOVERNMENT;
-                break;
-            case 3:
-                applicantTypeCode = ApplicantTypeCodeDataType.X_OTHER_SPECIFY;
-                break;
-            case 4:
-                applicantTypeCode = ApplicantTypeCodeDataType.M_NONPROFIT_WITH_501_C_3_IRS_STATUS_OTHER_THAN_INSTITUTION_OF_HIGHER_EDUCATION;
-                break;
-            case 5:
-                applicantTypeCode = ApplicantTypeCodeDataType.N_NONPROFIT_WITHOUT_501_C_3_IRS_STATUS_OTHER_THAN_INSTITUTION_OF_HIGHER_EDUCATION;
-                break;
-            case 6:
-                applicantTypeCode = ApplicantTypeCodeDataType.Q_FOR_PROFIT_ORGANIZATION_OTHER_THAN_SMALL_BUSINESS;
-                break;
-            case 7:
-                applicantTypeCode = ApplicantTypeCodeDataType.X_OTHER_SPECIFY;
-                break;
-            case 8:
-                applicantTypeCode = ApplicantTypeCodeDataType.I_INDIAN_NATIVE_AMERICAN_TRIBAL_GOVERNMENT_FEDERALLY_RECOGNIZED;
-                break;
-            case 9:
-                applicantTypeCode = ApplicantTypeCodeDataType.P_INDIVIDUAL;
-                break;
-            case 10:
-                applicantTypeCode = ApplicantTypeCodeDataType.O_PRIVATE_INSTITUTION_OF_HIGHER_EDUCATION;
-                break;
-            case 11:
-                applicantTypeCode = ApplicantTypeCodeDataType.R_SMALL_BUSINESS;
-                break;
-            case 14:
-                applicantTypeCode = ApplicantTypeCodeDataType.X_OTHER_SPECIFY;
-                isSociallyEconomicallyDisadvantaged.setStringValue(VALUE_YES);
-                smallOrganizationType
-                        .setIsSociallyEconomicallyDisadvantaged(isSociallyEconomicallyDisadvantaged);
-                smallBusflag = true;
-                break;
-            case 15:
-                applicantTypeCode = ApplicantTypeCodeDataType.X_OTHER_SPECIFY;
-                isWomenOwned.setStringValue(VALUE_YES);
-                smallOrganizationType.setIsWomenOwned(isWomenOwned);
-                smallBusflag = true;
-                break;
-            case 21:
-                applicantTypeCode = ApplicantTypeCodeDataType.H_PUBLIC_STATE_CONTROLLED_INSTITUTION_OF_HIGHER_EDUCATION;
-                break;
-            case 22:
-                applicantTypeCode = ApplicantTypeCodeDataType.B_COUNTY_GOVERNMENT;
-                break;
-            case 23:
-                applicantTypeCode = ApplicantTypeCodeDataType.D_SPECIAL_DISTRICT_GOVERNMENT;
-                break;
-            case 24:
-                applicantTypeCode = ApplicantTypeCodeDataType.G_INDEPENDENT_SCHOOL_DISTRICT;
-                break;
-            case 25:
-                applicantTypeCode = ApplicantTypeCodeDataType.L_PUBLIC_INDIAN_HOUSING_AUTHORITY;
-                break;
-            case 26:
-                applicantTypeCode = ApplicantTypeCodeDataType.J_INDIAN_NATIVE_AMERICAN_TRIBAL_GOVERNMENT_OTHER_THAN_FEDERALLY_RECOGNIZED;
-                break;
-            default:
-                applicantTypeCode = ApplicantTypeCodeDataType.X_OTHER_SPECIFY;
-                break;
-        }
-        if (smallBusflag) {
-            applicantType
-                    .setSmallBusinessOrganizationType(smallOrganizationType);
-        }
+		switch (orgTypeCode) {
+		case 1:
+			applicantTypeCode = ApplicantTypeCodeDataType.C_CITY_OR_TOWNSHIP_GOVERNMENT;
+			break;
+		case 2:
+			applicantTypeCode = ApplicantTypeCodeDataType.A_STATE_GOVERNMENT;
+			break;
+		case 3:
+			applicantTypeCode = ApplicantTypeCodeDataType.X_OTHER_SPECIFY;
+			break;
+		case 4:
+			applicantTypeCode = ApplicantTypeCodeDataType.M_NONPROFIT_WITH_501_C_3_IRS_STATUS_OTHER_THAN_INSTITUTION_OF_HIGHER_EDUCATION;
+			break;
+		case 5:
+			applicantTypeCode = ApplicantTypeCodeDataType.N_NONPROFIT_WITHOUT_501_C_3_IRS_STATUS_OTHER_THAN_INSTITUTION_OF_HIGHER_EDUCATION;
+			break;
+		case 6:
+			applicantTypeCode = ApplicantTypeCodeDataType.Q_FOR_PROFIT_ORGANIZATION_OTHER_THAN_SMALL_BUSINESS;
+			break;
+		case 7:
+			applicantTypeCode = ApplicantTypeCodeDataType.X_OTHER_SPECIFY;
+			break;
+		case 8:
+			applicantTypeCode = ApplicantTypeCodeDataType.I_INDIAN_NATIVE_AMERICAN_TRIBAL_GOVERNMENT_FEDERALLY_RECOGNIZED;
+			break;
+		case 9:
+			applicantTypeCode = ApplicantTypeCodeDataType.P_INDIVIDUAL;
+			break;
+		case 10:
+			applicantTypeCode = ApplicantTypeCodeDataType.O_PRIVATE_INSTITUTION_OF_HIGHER_EDUCATION;
+			break;
+		case 11:
+			applicantTypeCode = ApplicantTypeCodeDataType.R_SMALL_BUSINESS;
+			break;
+		case 14:
+			applicantTypeCode = ApplicantTypeCodeDataType.X_OTHER_SPECIFY;
+			isSociallyEconomicallyDisadvantaged.setStringValue(VALUE_YES);
+			smallOrganizationType
+					.setIsSociallyEconomicallyDisadvantaged(isSociallyEconomicallyDisadvantaged);
+			smallBusflag = true;
+			break;
+		case 15:
+			applicantTypeCode = ApplicantTypeCodeDataType.X_OTHER_SPECIFY;
+			isWomenOwned.setStringValue(VALUE_YES);
+			smallOrganizationType.setIsWomenOwned(isWomenOwned);
+			smallBusflag = true;
+			break;
+		case 21:
+			applicantTypeCode = ApplicantTypeCodeDataType.H_PUBLIC_STATE_CONTROLLED_INSTITUTION_OF_HIGHER_EDUCATION;
+			break;
+		case 22:
+			applicantTypeCode = ApplicantTypeCodeDataType.B_COUNTY_GOVERNMENT;
+			break;
+		case 23:
+			applicantTypeCode = ApplicantTypeCodeDataType.D_SPECIAL_DISTRICT_GOVERNMENT;
+			break;
+		case 24:
+			applicantTypeCode = ApplicantTypeCodeDataType.G_INDEPENDENT_SCHOOL_DISTRICT;
+			break;
+		case 25:
+			applicantTypeCode = ApplicantTypeCodeDataType.L_PUBLIC_INDIAN_HOUSING_AUTHORITY;
+			break;
+		case 26:
+			applicantTypeCode = ApplicantTypeCodeDataType.J_INDIAN_NATIVE_AMERICAN_TRIBAL_GOVERNMENT_OTHER_THAN_FEDERALLY_RECOGNIZED;
+			break;
+		default:
+			applicantTypeCode = ApplicantTypeCodeDataType.X_OTHER_SPECIFY;
+			break;
+		}
+		if (smallBusflag) {
+			applicantType
+					.setSmallBusinessOrganizationType(smallOrganizationType);
+		}
 
-        if (orgTypeCode == 3) {
-            applicantType
-                    .setApplicantTypeCodeOtherExplanation("Federal Government");
-        }
-        applicantType.setApplicantTypeCode(applicantTypeCode);
-        return applicantType;
-    }
+		if (orgTypeCode == 3) {
+			applicantType
+					.setApplicantTypeCodeOtherExplanation("Federal Government");
+		}
+		applicantType.setApplicantTypeCode(applicantTypeCode);
+		return applicantType;
+	}
 
 	/**
 	 * This method creates {@link XmlObject} of type {@link RRSF424Document} by
@@ -763,12 +776,12 @@ public class RRSF424V1_1Generator extends RRSF424BaseGenerator {
 
     public void setRolodexService(RolodexService rolodexService) {
         this.rolodexService = rolodexService;
-    }
+			}
 
     @Override
     public String getNamespace() {
         return namespace;
-    }
+		}
 
     public void setNamespace(String namespace) {
         this.namespace = namespace;
@@ -777,25 +790,25 @@ public class RRSF424V1_1Generator extends RRSF424BaseGenerator {
     @Override
     public String getFormName() {
         return formName;
-    }
-
+	}
+	
     public void setFormName(String formName) {
         this.formName = formName;
-    }
+                    }
 
     @Override
     public Resource getStylesheet() {
         return stylesheet;
-    }
+                }
 
     public void setStylesheet(Resource stylesheet) {
         this.stylesheet = stylesheet;
-    }
+            }
 
     @Override
     public String getPackageName() {
         return packageName;
-    }
+        }
 
     public void setPackageName(String packageName) {
         this.packageName = packageName;
@@ -804,9 +817,9 @@ public class RRSF424V1_1Generator extends RRSF424BaseGenerator {
     @Override
     public int getSortIndex() {
         return sortIndex;
-    }
+	}
 
     public void setSortIndex(int sortIndex) {
         this.sortIndex = sortIndex;
-    }
+	}
 }
