@@ -1,17 +1,20 @@
 /*
- * Copyright 2005-2014 The Kuali Foundation.
+ * Kuali Coeus, a comprehensive research administration system for higher education.
+ * 
+ * Copyright 2005-2015 Kuali, Inc.
  *
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  *
- * http://www.opensource.org/licenses/ecl1.php
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.kuali.coeus.s2sgen.impl.generate.support;
 
@@ -250,7 +253,7 @@ public class RRSF424V1_0Generator extends RRSF424BaseGenerator {
 				totalCost = totalCost.add(fundsRequested);
 			} else {
 	         	   totalCost=budget.getTotalCost();
-			}
+	        }
 
 			ScaleTwoDecimal fedNonFedCost = ScaleTwoDecimal.ZERO;
 			fedNonFedCost = fedNonFedCost.add(totalCost);
@@ -336,11 +339,7 @@ public class RRSF424V1_0Generator extends RRSF424BaseGenerator {
 			// divisionName
 			String divisionName = getDivisionName(pdDoc);
 			if (divisionName != null) {
-				// KC-633 RRSF424 form validation error PDPI Division invalid
-				if (divisionName.length() > DIVISION_NAME_MAX_LENGTH) {
-				    divisionName = divisionName.substring(0, DIVISION_NAME_MAX_LENGTH);	
-				}
-				orgType.setDivisionName(divisionName);
+				orgType.setDivisionName(StringUtils.substring(divisionName, 0, DIVISION_NAME_MAX_LENGTH));
 			}
 		}
 		appInfo.setOrganizationInfo(orgType);
@@ -579,11 +578,7 @@ public class RRSF424V1_0Generator extends RRSF424BaseGenerator {
 				// divisionName
 				String divisionName=proposalPerson.getDivision();
 				if (divisionName != null) {
-					// KC-633 RRSF424 form validation error PDPI Division invalid
-					if (divisionName.length() > DIVISION_NAME_MAX_LENGTH) {
-						divisionName = divisionName.substring(0, DIVISION_NAME_MAX_LENGTH);	
-					}
-					PDPI.setDivisionName(divisionName);
+					PDPI.setDivisionName(StringUtils.substring(divisionName, 0, DIVISION_NAME_MAX_LENGTH));
 				}
 				if (organization != null) {
 					PDPI
@@ -622,17 +617,12 @@ public class RRSF424V1_0Generator extends RRSF424BaseGenerator {
 					.getAddressRequireCountryDataType(departmentalPerson));
 			aorInfoType.setPhone(departmentalPerson.getOfficePhone());
             if (StringUtils.isNotEmpty(departmentalPerson.getFaxNumber())) {
-			aorInfoType.setFax(departmentalPerson.getFaxNumber());
+			    aorInfoType.setFax(departmentalPerson.getFaxNumber());
             }
 			aorInfoType.setDepartmentName(departmentalPerson.getDirDept());
 			aorInfoType.setEmail(departmentalPerson.getEmailAddress());
-			// KC-633 RRSF424 form validation error PDPI Division invalid
-			String homeUnit=departmentalPerson.getHomeUnit();
-			if (homeUnit != null) {
-				if (homeUnit.length() > DIVISION_NAME_MAX_LENGTH) {
-					homeUnit = homeUnit.substring(0, DIVISION_NAME_MAX_LENGTH);	
-			}
-				aorInfoType.setDivisionName(homeUnit);
+			if (departmentalPerson.getHomeUnit() != null) {
+				aorInfoType.setDivisionName(StringUtils.substring(departmentalPerson.getHomeUnit(), 0, DIVISION_NAME_MAX_LENGTH));
 			}
 
 		}
@@ -878,5 +868,5 @@ public class RRSF424V1_0Generator extends RRSF424BaseGenerator {
 
     public void setSortIndex(int sortIndex) {
         this.sortIndex = sortIndex;
-	}
+    }
 }

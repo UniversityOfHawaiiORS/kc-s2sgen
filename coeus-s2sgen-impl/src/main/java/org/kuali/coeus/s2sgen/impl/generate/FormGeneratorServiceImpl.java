@@ -1,17 +1,20 @@
 /*
- * Copyright 2005-2014 The Kuali Foundation.
+ * Kuali Coeus, a comprehensive research administration system for higher education.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Copyright 2005-2015 Kuali, Inc.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.kuali.coeus.s2sgen.impl.generate;
 
@@ -19,6 +22,8 @@ import gov.grants.apply.system.globalV10.HashValueDocument;
 import gov.grants.apply.system.headerV10.GrantSubmissionHeaderDocument;
 import gov.grants.apply.system.metaGrantApplication.GrantApplicationDocument;
 import gov.grants.apply.system.metaGrantApplication.GrantApplicationDocument.GrantApplication.Forms;
+
+import org.apache.commons.lang3.StringUtils;
 import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlObject;
 import org.kuali.coeus.propdev.api.core.DevelopmentProposalContract;
@@ -127,7 +132,7 @@ public class FormGeneratorServiceImpl implements FormGeneratorService {
             auditErrors.addAll(s2sFormGenerator.getAuditErrors());
 			try {
 				XmlObject formObject = s2sFormGenerator.getFormObject(pdDoc);
-				if (s2SValidatorService.validate(formObject, auditErrors)) {
+				if (s2SValidatorService.validate(formObject, auditErrors, info.getFormName())) {
 					if (forms != null && attList != null) {
 						setFormObject(forms, formObject);
 					}
@@ -270,15 +275,18 @@ public class FormGeneratorServiceImpl implements FormGeneratorService {
 	}
 
     @Override
-    public FormValidationResult validateUserAttachedFormFile(S2sUserAttachedFormFileContract s2sUserAttachedFormFile) throws S2SException {
+    public FormValidationResult validateUserAttachedFormFile(S2sUserAttachedFormFileContract s2sUserAttachedFormFile,String formName) throws S2SException {
         if (s2sUserAttachedFormFile == null) {
             throw new IllegalArgumentException("s2sUserAttachedFormFile is null");
+        }
+        if (StringUtils.isBlank(formName)) {
+            throw new IllegalArgumentException("formName is blank");
         }
         boolean validationSucceeded;
         List<AuditError> auditErrors = new ArrayList<AuditError>();
         try {
             XmlObject xmlObject = XmlObject.Factory.parse(s2sUserAttachedFormFile.getXmlFile());
-            if(!getS2SValidatorService().validate(xmlObject, auditErrors)) {
+            if(!getS2SValidatorService().validate(xmlObject, auditErrors, formName)) {
                 validationSucceeded = false;
             }else{
                 validationSucceeded = true;

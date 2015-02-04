@@ -1,17 +1,20 @@
 /*
- * Copyright 2005-2014 The Kuali Foundation.
+ * Kuali Coeus, a comprehensive research administration system for higher education.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Copyright 2005-2015 Kuali, Inc.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.kuali.coeus.s2sgen.impl.generate.support;
 
@@ -120,13 +123,13 @@ public abstract class RRFedNonFedBudgetBaseGenerator extends S2SBaseFormGenerato
                         s2sBudgetCalculatorService.getMatchingLineItems(period.getBudgetLineItems(), participantSupportCode);
                 int numberOfParticipants = period.getNumberOfParticipants() == null ? 0 : period.getNumberOfParticipants();
                 if (!participantSupportLineItems.isEmpty() && numberOfParticipants == 0) {
-                    AuditError auditError= s2SErrorHandlerService.getError(PARTICIPANT_COUNT_REQUIRED);
+                    AuditError auditError= s2SErrorHandlerService.getError(PARTICIPANT_COUNT_REQUIRED, getFormName());
                     AuditError error= new AuditError(auditError.getErrorKey(),
                             auditError.getMessageKey()+period.getBudgetPeriod(),auditError.getLink());
                     getAuditErrors().add(error);
                     valid = false;
                 } else if (numberOfParticipants > 0 && participantSupportLineItems.isEmpty()) {
-                    getAuditErrors().add(s2SErrorHandlerService.getError(PARTICIPANT_COSTS_REQUIRED));
+                    getAuditErrors().add(s2SErrorHandlerService.getError(PARTICIPANT_COSTS_REQUIRED, getFormName()));
                     valid = false;
                 }
             }

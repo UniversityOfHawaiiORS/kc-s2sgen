@@ -1,20 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
- 
- Copyright 2014-2014 The Kuali Foundation
- 
- Licensed under the Educational Community License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
- 
- http://www.opensource.org/licenses/ecl2.php
- 
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
- 
+   - Kuali Coeus, a comprehensive research administration system for higher education.
+   - 
+   - Copyright 2005-2015 Kuali, Inc.
+   - 
+   - This program is free software: you can redistribute it and/or modify
+   - it under the terms of the GNU Affero General Public License as
+   - published by the Free Software Foundation, either version 3 of the
+   - License, or (at your option) any later version.
+   - 
+   - This program is distributed in the hope that it will be useful,
+   - but WITHOUT ANY WARRANTY; without even the implied warranty of
+   - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   - GNU Affero General Public License for more details.
+   - 
+   - You should have received a copy of the GNU Affero General Public License
+   - along with this program.  If not, see <http://www.gnu.org/licenses />.
  -->
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
@@ -25,18 +26,25 @@
     </parent>
     <groupId>org.kuali.coeus</groupId>
     <artifactId>coeus-s2sgen</artifactId>
-    <version>6.0.0-SNAPSHOT</version>
+    <version>6.0.0</version>
     <packaging>pom</packaging>
     <description>
         This coeus s2s generator project contains s2s generators for grants.gov and research.gov form submission
     </description>
     <url>http://${kuali.site.hostname}/coeus/coeus-s2sgen/${project.version}</url>
     <inceptionYear>2014</inceptionYear>
+    <licenses>
+        <license>
+            <name>GNU Affero General Public License, Version 3</name>
+            <url>${kuali.agpl3.license.url}</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
     <scm>
-        <connection>scm:git:https://github.com/kuali/kc-s2sgen.git</connection>
-        <developerConnection>scm:git:https://github.com/kuali/kc-s2sgen.git</developerConnection>
+        <connection>scm:git:git@github.com:kuali/kc-s2sgen.git</connection>
+        <developerConnection>scm:git:git@github.com:kuali/kc-s2sgen.git</developerConnection>
         <url>https://github.com/kuali/kc-s2sgen/tree/${project.scm.tag}</url>
-        <tag>master</tag>
+        <tag>coeus-s2sgen-6.0.0</tag>
     </scm>
     <developers>
         <developer>
@@ -59,7 +67,7 @@
 
         <avalon-framework.version>4.3.1</avalon-framework.version>
         <bouncycastle.version>1.51</bouncycastle.version>
-        <coeus-api-all.version>6.0.0-SNAPSHOT</coeus-api-all.version>
+        <coeus-api-all.version>6.0.0.1</coeus-api-all.version>
         <commons-collections4.version>4.0</commons-collections4.version>
         <commons-lang3.version>3.3.2</commons-lang3.version>
         <fop.version>1.1</fop.version>
@@ -77,6 +85,8 @@
         <plexus-compiler-javac.version>2.3</plexus-compiler-javac.version>
         <plexus-compiler-javac-errorprone.version>2.3</plexus-compiler-javac-errorprone.version>
         <kuali.javadoc.maxmemory>3g</kuali.javadoc.maxmemory>
+
+        <kuali.agpl3.license.url>http://www.gnu.org/licenses/agpl-3.0.txt</kuali.agpl3.license.url>
     </properties>
 
     <modules>

@@ -1,17 +1,20 @@
 /*
- * Copyright 2005-2014 The Kuali Foundation.
+ * Kuali Coeus, a comprehensive research administration system for higher education.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Copyright 2005-2015 Kuali, Inc.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.kuali.coeus.s2sgen.impl.generate.support;
 
@@ -228,7 +231,7 @@ public class RRKeyPersonExpandedV1_2Generator extends
 		}
 		profile.setEmail(PI.getEmailAddress());
 		DevelopmentProposalContract developmentProposal = pdDoc
-				.getDevelopmentProposal();		
+				.getDevelopmentProposal();
 		setOrganizationName(profile, developmentProposal);
 		setDepartmentNameToProfile(profile,PI);
 
@@ -243,18 +246,10 @@ public class RRKeyPersonExpandedV1_2Generator extends
 		else {				
 			divisionName = getDivisionName(pdDoc);
 		}	
-			
+		// KC-398, KC-421 END	
 		if (divisionName != null) {
-			//added for KC-398, KC-421 reopen
-			//need to truncate the department name to 30 characters to avoid
-			//apply.grants.gov-system-GlobalLibrary-V2.0, error: cvc-maxLength-valid.1.1: string length (x) is greater than maxLength facet (30) for DivisionNameDataType
-			if(divisionName.length() > DIVISION_NAME_MAX_LENGTH) {					
-				divisionName = divisionName.substring(0, DIVISION_NAME_MAX_LENGTH);
-			}				
-			profile.setDivisionName(divisionName);
+			profile.setDivisionName(StringUtils.substring(divisionName, 0, DIVISION_NAME_MAX_LENGTH));
 		}
-		// KC-398, KC-421 END
-
 		if (PI.getEraCommonsUserName() != null) {
 			profile.setCredential(PI.getEraCommonsUserName());
 		} else {
@@ -267,7 +262,7 @@ public class RRKeyPersonExpandedV1_2Generator extends
 		setAttachments(profile, PI);
 		profileDataType.setProfile(profile);
 	}
-	
+
 	//added for KC-398, KC-421 employee key personnel set their division to their home unit if it exists
 	//otherwise set their division to the proposal's Lead Unit department (see KRACOEUS-5348)
 	//in the future we will need to allow division field population/editing by proposal (see KRACOEUS-5242)
@@ -316,7 +311,7 @@ public class RRKeyPersonExpandedV1_2Generator extends
             String departmentName = developmentProposal.getOwnedByUnit().getUnitName();
             if(departmentName.length() > DEPARTMENT_NAME_MAX_LENGTH) {
             	departmentName = departmentName.substring(0, DEPARTMENT_NAME_MAX_LENGTH);
-			}
+        }
             // KC-398 END
             profile.setDepartmentName(departmentName);
         }
@@ -486,7 +481,7 @@ public class RRKeyPersonExpandedV1_2Generator extends
 				profileKeyPerson.setOrganizationName(rolo.getOrganization());
 			}
 		} else {		
-			setOrganizationName(profileKeyPerson, developmentProposal);
+		setOrganizationName(profileKeyPerson, developmentProposal);
 			
 			//added for KC-398, KC-421 employee key personnel set their department to their home unit if it exists
 			//otherwise set their department to the proposal's Lead Unit department (see KRACOEUS-5348)
@@ -503,7 +498,7 @@ public class RRKeyPersonExpandedV1_2Generator extends
 					profileKeyPerson.setDepartmentName(deptName);
 				}
 			} else {
-				setDepartmentNameToProfile(profileKeyPerson,keyPerson);
+		setDepartmentNameToProfile(profileKeyPerson,keyPerson);
 			}
 			
 			//added for KC-398, KC-421 employee key personnel set their division to their home unit if it exists
@@ -514,20 +509,11 @@ public class RRKeyPersonExpandedV1_2Generator extends
 				divisionName = keyPerson.getDivision();
 			} else {				
 				divisionName = getDivisionName(pdDoc);
-			}	
+			}
+        // KC-398, KC-421 END	
 		if (divisionName != null) {
-				//added for KC-398,  KC-421 reopen
-				//need to truncate the department name to 30 characters to avoid
-				//apply.grants.gov-system-GlobalLibrary-V2.0, error: cvc-maxLength-valid.1.1: string length (x) is greater than maxLength facet (30) for DivisionNameDataType
-				if(divisionName.length() > DIVISION_NAME_MAX_LENGTH) {				
-					divisionName = divisionName.substring(0, DIVISION_NAME_MAX_LENGTH);
-				}
-			profileKeyPerson.setDivisionName(divisionName);
+			profileKeyPerson.setDivisionName(StringUtils.substring(divisionName, 0, DIVISION_NAME_MAX_LENGTH));
 		}
-		}
-		// KC-398, KC-421 END
-		
-
 		if (keyPerson.getEraCommonsUserName() != null) {
 			profileKeyPerson.setCredential(keyPerson.getEraCommonsUserName());
 		} else {
@@ -654,7 +640,7 @@ public class RRKeyPersonExpandedV1_2Generator extends
     @Override
     public int getSortIndex() {
         return sortIndex;
-	}
+    }
 
     public void setSortIndex(int sortIndex) {
         this.sortIndex = sortIndex;

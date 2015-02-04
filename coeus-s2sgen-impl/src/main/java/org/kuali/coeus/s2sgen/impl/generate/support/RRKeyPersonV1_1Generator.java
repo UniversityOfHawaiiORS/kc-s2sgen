@@ -1,17 +1,20 @@
 /*
- * Copyright 2005-2014 The Kuali Foundation.
+ * Kuali Coeus, a comprehensive research administration system for higher education.
  * 
- * Licensed under the Educational Community License, Version 1.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * Copyright 2005-2015 Kuali, Inc.
  * 
- * http://www.opensource.org/licenses/ecl1.php
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package org.kuali.coeus.s2sgen.impl.generate.support;
 
@@ -203,19 +206,12 @@ public class RRKeyPersonV1_1Generator extends RRKeyPersonBaseGenerator {
                 //leave the department Name blank if they are a non-employee
                 if(PI.getRolodexId() == null) {
                 	profile.setDepartmentName(departmentName);
-                }
+            }
                 //UH KC-647 END
             }
             String divisionName = PI.getDivision();
             if (divisionName != null) {
-				//UH KC-647 BEGIN
-				//need to truncate the division name to 30 characters to avoid
-				//apply.grants.gov-system-GlobalLibrary-V2.0, error: cvc-maxLength-valid.1.1: string length (x) is greater than maxLength facet (30) for DivisionNameDataType
-				if(divisionName.length() > DIVISION_NAME_MAX_LENGTH) {					
-					divisionName = divisionName.substring(0, DIVISION_NAME_MAX_LENGTH);
-			    }
-				//UH KC-647 END
-                profile.setDivisionName(divisionName);
+                profile.setDivisionName(StringUtils.substring(divisionName, 0, DIVISION_NAME_MAX_LENGTH));
             }
             if (PI.getEraCommonsUserName() != null) {
                 profile.setCredential(PI.getEraCommonsUserName());
@@ -330,19 +326,12 @@ public class RRKeyPersonV1_1Generator extends RRKeyPersonBaseGenerator {
                     //leave the department Name blank if they are a non-employee
                     if(keyPerson.getRolodexId() == null) {
                     	profileKeyPerson.setDepartmentName(departmentName);
-                    }
+                }
                     //UH KC-647 END
                 }
                 String divisionName = keyPerson.getDivision();
                 if (divisionName != null) {
-    				//UH KC-647 BEGIN
-    				//need to truncate the division name to 30 characters to avoid
-    				//apply.grants.gov-system-GlobalLibrary-V2.0, error: cvc-maxLength-valid.1.1: string length (x) is greater than maxLength facet (30) for DivisionNameDataType
-    				if(divisionName.length() > DIVISION_NAME_MAX_LENGTH) {					
-    					divisionName = divisionName.substring(0, DIVISION_NAME_MAX_LENGTH);
-    			    }
-    				//UH KC-647 END
-                    profileKeyPerson.setDivisionName(divisionName);
+                    profileKeyPerson.setDivisionName(StringUtils.substring(divisionName, 0, DIVISION_NAME_MAX_LENGTH));
                 }
                 if (keyPerson.getEraCommonsUserName() != null) {
                     profileKeyPerson.setCredential(keyPerson.getEraCommonsUserName());

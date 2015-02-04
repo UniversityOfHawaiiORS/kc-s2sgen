@@ -1,3 +1,21 @@
+/*
+ * Kuali Coeus, a comprehensive research administration system for higher education.
+ * 
+ * Copyright 2005-2015 Kuali, Inc.
+ * 
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Affero General Public License as
+ * published by the Free Software Foundation, either version 3 of the
+ * License, or (at your option) any later version.
+ * 
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Affero General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Affero General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package org.kuali.coeus.s2sgen.impl.generate.support;
 
 import com.lowagie.text.*;
@@ -47,13 +65,14 @@ public abstract class RRKeyPersonBase extends S2SBaseFormGenerator{
 	protected static final int CURRENTPENDING_DOC_TYPE = 17;
 	protected static final String BIOSKETCH_TYPE = "1";
 	protected static final String CURRENT_PENDING_TYPE = "2";
-	private int WHITESPACE_LENGTH_76 = 76;
-	private int WHITESPACE_LENGTH_60 = 60;
+	private static final int WHITESPACE_LENGTH_76 = 76;
+	private static final int WHITESPACE_LENGTH_60 = 60;
 	private static final String COMMENT = "Auto generated document for ";
 	private static final String BIOSKETCH_COMMENT = "BIOSKETCH";
 	private static final String CURRENT_PENDING_COMMENT = "CURRENTPENDING";
 	protected static final String PROFILE_COMMENT = "PROFILE";
     protected static final int PROFILE_TYPE = 18;
+	protected static final int DIVISION_NAME_MAX_LENGTH = 30;
 	protected static final String ADDITIONALKEYPERSONPROFILES_XSL = "/org/kuali/kra/s2s/stylesheet/additionalkeypersonprofiles.xsl";
 	protected static final String NIH_CO_INVESTIGATOR = "Co-Investigator";
     protected static final String ERROR_ERA_COMMON_USER_NAME="eRA Commons User Name is missing for ";
@@ -416,24 +435,12 @@ public abstract class RRKeyPersonBase extends S2SBaseFormGenerator{
 		return name;
 	}
 
-	private void setDivisionName(ExtraKeyPerson extraPerson,
-			ProposalPersonContract proposalPerson) {
-		String divisionName = "";
-		if (divisionName != null && divisionName.length() > 29) {
-			divisionName = divisionName.substring(0, 29);
-		}
-		extraPerson.setDivisionName(divisionName);
+	private void setDivisionName(ExtraKeyPerson extraPerson, ProposalPersonContract proposalPerson) {
+		extraPerson.setDivisionName("");
 	}
 
-	private void setDepartmentName(ExtraKeyPerson extraPerson,
-			ProposalPersonContract proposalPerson) {
-		String departmentName = "";
-		if (departmentName != null && departmentName.length() > 30) {
-			departmentName = departmentName.substring(0, 29);
-		}
-		if (departmentName != null)
-			extraPerson.setDepartmentName(departmentName);
-
+	private void setDepartmentName(ExtraKeyPerson extraPerson, ProposalPersonContract proposalPerson) {
+		extraPerson.setDepartmentName("");
 	}
 	private NarrativeContract saveKeypersonProfileObject() {
         NarrativeContract narrative = null;
