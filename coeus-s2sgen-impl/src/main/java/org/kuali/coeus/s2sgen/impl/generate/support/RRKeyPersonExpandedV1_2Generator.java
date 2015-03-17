@@ -510,7 +510,7 @@ public class RRKeyPersonExpandedV1_2Generator extends
 			} else {				
 				divisionName = getDivisionName(pdDoc);
 			}
-        // KC-398, KC-421 END	
+                // KC-398, KC-421 END	
 		if (divisionName != null) {
 			profileKeyPerson.setDivisionName(StringUtils.substring(divisionName, 0, DIVISION_NAME_MAX_LENGTH));
 		}
@@ -537,6 +537,7 @@ public class RRKeyPersonExpandedV1_2Generator extends
         } else {
 			setProjectRoleCategoryToProfile(keyPerson, profileKeyPerson);
 		}
+	    }
 	}
 
 	private void setOrganizationName(Profile profileKeyPerson,
