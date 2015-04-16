@@ -171,9 +171,16 @@ public class GlobalLibraryV2_0Generator {
             if (postalCode != null && !postalCode.equals("")) {
                 addressDataType.setZipPostalCode(postalCode);
             }
+            
+	        // BEGIN KC-763 Validation throws exception if proposal is
+	        //              s2s and AOR has no address configured.
+            CountryCodeDataType.Enum countryCodeDataType = null;          
             String country = depPerson.getCountryCode();
-            CountryCodeDataType.Enum countryCodeDataType = getCountryCodeDataType(country);
+            if (country != null && !country.equals("")) {
+            	countryCodeDataType = getCountryCodeDataType(country);
             addressDataType.setCountry(countryCodeDataType);
+            }
+	        // END KC-763
             
             String state = depPerson.getState();
             if (state != null && !state.equals("")) {
