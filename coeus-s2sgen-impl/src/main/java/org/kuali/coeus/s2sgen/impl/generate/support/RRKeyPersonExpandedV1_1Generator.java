@@ -189,12 +189,37 @@ public class RRKeyPersonExpandedV1_1Generator extends
 			if(PI.getHomeUnit() != null) {
                 KcPersonContract kcPerson = PI.getPerson();
                 String departmentName =  kcPerson.getOrganizationIdentifier();
-                profile.setDepartmentName(StringUtils.substring(departmentName, 0, DEPARTMENT_NAME_MAX_LENGTH));
+                //UH KC-647 BEGIN
+				//need to truncate the department name to 30 characters to avoid
+				//apply.grants.gov-system-GlobalLibrary-V2.0, error: cvc-maxLength-valid.1.1: string length (x) is greater than maxLength facet (30) for DepartmentNameDataType
+                if (departmentName != null ) {
+					if(departmentName.length() > DEPARTMENT_NAME_MAX_LENGTH) {
+						departmentName = departmentName.substring(0, DEPARTMENT_NAME_MAX_LENGTH);
+					}
+                }
+                //leave the department name blank for non-employees
+                if(PI.getRolodexId() == null) {
+                profile.setDepartmentName(departmentName);
+            }
+                //UH KC-647 END
             }
             else
             {
                 DevelopmentProposalContract developmentProposal = pdDoc.getDevelopmentProposal();
-                profile.setDepartmentName(StringUtils.substring(developmentProposal.getOwnedByUnit().getUnitName(), 0, DEPARTMENT_NAME_MAX_LENGTH));
+                //UH KC-647 BEGIN
+				//need to truncate the department name to 30 characters to avoid
+				//apply.grants.gov-system-GlobalLibrary-V2.0, error: cvc-maxLength-valid.1.1: string length (x) is greater than maxLength facet (30) for DepartmentNameDataType
+                String departmentName = developmentProposal.getOwnedByUnit().getUnitName();
+                if (departmentName != null ) {
+					if(departmentName.length() > DEPARTMENT_NAME_MAX_LENGTH) {
+						departmentName = departmentName.substring(0, DEPARTMENT_NAME_MAX_LENGTH);
+                    }
+                }
+                //leave the department name blank for non-employees
+                if(PI.getRolodexId() == null) {
+                	profile.setDepartmentName(departmentName);
+            }
+                //UH KC-647 END
             }
 			String divisionName = PI.getDivision();
 			if (divisionName != null) {
@@ -293,12 +318,37 @@ public class RRKeyPersonExpandedV1_1Generator extends
 				if(keyPerson.getHomeUnit() != null) {
                     KcPersonContract kcPerson = keyPerson.getPerson();
                     String departmentName =  kcPerson.getOrganizationIdentifier();
-                    profileKeyPerson.setDepartmentName(StringUtils.substring(departmentName, 0, DEPARTMENT_NAME_MAX_LENGTH));
+                    //UH KC-647 BEGIN
+    				//need to truncate the department name to 30 characters to avoid
+    				//apply.grants.gov-system-GlobalLibrary-V2.0, error: cvc-maxLength-valid.1.1: string length (x) is greater than maxLength facet (30) for DepartmentNameDataType
+                    if (departmentName != null ) {
+    					if(departmentName.length() > DEPARTMENT_NAME_MAX_LENGTH) {
+    						departmentName = departmentName.substring(0, DEPARTMENT_NAME_MAX_LENGTH);
+    					}
+                    }
+                    //leave department name blank for non-employees
+                    if(keyPerson.getRolodexId() == null) {
+                    profileKeyPerson.setDepartmentName(departmentName);
+                }
+                    //UH KC-647 END
                 }
                 else
                 {
                     DevelopmentProposalContract developmentProposal = pdDoc.getDevelopmentProposal();
-                    profileKeyPerson.setDepartmentName(StringUtils.substring(developmentProposal.getOwnedByUnit().getUnitName(), 0, DEPARTMENT_NAME_MAX_LENGTH));
+                    //UH KC-647 BEGIN
+    				//need to truncate the department name to 30 characters to avoid
+    				//apply.grants.gov-system-GlobalLibrary-V2.0, error: cvc-maxLength-valid.1.1: string length (x) is greater than maxLength facet (30) for DepartmentNameDataType
+                    String departmentName = developmentProposal.getOwnedByUnit().getUnitName();
+                    if (departmentName != null ) {
+    					if(departmentName.length() > DEPARTMENT_NAME_MAX_LENGTH) {
+    						departmentName = departmentName.substring(0, DEPARTMENT_NAME_MAX_LENGTH);
+    					}
+                    }
+                    //leave department name blank for non-employees
+                    if(keyPerson.getRolodexId() == null) {
+                    	profileKeyPerson.setDepartmentName(departmentName);
+                }
+                    //UH KC-647 END
                 }
 				String divisionName = keyPerson.getDivision();
 				if (divisionName != null) {
