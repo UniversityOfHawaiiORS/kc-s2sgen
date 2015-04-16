@@ -74,9 +74,11 @@ public class DepartmentalPersonServiceImpl implements DepartmentalPersonService 
     public DepartmentalPersonDto getDepartmentalPerson(ProposalDevelopmentDocumentContract pdDoc) {
         int count = 0;
         DepartmentalPersonDto depPerson = new DepartmentalPersonDto();
+/* KC-640 AOR contact switch when submitting causes exception in background process                
         List<? extends ProposalAdminDetailsContract> proposalAdminDetailsList = proposalAdminDetailsService.findProposalAdminDetailsByPropDevNumber(pdDoc.getDevelopmentProposal().getProposalNumber());
         count = proposalAdminDetailsList.size();
         if (count < 1) {
+*/        
             // Proposal has not been submitted
 
             OrganizationContract organization = pdDoc.getDevelopmentProposal().getApplicantOrganization().getOrganization();
@@ -114,6 +116,7 @@ public class DepartmentalPersonServiceImpl implements DepartmentalPersonService 
                 depPerson.setPersonId(Integer.toString(rolodex.getRolodexId()));
                 depPerson.setDirDept(organization.getOrganizationName());
             }
+/* KC-640 AOR contact switch when submitting causes exception in background process   
         }
         else {
             ProposalAdminDetailsContract proposalAdminDetails = proposalAdminDetailsList.get(0);
@@ -140,6 +143,7 @@ public class DepartmentalPersonServiceImpl implements DepartmentalPersonService 
                 depPerson.setDirDept(person.getContactOrganizationName());
             }
         }
+*/
         return depPerson;
     }
 
