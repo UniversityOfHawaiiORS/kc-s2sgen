@@ -316,7 +316,7 @@ public class RRSF424V1_2Generator extends RRSF424BaseGenerator {
 	 * 
 	 * This method is used to get Contact person information
 	 * 
-	 * @param rolodex Rolodex
+	 * @param rolodex(Rolodex)
 	 * @return ContactPersonInfo corresponding to the Rolodex object.
 	 */
 	private ContactPersonInfo getContactInfo(RolodexContract rolodex) {
@@ -510,6 +510,7 @@ public class RRSF424V1_2Generator extends RRSF424BaseGenerator {
 
 	private void setDivisionName(OrganizationContactPersonDataType PDPI,ProposalPersonContract PI) {
 		String divisionName = PI.getDivision();
+
 		if (divisionName != null) {
 			PDPI.setDivisionName(StringUtils.substring(divisionName, 0, DIVISION_NAME_MAX_LENGTH));
 		}
@@ -519,12 +520,12 @@ public class RRSF424V1_2Generator extends RRSF424BaseGenerator {
 	    if(PI.getHomeUnit() != null) {
             KcPersonContract kcPerson = PI.getPerson();
 	        String departmentName =  kcPerson.getOrganizationIdentifier();
-	        PDPI.setDepartmentName(StringUtils.substring(departmentName, 0, DEPARTMENT_NAME_MAX_LENGTH));
+	        PDPI.setDepartmentName(departmentName);
 	    }
 	    else
 	    {
 	        DevelopmentProposalContract developmentProposal = pdDoc.getDevelopmentProposal();
-	        PDPI.setDepartmentName(StringUtils.substring(developmentProposal.getOwnedByUnit().getUnitName(), 0, DEPARTMENT_NAME_MAX_LENGTH));
+	        PDPI.setDepartmentName(developmentProposal.getOwnedByUnit().getUnitName());
 	    }
 	}
 

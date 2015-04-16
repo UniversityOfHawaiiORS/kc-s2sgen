@@ -2,17 +2,17 @@
  * Kuali Coeus, a comprehensive research administration system for higher education.
  * 
  * Copyright 2005-2015 Kuali, Inc.
- * 
+ *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Affero General Public License as
  * published by the Free Software Foundation, either version 3 of the
  * License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU Affero General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU Affero General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
@@ -350,6 +350,7 @@ public class RRSF424V1_0Generator extends RRSF424BaseGenerator {
 	 *
 	 * This method is used to get Contact person information
 	 *
+	 * @param rolodexOrganization
 	 * @return ContactPersonInfo corresponding to the Rolodex object.
 	 */
 	private ContactPersonInfo getContactInfo(RolodexContract rolodexOrganization) {
@@ -566,12 +567,12 @@ public class RRSF424V1_0Generator extends RRSF424BaseGenerator {
 				if(PI.getHomeUnit() != null) {
                     KcPersonContract kcPerson = PI.getPerson();
 		            String departmentName =  kcPerson.getOrganizationIdentifier();
-		            PDPI.setDepartmentName(StringUtils.substring(departmentName, 0, DEPARTMENT_NAME_MAX_LENGTH));
+		            PDPI.setDepartmentName(departmentName);
 		        }
 		        else
 		        {
 		            DevelopmentProposalContract developmentProposal = pdDoc.getDevelopmentProposal();
-		            PDPI.setDepartmentName(StringUtils.substring(developmentProposal.getOwnedByUnit().getUnitName(), 0, DEPARTMENT_NAME_MAX_LENGTH));
+		            PDPI.setDepartmentName(developmentProposal.getOwnedByUnit().getUnitName());
 		        }
 
 				// divisionName
@@ -618,7 +619,7 @@ public class RRSF424V1_0Generator extends RRSF424BaseGenerator {
             if (StringUtils.isNotEmpty(departmentalPerson.getFaxNumber())) {
 			    aorInfoType.setFax(departmentalPerson.getFaxNumber());
             }
-			aorInfoType.setDepartmentName(departmentalPerson.getDirDept().substring(0, DEPARTMENT_NAME_MAX_LENGTH));
+			aorInfoType.setDepartmentName(departmentalPerson.getDirDept());
 			aorInfoType.setEmail(departmentalPerson.getEmailAddress());
 			if (departmentalPerson.getHomeUnit() != null) {
 				aorInfoType.setDivisionName(StringUtils.substring(departmentalPerson.getHomeUnit(), 0, DIVISION_NAME_MAX_LENGTH));
