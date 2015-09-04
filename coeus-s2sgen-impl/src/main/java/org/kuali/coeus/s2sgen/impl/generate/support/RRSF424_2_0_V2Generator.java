@@ -523,8 +523,10 @@ public class RRSF424_2_0_V2Generator extends RRSF424BaseGenerator {
 		} else {
 			String personId = PI.getPersonId();
 			KcPersonContract kcPersons = kcPersonRepositoryService.findKcPersonByPersonId(personId);
-			
-			if (kcPersons.getOrganizationIdentifier() != null) {
+
+			// KC-998 Turning on Data Validation causes STE if S2S is connected
+			// added check for empty string 
+			if (kcPersons.getOrganizationIdentifier() != null && !kcPersons.getOrganizationIdentifier().isEmpty()) {
 				divisionName = getPIDivision(kcPersons.getOrganizationIdentifier());
 			}
 			if (divisionName != null) {
