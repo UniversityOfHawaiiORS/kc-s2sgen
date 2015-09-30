@@ -37,9 +37,11 @@ import gov.grants.apply.forms.phsFellowshipSupplemental11V11.PHSFellowshipSupple
 import gov.grants.apply.system.attachmentsV10.AttachedFileDataType;
 import gov.grants.apply.system.attachmentsV10.AttachmentGroupMin0Max100DataType;
 import gov.grants.apply.system.globalLibraryV20.YesNoDataType;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.xmlbeans.XmlObject;
+import org.kuali.coeus.common.api.person.attr.CitizenshipType;
 import org.kuali.coeus.common.api.ynq.YnqConstant;
 import org.kuali.coeus.common.budget.api.nonpersonnel.BudgetLineItemContract;
 import org.kuali.coeus.common.budget.api.period.BudgetPeriodContract;
@@ -54,16 +56,13 @@ import org.kuali.coeus.propdev.api.person.ProposalPersonContract;
 import org.kuali.coeus.propdev.api.specialreview.ProposalSpecialReviewContract;
 import org.kuali.coeus.propdev.api.core.ProposalDevelopmentDocumentContract;
 import org.kuali.coeus.s2sgen.impl.generate.FormVersion;
-
 import org.kuali.coeus.s2sgen.impl.util.FieldValueConstants;
 import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
-import org.kuali.coeus.s2sgen.impl.citizenship.CitizenshipType;
 import org.kuali.coeus.propdev.api.attachment.NarrativeContract;
 import org.kuali.coeus.s2sgen.api.core.ConfigurationConstants;
 import org.kuali.coeus.s2sgen.impl.generate.FormGenerator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-
 
 import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
@@ -636,24 +635,27 @@ public class PHS398FellowshipSupplementalV1_1Generator extends
         GraduateDegreeSought graduateDegreeSought = GraduateDegreeSought.Factory.newInstance();
         ProposalPersonContract principalInvestigator = s2SProposalPersonService.getPrincipalInvestigator(pdDoc);
         ArrayList<String> cellLinesList = new ArrayList<String>(Arrays.asList(stemCells.getCellLinesArray())); 
-		for (ProposalPersonContract proposalPerson : pdDoc.getDevelopmentProposal()
-				.getProposalPersons()) {
-			if (proposalPerson.isInvestigator()) {	
-				CitizenshipType citizenShip=s2SProposalPersonService.getCitizenship(proposalPerson);
-				if(citizenShip.getCitizenShip().trim().equals(CitizenshipDataType.NON_U_S_CITIZEN_WITH_TEMPORARY_VISA.toString())){
-					additionalInformation.setCitizenship(CitizenshipDataType.NON_U_S_CITIZEN_WITH_TEMPORARY_VISA);
-				}
-				else if(citizenShip.getCitizenShip().trim().equals(CitizenshipDataType.PERMANENT_RESIDENT_OF_U_S.toString())){
-					additionalInformation.setCitizenship(CitizenshipDataType.PERMANENT_RESIDENT_OF_U_S);
-				}
-				else if(citizenShip.getCitizenShip().trim().equals(CitizenshipDataType.U_S_CITIZEN_OR_NONCITIZEN_NATIONAL.toString())){
-					additionalInformation.setCitizenship(CitizenshipDataType.U_S_CITIZEN_OR_NONCITIZEN_NATIONAL);
-				}
-				else if(citizenShip.getCitizenShip().trim().equals(CitizenshipDataType.PERMANENT_RESIDENT_OF_U_S_PENDING.toString())){
-                    additionalInformation.setCitizenship(CitizenshipDataType.PERMANENT_RESIDENT_OF_U_S_PENDING);
-                }				
-			}
-		}
+        for (ProposalPersonContract proposalPerson : pdDoc.getDevelopmentProposal().getProposalPersons()) {
+        	if (proposalPerson.isInvestigator()) {
+        		CitizenshipType citizenShip=s2SProposalPersonService.getCitizenship(proposalPerson);
+        		if(citizenShip!=null){
+        			if(citizenShip.getCitizenShip().trim().equals(CitizenshipDataType.NON_U_S_CITIZEN_WITH_TEMPORARY_VISA.toString())){
+        				additionalInformation.setCitizenship(CitizenshipDataType.NON_U_S_CITIZEN_WITH_TEMPORARY_VISA);
+        			}
+        			else if(citizenShip.getCitizenShip().trim().equals(CitizenshipDataType.PERMANENT_RESIDENT_OF_U_S.toString())){
+        				additionalInformation.setCitizenship(CitizenshipDataType.PERMANENT_RESIDENT_OF_U_S);
+        			}
+        			else if(citizenShip.getCitizenShip().trim().equals(CitizenshipDataType.U_S_CITIZEN_OR_NONCITIZEN_NATIONAL.toString())){
+        				additionalInformation.setCitizenship(CitizenshipDataType.U_S_CITIZEN_OR_NONCITIZEN_NATIONAL);
+        			}
+        			else if(citizenShip.getCitizenShip().trim().equals(CitizenshipDataType.PERMANENT_RESIDENT_OF_U_S_PENDING.toString())){
+        				additionalInformation.setCitizenship(CitizenshipDataType.PERMANENT_RESIDENT_OF_U_S_PENDING);
+        			}
+        		}else{
+        			additionalInformation.setCitizenship(null);
+        		}
+        	}
+        }
 		if (principalInvestigator != null && principalInvestigator.getMobilePhoneNumber() != null) {
 			additionalInformation.setAlernatePhoneNumber(principalInvestigator.getMobilePhoneNumber());
 		}
@@ -985,31 +987,27 @@ public class PHS398FellowshipSupplementalV1_1Generator extends
 	 * DevelopmentProposal
 	 */
 	private TypeOfApplication.Enum getTypeOfApplication() {
-		String proposalTypeCode = pdDoc.getDevelopmentProposal()
-				.getProposalType().getCode();
-		TypeOfApplication.Enum typeOfApplication = null;
-		if (proposalTypeCode != null) {
-			if (proposalTypeCode.equals(s2SConfigurationService.getValueAsString(
-                    ConfigurationConstants.PROPOSAL_TYPE_CODE_NEW))) {
-				typeOfApplication = TypeOfApplication.NEW;
-			} else if (proposalTypeCode.equals(s2SConfigurationService.getValueAsString(
-                    ConfigurationConstants.PROPOSAL_TYPE_CODE_CONTINUATION))) {
-				typeOfApplication = TypeOfApplication.CONTINUATION;
-			} else if (proposalTypeCode.equals(s2SConfigurationService.getValueAsString(
-                    ConfigurationConstants.PROPOSAL_TYPE_CODE_REVISION))) {
-				typeOfApplication = TypeOfApplication.REVISION;
-			} else if (proposalTypeCode.equals(s2SConfigurationService.getValueAsString(
-                    ConfigurationConstants.PROPOSAL_TYPE_CODE_RENEWAL))) {
-				typeOfApplication = TypeOfApplication.RENEWAL;
-			} else if (proposalTypeCode.equals(s2SConfigurationService.getValueAsString(
-                    ConfigurationConstants.PROPOSAL_TYPE_CODE_RESUBMISSION))) {
-				typeOfApplication = TypeOfApplication.RESUBMISSION;
-			} else if (proposalTypeCode.equals(PROPOSAL_TYPE_CODE_NEW7)) {
-				typeOfApplication = TypeOfApplication.NEW;
-			}
-		}
-		return typeOfApplication;
-	}
+        String proposalTypeCode = pdDoc.getDevelopmentProposal().getProposalType().getCode();
+        TypeOfApplication.Enum typeOfApplication = null;
+        if (proposalTypeCode != null) {
+            if (s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_NEW).contains(proposalTypeCode)) {
+                typeOfApplication = TypeOfApplication.NEW;
+            }
+            else if (s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_CONTINUATION).contains(proposalTypeCode)) {
+                typeOfApplication = TypeOfApplication.CONTINUATION;
+            }
+            else if (s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_REVISION).contains(proposalTypeCode)){ 
+                typeOfApplication = TypeOfApplication.REVISION;
+            }
+            else if (s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_RENEWAL).contains(proposalTypeCode)){ 
+                typeOfApplication = TypeOfApplication.RENEWAL;
+            }
+            else if (s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_RESUBMISSION).contains(proposalTypeCode)){ 
+                typeOfApplication = TypeOfApplication.RESUBMISSION;
+            }
+        }
+        return typeOfApplication;
+    }
 
 	/*
 	 * 

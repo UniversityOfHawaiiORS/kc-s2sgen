@@ -37,9 +37,11 @@ import gov.grants.apply.system.attachmentsV10.AttachedFileDataType;
 import gov.grants.apply.system.attachmentsV10.AttachmentGroupMin0Max100DataType;
 import gov.grants.apply.system.globalLibraryV20.YesNoDataType;
 import gov.grants.apply.system.globalLibraryV20.YesNoDataType.Enum;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.xmlbeans.XmlObject;
+import org.kuali.coeus.common.api.person.attr.CitizenshipType;
 import org.kuali.coeus.common.api.ynq.YnqConstant;
 import org.kuali.coeus.common.budget.api.nonpersonnel.BudgetLineItemContract;
 import org.kuali.coeus.common.budget.api.period.BudgetPeriodContract;
@@ -54,16 +56,13 @@ import org.kuali.coeus.propdev.api.person.ProposalPersonContract;
 import org.kuali.coeus.propdev.api.specialreview.ProposalSpecialReviewContract;
 import org.kuali.coeus.propdev.api.core.ProposalDevelopmentDocumentContract;
 import org.kuali.coeus.s2sgen.impl.generate.FormVersion;
-
 import org.kuali.coeus.s2sgen.impl.util.FieldValueConstants;
 import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
-import org.kuali.coeus.s2sgen.impl.citizenship.CitizenshipType;
 import org.kuali.coeus.propdev.api.attachment.NarrativeContract;
 import org.kuali.coeus.s2sgen.api.core.ConfigurationConstants;
 import org.kuali.coeus.s2sgen.impl.generate.FormGenerator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -824,22 +823,25 @@ public class PHS398FellowshipSupplementalV2_0Generator extends PHS398FellowshipS
             if (proposalPerson.isInvestigator()) {
                 hasInvestigator = true;
                 CitizenshipType citizenShip = s2SProposalPersonService.getCitizenship(proposalPerson);
-                if (citizenShip.getCitizenShip().trim().equals(CitizenshipDataType.NON_U_S_CITIZEN_WITH_TEMPORARY_VISA.toString())) {
-                    additionalInformation.setCitizenship(CitizenshipDataType.NON_U_S_CITIZEN_WITH_TEMPORARY_VISA);
+                if(citizenShip!=null){
+	                if (citizenShip.getCitizenShip().trim().equals(CitizenshipDataType.NON_U_S_CITIZEN_WITH_TEMPORARY_VISA.toString())) {
+	                    additionalInformation.setCitizenship(CitizenshipDataType.NON_U_S_CITIZEN_WITH_TEMPORARY_VISA);
+	                }
+	                else if (citizenShip.getCitizenShip().trim().equals(CitizenshipDataType.PERMANENT_RESIDENT_OF_U_S.toString())) {
+	                    additionalInformation.setCitizenship(CitizenshipDataType.PERMANENT_RESIDENT_OF_U_S);
+	                }
+	                else if (citizenShip.getCitizenShip().trim().equals(
+	                        CitizenshipDataType.U_S_CITIZEN_OR_NONCITIZEN_NATIONAL.toString())) {
+	                    additionalInformation.setCitizenship(CitizenshipDataType.U_S_CITIZEN_OR_NONCITIZEN_NATIONAL);
+	                }
+	                else if (citizenShip.getCitizenShip().trim().equals(
+	                        CitizenshipDataType.PERMANENT_RESIDENT_OF_U_S_PENDING.toString())) {
+	                    additionalInformation.setCitizenship(CitizenshipDataType.PERMANENT_RESIDENT_OF_U_S_PENDING);
+	                }
                 }
-                else if (citizenShip.getCitizenShip().trim().equals(CitizenshipDataType.PERMANENT_RESIDENT_OF_U_S.toString())) {
-                    additionalInformation.setCitizenship(CitizenshipDataType.PERMANENT_RESIDENT_OF_U_S);
+                else{
+                	additionalInformation.setCitizenship(null);
                 }
-                else if (citizenShip.getCitizenShip().trim().equals(
-                        CitizenshipDataType.U_S_CITIZEN_OR_NONCITIZEN_NATIONAL.toString())) {
-                    additionalInformation.setCitizenship(CitizenshipDataType.U_S_CITIZEN_OR_NONCITIZEN_NATIONAL);
-                }
-                else if (citizenShip.getCitizenShip().trim().equals(
-                        CitizenshipDataType.PERMANENT_RESIDENT_OF_U_S_PENDING.toString())) {
-                    additionalInformation.setCitizenship(CitizenshipDataType.PERMANENT_RESIDENT_OF_U_S_PENDING);
-                }
-
-
             }
         }
         if (principalInvestigator != null && principalInvestigator.getMobilePhoneNumber() != null) {
@@ -940,23 +942,20 @@ public class PHS398FellowshipSupplementalV2_0Generator extends PHS398FellowshipS
         String proposalTypeCode = pdDoc.getDevelopmentProposal().getProposalType().getCode();
         TypeOfApplication.Enum typeOfApplication = null;
         if (proposalTypeCode != null) {
-            if (proposalTypeCode.equals(s2SConfigurationService.getValueAsString(ConfigurationConstants.PROPOSAL_TYPE_CODE_NEW))) {
+            if (s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_NEW).contains(proposalTypeCode)) {
                 typeOfApplication = TypeOfApplication.NEW;
             }
-            else if (proposalTypeCode.equals(s2SConfigurationService.getValueAsString(ConfigurationConstants.PROPOSAL_TYPE_CODE_CONTINUATION))) {
+            else if (s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_CONTINUATION).contains(proposalTypeCode)) {
                 typeOfApplication = TypeOfApplication.CONTINUATION;
             }
-            else if (proposalTypeCode.equals(s2SConfigurationService.getValueAsString(ConfigurationConstants.PROPOSAL_TYPE_CODE_REVISION))) {
+            else if (s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_REVISION).contains(proposalTypeCode)){ 
                 typeOfApplication = TypeOfApplication.REVISION;
             }
-            else if (proposalTypeCode.equals(s2SConfigurationService.getValueAsString(ConfigurationConstants.PROPOSAL_TYPE_CODE_RENEWAL))) {
+            else if (s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_RENEWAL).contains(proposalTypeCode)){ 
                 typeOfApplication = TypeOfApplication.RENEWAL;
             }
-            else if (proposalTypeCode.equals(s2SConfigurationService.getValueAsString(ConfigurationConstants.PROPOSAL_TYPE_CODE_RESUBMISSION))) {
+            else if (s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_RESUBMISSION).contains(proposalTypeCode)){ 
                 typeOfApplication = TypeOfApplication.RESUBMISSION;
-            }
-            else if (proposalTypeCode.equals(PROPOSAL_TYPE_CODE_NEW7)) {
-                typeOfApplication = TypeOfApplication.NEW;
             }
         }
         return typeOfApplication;
