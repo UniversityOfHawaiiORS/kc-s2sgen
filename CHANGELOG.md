@@ -1,6 +1,280 @@
 
 
 ##CURRENT
+* Merge PD > S2S Opportunity > Forms: For Approved and Submitted
+  * Migrated Proposals, Create PDF prints form but does NOT print any
+  * attachments.
+  * PD > S2S Opportunity > Forms: For Approved and Submitted Migrated
+  * Proposals, Create PDF prints form but does NOT print any attachments.
+  * Any migrated Coeus proposal in Approved and Submitted status that was
+submitted to Grants.gov - when you open in KC and select the Create PDF
+  * option for any form, the form prints but the pdf does not include any
+  * attachments. This seems to be true for ALL forms and all attachment
+  * types.
+  * It does include attachments when printing for proposals that were NOT
+  * migrated from Coeus.
+  * See for example PD 25607 (in either KC Wkly or KC Production)
+  * One example of why this is needed to be fixed is sponsor requests for
+  * copies of the proposal materials submitted to grants.gov (including
+  * print of forms and attachments). The KC electronic proposal is the
+system of record for this.
+  * NOTE: Some migrated "Submitted" proposals from Coeus have the status of
+  * "Approval Granted" in KC. This status for migrated proposals also is not
+  * printing the attachments for the G.gov forms. See for example PD 23373
+  * MITKC 2096  * vineeth on Wed, 16 Dec 2015 16:01:33 -0500 [View Commit](../../commit/d0d21ab5283ea3b07015022a51a86c431ed780a7)
+
+##coeus-s2sgen-1512.0013
+* minor fixes and renames for consistency.
+  * Travis Schneeberger on Fri, 11 Dec 2015 17:18:40 -0500 [View Commit](../../commit/52d4afbd0a6a1e018636e904c0f7884c80bf497b)
+
+##coeus-s2sgen-1512.0012
+*  The RR_SubawardBudget10_10_1_3 Form PDF Preview from KC does not display all the details even-though this information is entered in the uploaded RR_Budget10_1_3_A-V1.3 Form.
+
+            The following information is not populating the KC Generated form:
+
+                 - Section A. Senior/Key Person - following fields: Base Salary, Cal. Months, Acad. Months, Sum. Months, Requested Salary ($), Fringe Benefits ($), Funds Requested ($) for each individual listed
+                 - Section B. Other Personnel - following fields: Cal. Months, Acad. Months, Sum. Months, Requested Salary ($), Fringe Benefits ($), Funds Requested ($) for each individual listed
+                 - Section F. Other Direct Costs - anything that is added under Other (i.e. lines 8-10) on the uploaded Subaward Budget forms also does not appear on the KC generated form
+                 - Section K. Budget Justification - The file name and mime type for the Budget Justification does not populate the form even though the Budget Justification is uploaded and attached to the form
+                 - The Cumulative Budget Form is missing the detailed breakdown as well along with the Subtotals for Sections C, D, E, and F
+                 - The form Expiration Date in incorrect. It should be 06/30/2016
+
+            Attached is the RR_Budget10_1_3_A-V1.3 Form uploaded in the Subaward Budget Section.
+
+            (I'm not sure if this is helpful, but there were Jiras: KRACOEUS-8003 and COEUSQA-4087 with this same problem but for the RR_SubawardBudget10_30_1_3 Form).
+
+            Steps to Reproduce:
+
+            # Create a new proposal with basic info to save (With start and end dates that include period 7/1/2015-6/30/2016)
+            # Create a new, detailed budget
+            # Enter a single non-personnel line item for M&S
+            # Go to Subaward section. Enter subaward uploading attached RR_Budget10_1_3_A-V1.3 file
+            # Save
+            #  Naviagte to Basics -> S2S Opportunity Search -> Forms Tab
+            # Check the Select checkbox for RR_SubawardBudget10_10_1_3 From
+            # Click the [Create PDF] button
+
+            You will see the fields listed above are unpopulated
+  * Travis Schneeberger on Thu, 10 Dec 2015 11:46:12 -0500 [View Commit](../../commit/d48e900b57a42553d6e5534267a614b5da240894)
+
+##coeus-s2sgen-1512.0011
+* PD Printing: Approved&Submitted does not support Create PDF
+  * for PHS398_ModularBudget_1_2-V1.2.
+  * Approved and Submitted Proposals are not generating the Modular Budget
+  * FORM when users attempt to create the PDF.
+  * S2S Opportunity Search > Forms > Select > Create PDF for the PHS 398
+  * Modular Budget form.
+  * The system will generate the Attachments (justifications), but NOT the
+  * actual FORM with the budget data post-submission.
+  * To reproduce:
+  * Kuali Demo 1: 
+  * Search and open proposal number 72 (approved submitted PA-C-R01)
+  * Go to S2S Opportunity Search screen > Forms tabl
+  * Click "select" PHS398_ModularBudget_1_2-V1.2
+  * Click "Create PDF"
+  * Results:
+  * Generates a PDF file, but the Attachment only, NOT the Modular Budget
+  * form sheet & data.
+  * Desired Results:
+  * KC needs to print the Modular Budget FORM with DATA for Approved and
+  * Submitted proposals.
+  * MIT KC Production PD 29529 - 
+  * Change/Corrected proposal, Created from copy of KC Native (not Migrated
+  * from Coeus) proposals.
+  * Approved and Submitted status, submitted S2S 10/14/2018
+  * Confirmed that in PD Budget Settings, Modular Budget was selected.
+  * Confirmed in PD Budget > Modular Budget, data was synced and populated
+  * from detailed budget.
+  * Confirmed in eRA Commons that the Grant Image included correct data for
+  * Modular Budget.
+  * This is happening in multiple proposals in MIT KC Production: see also
+  * 29465, 29528, 29417, 29216
+  * KC needs to print the Modular Budget form for user on Approved and
+  * Submitted proposals.  * vineeth on Wed, 9 Dec 2015 19:32:23 -0500 [View Commit](../../commit/ddf0c9da7a485721b6247c5bd852e62f906e0f5d)
+
+##coeus-s2sgen-1512.0010
+*  PD: Grants.gov: RR_SubawardBudget10_30_1_3 From PDF Preview does NOT Generate (only the attached Budget Justification appears)
+
+  * Users are not able to generate a PDF preview of the RR_SubawardBudget10_30_1_3 From in the Opportunity Search screen -> Forms tab (or from the Print link).
+  * When users checks the select checkbox for RR_SubawardBudget10_30_1_3 Form and then clicks the [Create PDF] button, the file that opens/downloads only includes the Budget Justification file that was attached to the Subawawrd Budget pdf that was uploaded in the Subaward Section of the PD Budget. See Proposal Number 29411 (Budget version 2) in MIT QA Weekly.
+  * (From our experience of this in MIT KC Production, It appears that the XML that was generated of the form - does include the information as uploaded in the form - so this might be a display issue.)
+  * (I am including in this Jira the Sub RR Budget form uploaded in the Subaward Section of the Budget)
+  * Steps to Reproduce:
+  * Create a new proposal with basic info to save (With start and end dates that include period 7/1/2015-6/30/2016)
+  * Create a new, detailed budget
+  * Enter a single non-personnel line item for M&S
+  * Go to Subaward section. Enter subaward uploading attached RR_Budget10_1_3_A30-V1.3-Display.pdf file
+  * Save
+  * Naviagte to Basics -> S2S Opportunity Search -> Forms Tab
+  * Check the Select checkbox for RR_SubawardBudget10_30_1_3 From
+  * Click the [Create PDF] button
+  * You will see that only the Budget Justification generates as the Preview. The actual 10 YEAR R&R SUBAWARD BUDGET ATTACHMENT(S) FORM and the attached RR Budget pages do NOT generate.
+  * Travis Schneeberger on Wed, 9 Dec 2015 17:14:33 -0500 [View Commit](../../commit/103a22d62b771d09d110e2428f6caf8246a028db)
+
+##coeus-s2sgen-1512.0009
+*  PD: Grants.gov: RR_SubawardBudget10_30_1_3 From PDF Preview does NOT Generate (only the attached Budget Justification appears)
+
+  * Users are not able to generate a PDF preview of the RR_SubawardBudget10_30_1_3 From in the Opportunity Search screen -> Forms tab (or from the Print link).
+  * When users checks the select checkbox for RR_SubawardBudget10_30_1_3 Form and then clicks the [Create PDF] button, the file that opens/downloads only includes the Budget Justification file that was attached to the Subawawrd Budget pdf that was uploaded in the Subaward Section of the PD Budget. See Proposal Number 29411 (Budget version 2) in MIT QA Weekly.
+  * (From our experience of this in MIT KC Production, It appears that the XML that was generated of the form - does include the information as uploaded in the form - so this might be a display issue.)
+  * (I am including in this Jira the Sub RR Budget form uploaded in the Subaward Section of the Budget)
+  * Steps to Reproduce:
+  * Create a new proposal with basic info to save (With start and end dates that include period 7/1/2015-6/30/2016)
+  * Create a new, detailed budget
+  * Enter a single non-personnel line item for M&S
+  * Go to Subaward section. Enter subaward uploading attached RR_Budget10_1_3_A30-V1.3-Display.pdf file
+  * Save
+  * Naviagte to Basics -> S2S Opportunity Search -> Forms Tab
+  * Check the Select checkbox for RR_SubawardBudget10_30_1_3 From
+  * Click the [Create PDF] button
+  * You will see that only the Budget Justification generates as the Preview. The actual 10 YEAR R&R SUBAWARD BUDGET ATTACHMENT(S) FORM and the attached RR Budget pages do NOT generate.
+  * Travis Schneeberger on Wed, 9 Dec 2015 15:27:57 -0500 [View Commit](../../commit/1202ca815db2c3062b1029fecc74afa6ed38840b)
+
+##coeus-s2sgen-1512.0008
+* No Changes
+
+
+##coeus-s2sgen-1512.0007
+* PD Printing: Approved&Submitted does not support Create PDF
+  * for PHS398_CoverPageSupplement_2_0-V2.0 > Create PDF -no data provided
+  * in form.
+  * Approved and Submitted Proposals are not populating data in the PHS398
+  * Cover Page Supplement 2-0 FORM when users attempt to create the PDF.
+  * (Create PDF) is printing a blank form and populates with no transmitted
+  * data. 
+  * S2S Opportunity Search > Forms > Select > Create PDF for the PHS Cover
+  * Page Supplement form.
+  * The system will generate the FORM, but none of the proposal or
+  * questionnaire data appear in the PDF post-submission.
+  * To reproduce:
+  * Kuali Demo 1: 
+  * Search and open proposal number 72 (approved submitted PA-C-R01)
+  * Go to S2S Opportunity Search screen > Forms tabl
+  * Click "select" PHS398 Cover Page Supplement 2-0
+  * Click "Create PDF"
+  * Results:
+  * Generates a PDF form stylesheet, but NO DATA answers appear.
+  * Desired Results:
+  * KC needs to print the PHS398_CoverPageSupplement_2_0-V2.0 form for user
+  * on Approved and Submitted proposals with transmitted data populated.
+  * MIT KC Production PD 29529 - 
+  * Change/Corrected proposal, Created from copy of KC Native (not Migrated
+  * from Coeus) proposals.
+  * Approved and Submitted status, submitted S2S 10/14/2018
+  * Confirmed in eRA Commons that the Grant Image included correct data for
+  * PHS398_CoverPageSupplement_2_0-V2.0
+  * This is happening in multiple proposals in MIT KC Production: see also
+  * as examples 29465, 29528, 29417, 29216, 29332  * vineeth on Tue, 8 Dec 2015 18:41:58 -0500 [View Commit](../../commit/bb8313d5b9b821285e4034c326dc11a8f4fcf50c)
+
+##coeus-s2sgen-1512.0006
+*  fixing the stylesheet so that it will print without Apache FOP throwing an exception.
+  * Travis Schneeberger on Tue, 8 Dec 2015 20:06:05 -0500 [View Commit](../../commit/e9e2f5ae05e5c38c4809d241a7c508a0948c0c84)
+
+##coeus-s2sgen-1512.0005
+*  When printing s2s forms and validation errors exist those validation errors are never displayed to the end user.  Instead s2s pdf generation will be unable to create a pdf due to incomplete xml being input into the print process.
+  * Travis Schneeberger on Tue, 8 Dec 2015 15:28:28 -0500 [View Commit](../../commit/82b9eabb7b0781be58e30bf83d081a8cf2215d6e)
+
+##coeus-s2sgen-1512.0004
+* Fix issue due to recent change that caused exception when validating s2s forms
+
+  * Due to ProposalAdminDetails being created on routing, an assumption in S2S was incorrect and would cause the generators to lookup a blank user for the AOR. This corrects this and instead only uses the proposaladmindetails signedBy when it exists.
+  * blackcathacker on Thu, 3 Dec 2015 11:03:57 -0800 [View Commit](../../commit/9c069a9d91c0095d2a6d49460036440bd8bfeac4)
+
+##coeus-s2sgen-1512.0003
+*  Fix application type.
+  * Regardless of proposal type selected, the Data Validation and/or the Opportunity Search > Forms screen return error based on S2S Application Type.
+  * With form SF424-V2.1:
+  * /GrantApplication/Forms/SF424_2_1/ApplicationType is not valid in SF424-V2.1
+  * and
+  * With form SF424-V2.0:
+  * /GrantApplication/Forms/SF424/ApplicationType is not valid in SF424-V2.0
+
+  * Steps to recreate:
+  * Create a PD record, with basic info to save and Proposal Type = New
+  * In S2S Opportunity Search, search for Grants.gov test opportunity NISTNOTRR2 and link.
+  * Add a PI
+  * Questionnaire: answer the GG Form questionnaire
+  * S2S Opportunity Search > Create the PDF for the SF424-V2.1
+  * Results:
+  * error stating the Application Type not Valid in SF424-V2.1
+  * Return to Proposal Details and change proposal type to any other.
+  * Attempt to Print.
+  * Same error re Application Type remains.
+  * This is may be a result of the recently added Proposal Types and/or RESKC-360 which was for a problem in MIT KC Production soon after go-live related to the same form.
+  * PD S2S - Error messages re "Application Type" for SF424-V2.1 and SF424-V2.0 (NOT RR versions)
+  * Gayathri Athreya on Wed, 2 Dec 2015 17:29:17 -0700 [View Commit](../../commit/2bbd144823d898a54b75f92c13bd6d4ba16d317d)
+
+##coeus-s2sgen-1512.0002
+*  PD - Grants.gov RR SF424 v1-2, RR SF424 v1-1, RR SF424 v1-0 forms populate PD/PI "Department" field with unit code - should be Unit Name
+  * Travis Schneeberger on Wed, 2 Dec 2015 11:25:41 -0500 [View Commit](../../commit/89188b4f161edaa0aaa56c8a42f4621bf9854039)
+
+##coeus-s2sgen-1512.0001
+*  Fix key person role.
+  * PD Budget - G.gov form RR Budget v1-3, system generated attachment "Additional Senior Key Persons" not not populating project role
+  * On the system generated attachment "Additional Senior Key Persons," KC should populate the "Project Role" field as it does for Senior/Key persons listed on the budget form.
+  * Currently, if a key person, has "Project Role: Other (Specify)
+  * This should instead be the "Other" that is entered in the Proposal > Key Personnel> Personnel section of the proposal, such as "Senior Research Scientist"
+  * This should be consistent with the project role populating in Section A of the rr budget form.
+  * To duplicate:
+  * Create a proposal with the minimum required fields to save, including a federal sponsor code to connect to Grants.gov.
+  * S2S Opportunity > Grants.gov PA-C-R01 contains the RR Budget 1-3.
+  * Key Personnel: add a PI and at least 8 more key personnel to surpass the 8 detailed persons in the s2s form.
+  * Budget > Create a detailed budget
+  * >maintain salaries for all the persons and assign them to P1, generate all periods
+  * >Mark the budget complete and for submission
+  * Return to proposal
+  * Attachments > add a budget justification PDF file
+  * S2S Opportunity > Forms > RR Budget 1-3 check to Include & save
+  * Check to Print the RR Budget 1-3, click create pdf
+  * Result:
+  * The primary budget form publishes the Project Role for the 8 persons in the Sr/Key budget section, but the Additional Key Persons sheet does NOT provide the project role for the additional persons.
+  * Desired Results:
+  * The additional key personnel sheet(s) should provide the Project Role as defined in Key Personnel, just as is done for the prime budget.
+  * Gayathri Athreya on Wed, 2 Dec 2015 11:38:51 -0700 [View Commit](../../commit/d6ad5ea3f56acfead4c0acddb615880e04d7a78f)
+
+##coeus-s2sgen-1511.0006
+* No Changes
+
+
+##coeus-s2sgen-1511.0005
+* No Changes
+
+
+##coeus-s2sgen-1511.0004
+*  preventing the federalId from being set to blank
+  * Travis Schneeberger on Thu, 5 Nov 2015 17:00:18 -0500 [View Commit](../../commit/1e761aa5f01fcfc5afa506ad32284697f18428a0)
+
+##coeus-s2sgen-1511.0003
+*  The SF 424 R&R version 1-2 must be updated to allow field 4.a to be populated no matter what the proposal type (new/renewal/revision/etc.)
+*This logic was already updated for the 2-0 form version and needs to be applied to the 1-2 because this version of the form was not retire*d.
+  * The field mapping from KC is “Sponsor Proposal ID” on the Sponsor and Program Info screen.
+  * Travis Schneeberger on Wed, 4 Nov 2015 14:56:42 -0500 [View Commit](../../commit/8ae8bd8ff2eb4a7144bf52b1a3f27e5092358e34)
+
+##coeus-s2sgen-1511.0002
+*  Remove activity title from forms
+  * KC needs to populate the "ActivityTitle" with the CFDA Description data from the S2S opportunity if available; and ALWAYS trim the length to stay under the 120 character limit.
+  * IF the CFDA is blank in the opportunity, this field should remain blank in the SF424 RR forms.*
+  * With the CFDA *blank *in the sponsor opportunity package, the RR SF424 form CFDA Title/Description field continues to be populated with the "Opportunity Title" rather than being left blank.
+  * When CFDA is *included *in the sponsor opportunity package, the RR SF424 form CFDA Title/Description field is populated with the "Opportunity Title" rather than with the CFDA Description data from the S2S opportunity. (the CFDA number does print correctly)
+  * Gayathri Athreya on Tue, 3 Nov 2015 17:13:36 -0700 [View Commit](../../commit/d87968e84818b75550920b5971552fc8f73ca544)
+
+##coeus-s2sgen-1511.0001
+* Prevent an NPE where the ProposalPerson.Person instance ProposalPerson.Person.Unit instance is null
+  * Travis Schneeberger on Wed, 28 Oct 2015 16:03:25 -0400 [View Commit](../../commit/9f1573d21feb0379c7715e45cdb0366d699a977b)
+
+##coeus-s2sgen-1510.0003
+* No Changes
+
+
+##coeus-s2sgen-1510.0002
+*  fixing proposal type check for NSFApplicationCheckList form. It will use comma separated param list for populating question answers on the form
+  * Geo Thomas on Thu, 1 Oct 2015 17:19:06 -0400 [View Commit](../../commit/681de377f5414c866e17124b0fa3c1acbee3cc0e)
+
+##coeus-s2sgen-1510.0001
+*  Application Types are populating on RRSF424 with comma separated proposal types and new proposal type constants have been added for setting proper submission type on RRSF424
+  * Geo Thomas on Wed, 30 Sep 2015 19:41:32 -0400 [View Commit](../../commit/77a556fc7bd95aac37766de8553aaff0f4ba9ea4)
+
+##coeus-s2sgen-1509.0014
 *  Fixed populating correct Proposal Types on Grants.gov PHS_Fellowship_Supplemental_X_X and PHS398ResTrainProgPlanV1_0 forms by setting comma separated parameter values
   * vineeth on Fri, 7 Aug 2015 13:21:04 -0400 [View Commit](../../commit/cdb97747f985b17208495bb6d21b5b42e46ff95b)
 

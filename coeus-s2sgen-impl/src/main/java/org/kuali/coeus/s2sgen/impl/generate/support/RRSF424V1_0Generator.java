@@ -38,7 +38,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.apache.xmlbeans.XmlObject;
 import org.kuali.coeus.common.api.org.OrganizationContract;
-import org.kuali.coeus.common.api.person.KcPersonContract;
 import org.kuali.coeus.common.api.ynq.YnqConstant;
 import org.kuali.coeus.common.questionnaire.api.answer.AnswerHeaderContract;
 import org.kuali.coeus.common.api.rolodex.RolodexService;
@@ -58,6 +57,7 @@ import org.kuali.coeus.propdev.api.core.ProposalDevelopmentDocumentContract;
 import org.kuali.coeus.s2sgen.impl.generate.FormVersion;
 
 import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
+import org.kuali.coeus.s2sgen.api.core.ConfigurationConstants;
 import org.kuali.coeus.s2sgen.api.core.S2SException;
 import org.kuali.coeus.propdev.api.attachment.NarrativeContract;
 import org.kuali.coeus.s2sgen.impl.generate.FormGenerator;
@@ -131,13 +131,9 @@ public class RRSF424V1_0Generator extends RRSF424BaseGenerator {
 		if (rolodex != null) {
 			rrsf424.setStateID(rolodex.getState());
 		}
-		String federalId = getSubmissionInfoService().getFederalId(pdDoc.getDevelopmentProposal().getProposalNumber());
-		if (federalId != null) {
-			if (federalId.length() > 30) {
-				rrsf424.setFederalID(federalId.substring(0, 30));
-			} else {
-				rrsf424.setFederalID(federalId);
-			}
+		final String federalId = getFederalId();
+		if (StringUtils.isNotBlank(federalId)) {
+			rrsf424.setFederalID(federalId);
 		}
 		rrsf424.setApplicantInfo(getApplicationInfo());
 		rrsf424.setApplicantType(getApplicantType());
@@ -377,7 +373,7 @@ public class RRSF424V1_0Generator extends RRSF424BaseGenerator {
 	private StateReview getStateReview() {
 		Map<String, String> eoStateReview = getEOStateReview(pdDoc);
 		StateReviewCodeTypeDataType.Enum stateReviewCodeType = null;
-		String stateReviewData = null;
+		String stateReviewData;
 		String strReview = eoStateReview.get(YNQ_ANSWER);
 		if (STATE_REVIEW_YES.equals(strReview)) {
 			stateReviewCodeType = StateReviewCodeTypeDataType.YES;
@@ -402,75 +398,67 @@ public class RRSF424V1_0Generator extends RRSF424BaseGenerator {
 	 */
 	private ApplicationType getApplicationType() {
 		ApplicationType applicationType = ApplicationType.Factory.newInstance();
-
-		if (pdDoc.getDevelopmentProposal().getProposalType() != null
-				&& Integer.parseInt(pdDoc.getDevelopmentProposal()
-						.getProposalType().getCode()) < PROPOSAL_TYPE_CODE_6) {
-			// Check <6 to ensure that if proposalType='TASk ORDER", it must not
-			// set. THis is because enum ApplicationType has no
-			// entry for TASK ORDER
+		String proposalTypeCode = pdDoc.getDevelopmentProposal().getProposalType().getCode();
+		if (s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_REVISION).contains(proposalTypeCode)) {
 			ApplicationTypeCodeDataType.Enum applicationTypeCodeDataType = ApplicationTypeCodeDataType.Enum
-					.forInt(Integer.parseInt(pdDoc.getDevelopmentProposal()
-							.getProposalType().getCode()));
+					.forInt(Integer.parseInt(proposalTypeCode));
 			applicationType.setApplicationTypeCode(applicationTypeCodeDataType);
-
 			Map<String, String> submissionInfo = getSubmissionType(pdDoc);
-			if (Integer.parseInt(pdDoc.getDevelopmentProposal()
-					.getProposalType().getCode()) == ApplicationTypeCodeDataType.INT_REVISION) {
-				String revisionCode = null;
+				String revisionCode;
 				if (submissionInfo.get(KEY_REVISION_CODE) != null) {
-					revisionCode = submissionInfo
-							.get(KEY_REVISION_CODE);
-					RevisionCode revisionCodeApplication = RevisionCode.Factory
-							.newInstance();
+					revisionCode = submissionInfo.get(KEY_REVISION_CODE);
+					RevisionCode revisionCodeApplication = RevisionCode.Factory.newInstance();
 					revisionCodeApplication.setStringValue(revisionCode);
 					applicationType.setRevisionCode(revisionCodeApplication);
 				}
-				String revisionCodeOtherDesc = null;
-				if (submissionInfo
-						.get(KEY_REVISION_OTHER_DESCRIPTION) != null) {
-					revisionCodeOtherDesc = submissionInfo
-							.get(KEY_REVISION_OTHER_DESCRIPTION);
-					RevisionCodeOtherExplanation revisionCodeOtherExplanation = RevisionCodeOtherExplanation.Factory
-							.newInstance();
-					revisionCodeOtherExplanation
-							.setStringValue(revisionCodeOtherDesc);
-					applicationType
-							.setRevisionCodeOtherExplanation(revisionCodeOtherExplanation);
+				String revisionCodeOtherDesc;
+				if (submissionInfo.get(KEY_REVISION_OTHER_DESCRIPTION) != null) {
+					revisionCodeOtherDesc = submissionInfo.get(KEY_REVISION_OTHER_DESCRIPTION);
+					RevisionCodeOtherExplanation revisionCodeOtherExplanation = RevisionCodeOtherExplanation.Factory.newInstance();
+					revisionCodeOtherExplanation.setStringValue(revisionCodeOtherDesc);
+					applicationType.setRevisionCodeOtherExplanation(revisionCodeOtherExplanation);
 				}
-			}
 		}
-		ProposalYnqContract proposalYnq = getAnswer(
-				PROPOSAL_YNQ_OTHER_AGENCY_SUBMISSION, pdDoc);
+		if (pdDoc.getDevelopmentProposal().getProposalType() != null) {
+			setProposalApplicationType(proposalTypeCode,applicationType);
+		}
+		ProposalYnqContract proposalYnq = getAnswer(PROPOSAL_YNQ_OTHER_AGENCY_SUBMISSION, pdDoc);
 		Enum answer = YesNoDataType.NO;
 		if (proposalYnq != null && proposalYnq.getAnswer() != null) {
-			answer = (proposalYnq.getAnswer().equals(
-					YnqConstant.YES.code()) ? YesNoDataType.YES
-					: YesNoDataType.NO);
+			answer = (proposalYnq.getAnswer().equals(YnqConstant.YES.code()) ? YesNoDataType.YES: YesNoDataType.NO);
 		}
-
 		applicationType.setIsOtherAgencySubmission(answer);
 		if (answer.equals(YesNoDataType.YES)) {
-			OtherAgencySubmissionExplanation otherAgencySubmissionExplanation = OtherAgencySubmissionExplanation.Factory
-					.newInstance();
+			OtherAgencySubmissionExplanation otherAgencySubmissionExplanation = OtherAgencySubmissionExplanation.Factory.newInstance();
 			otherAgencySubmissionExplanation.setIsOtherAgencySubmission(answer);
 			String answerExplanation = proposalYnq.getExplanation();
 			if (answerExplanation != null) {
 				if (answerExplanation.length() > ANSWER_EXPLANATION_MAX_LENGTH) {
-					otherAgencySubmissionExplanation
-							.setStringValue(answerExplanation.substring(0,
-									ANSWER_EXPLANATION_MAX_LENGTH));
+					otherAgencySubmissionExplanation.setStringValue(answerExplanation.substring(0,ANSWER_EXPLANATION_MAX_LENGTH));
 				} else {
-					otherAgencySubmissionExplanation
-							.setStringValue(answerExplanation);
+					otherAgencySubmissionExplanation.setStringValue(answerExplanation);
 				}
 			}
-			applicationType
-					.setOtherAgencySubmissionExplanation(otherAgencySubmissionExplanation);
+			applicationType.setOtherAgencySubmissionExplanation(otherAgencySubmissionExplanation);
 		}
 		return applicationType;
 	}
-
+	
+	private void setProposalApplicationType(String proposalTypeCode,ApplicationType applicationType) {
+		if(s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_NEW).contains(proposalTypeCode)) {
+			applicationType.setApplicationTypeCode(ApplicationTypeCodeDataType.Enum.forInt(ApplicationTypeCodeDataType.INT_NEW));
+		}else if(s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_REVISION).contains(proposalTypeCode)) {
+			applicationType.setApplicationTypeCode(ApplicationTypeCodeDataType.Enum.forInt(ApplicationTypeCodeDataType.INT_REVISION));
+		}else if(s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_RENEWAL).contains(proposalTypeCode))  {
+			applicationType.setApplicationTypeCode(ApplicationTypeCodeDataType.Enum.forInt(ApplicationTypeCodeDataType.INT_RENEWAL));
+		}else if(s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_RESUBMISSION).contains(proposalTypeCode)) {
+			applicationType.setApplicationTypeCode(ApplicationTypeCodeDataType.Enum.forInt(ApplicationTypeCodeDataType.INT_RESUBMISSION));
+		}else if(s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_CONTINUATION).contains(proposalTypeCode)) {
+			applicationType.setApplicationTypeCode(ApplicationTypeCodeDataType.Enum.forInt(ApplicationTypeCodeDataType.INT_CONTINUATION));
+		}
+	}
+	
+	
 	/**
 	 *
 	 * This method is used to get Proposed Project Period for RRSF424
@@ -537,7 +525,7 @@ public class RRSF424V1_0Generator extends RRSF424BaseGenerator {
 
 		OrganizationContactPersonDataType PDPI = OrganizationContactPersonDataType.Factory
 				.newInstance();
-		ProposalPersonContract PI = null;
+		ProposalPersonContract PI;
 		for (ProposalPersonContract proposalPerson : pdDoc.getDevelopmentProposal()
 				.getProposalPersons()) {
 			if (PRINCIPAL_INVESTIGATOR.equals(proposalPerson
@@ -564,9 +552,7 @@ public class RRSF424V1_0Generator extends RRSF424BaseGenerator {
 				}
 
 				if(PI.getHomeUnit() != null) {
-                    KcPersonContract kcPerson = PI.getPerson();
-		            String departmentName =  kcPerson.getOrganizationIdentifier();
-		            PDPI.setDepartmentName(StringUtils.substring(departmentName, 0, DEPARTMENT_NAME_MAX_LENGTH));
+					PDPI.setDepartmentName(getDepartmentName(PI.getPerson()));
 		        }
 		        else
 		        {
@@ -656,7 +642,7 @@ public class RRSF424V1_0Generator extends RRSF424BaseGenerator {
 					.getApplicantOrganization().getOrganization()
 					.getOrganizationTypes().get(0).getOrganizationTypeList().getCode();
 		}
-		ApplicantTypeCodeDataType.Enum applicantTypeCode = null;
+		ApplicantTypeCodeDataType.Enum applicantTypeCode;
 		switch (orgTypeCode) {
 		case 1: {
 			// local
@@ -715,8 +701,6 @@ public class RRSF424V1_0Generator extends RRSF424BaseGenerator {
 		}
 		case 14: {
 			// disadvantaged
-			applicantTypeCode = ApplicantTypeCodeDataType.P_OTHER_SPECIFY;
-			// value is hardcoded
 			isSociallyEconomicallyDisadvantaged.setStringValue(VALUE_YES);
 			applicantTypeCode = ApplicantTypeCodeDataType.O_SMALL_BUSINESS;
 			smallOrganizationType.setApplicantTypeCode(applicantTypeCode);
@@ -726,9 +710,6 @@ public class RRSF424V1_0Generator extends RRSF424BaseGenerator {
 			break;
 		}
 		case 15: {
-			// women owned
-			applicantTypeCode = ApplicantTypeCodeDataType.P_OTHER_SPECIFY;
-			// value is hardcoded
 			isWomenOwned.setStringValue(VALUE_YES);
 			applicantTypeCode = ApplicantTypeCodeDataType.O_SMALL_BUSINESS;
 			smallOrganizationType.setApplicantTypeCode(applicantTypeCode);

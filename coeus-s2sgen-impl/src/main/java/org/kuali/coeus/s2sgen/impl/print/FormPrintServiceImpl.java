@@ -59,6 +59,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
 import java.util.*;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -70,7 +71,12 @@ import java.util.zip.ZipOutputStream;
 public class FormPrintServiceImpl implements FormPrintService {
 	private static final Logger LOG = LoggerFactory.getLogger(FormPrintServiceImpl.class);
     private static final String PDF_FILE_EXTENSION = ".pdf";
-
+    private static final String NARRATIVE_CONTENT_ID_PREFIX = "N";
+    private static final String BIOGRAPHY_CONTENT_ID_PREFIX = "B";
+    private static final String NARRATIVE_LEGACY_DATA_CONTENT_ID_PREFIX = "M";
+    private static final String BIOGRAPHY_LEGACY_DATA_CONTENT_ID_PREFIX = "ID";
+    private static final String BIOGRAPHY_LEGACY_DATA_CONTENT_ID_ELEMENT = "BN";
+    
     @Autowired
     @Qualifier("s2sApplicationService")
 	private S2sApplicationService s2sApplicationService;
@@ -235,8 +241,8 @@ public class FormPrintServiceImpl implements FormPrintService {
 	protected PrintableResult getSubmittedPDFStream(
 			ProposalDevelopmentDocumentContract pdDoc) throws S2SException {
 		GrantApplicationDocument submittedDocument;
-		String frmXpath = null;        
-        String frmAttXpath = null;
+		String frmXpath;
+        String frmAttXpath;
 		try {
 		    S2sAppSubmissionContract s2sAppSubmission = getLatestS2SAppSubmission(pdDoc);
 		    String submittedApplicationXml = findSubmittedXml(s2sAppSubmission);
@@ -246,28 +252,28 @@ public class FormPrintServiceImpl implements FormPrintService {
 			LOG.error(e.getMessage(), e);
 			throw new S2SException(e);
 		}
-		FormMappingInfo info = null;
+		FormMappingInfo info;
 		DevelopmentProposalContract developmentProposal = pdDoc.getDevelopmentProposal();
         List<String> sortedNameSpaces = getSortedNameSpaces(developmentProposal.getProposalNumber(),developmentProposal.getS2sOppForms());
 		boolean formEntryFlag = true;
 		List<S2SPrintable> formPrintables = new ArrayList<>();
 		for (String namespace : sortedNameSpaces) {
-			XmlObject formFragment = null;
+			XmlObject formFragment;
 			info = formMappingService.getFormInfo(namespace);
 			if(info==null) continue;
 			if(StringUtils.isNotBlank(info.getStyleSheet())){
-				formFragment = getFormObject(submittedDocument, info);
+				formFragment = getFormObject(submittedDocument);
 				frmXpath = "//*[namespace-uri(.) = '"+namespace+"']";               
 				frmAttXpath = "//*[namespace-uri(.) = '"+namespace+"']//*[local-name(.) = 'FileLocation' and namespace-uri(.) = 'http://apply.grants.gov/system/Attachments-V1.0']";           
 
 				byte[] formXmlBytes = formFragment.xmlText().getBytes();
 				GenericPrintable formPrintable = new GenericPrintable();
 
-				ArrayList<Source> templates = new ArrayList<Source>();
+				ArrayList<Source> templates = new ArrayList<>();
 				DefaultResourceLoader resourceLoader = new DefaultResourceLoader(ClassLoaderUtils.getDefaultClassLoader());
 				Resource resource = resourceLoader.getResource(info.getStyleSheet());
 
-				Source xsltSource = null;
+				Source xsltSource;
 				try {
 					xsltSource = new StreamSource(resource.getInputStream());
 				} catch (IOException e) {
@@ -277,13 +283,13 @@ public class FormPrintServiceImpl implements FormPrintService {
 				formPrintable.setXSLTemplates(templates);
 
 				// Linkedhashmap is used to preserve the order of entry.
-				Map<String, byte[]> formXmlDataMap = new LinkedHashMap<String, byte[]>();
+				Map<String, byte[]> formXmlDataMap = new LinkedHashMap<>();
 				formXmlDataMap.put(info.getFormName(), formXmlBytes);
 				formPrintable.setStreamMap(formXmlDataMap);
 				S2sApplicationContract s2sApplciation = s2sApplicationService.findS2sApplicationByProposalNumber(pdDoc.getDevelopmentProposal().getProposalNumber());
 				List<? extends S2sAppAttachmentsContract> attachmentList = s2sApplciation.getS2sAppAttachmentList();
 
-				Map<String, byte[]> formAttachments = new LinkedHashMap<String, byte[]>();
+				Map<String, byte[]> formAttachments = new LinkedHashMap<>();
 
 				try{
 					XPathExecutor executer = new XPathExecutor(formFragment.toString());
@@ -320,7 +326,7 @@ public class FormPrintServiceImpl implements FormPrintService {
 				}
 				try {
 					if(developmentProposal.getGrantsGovSelectFlag()){
-						List<AttachmentData> attachmentLists = new ArrayList<AttachmentData>();
+						List<AttachmentData> attachmentLists = new ArrayList<>();
 						saveGrantsGovXml(pdDoc,formEntryFlag,formFragment,attachmentLists,attachmentList);
 						formEntryFlag = false;
 					}
@@ -353,7 +359,7 @@ public class FormPrintServiceImpl implements FormPrintService {
 	protected PrintableResult getPDFStream(ProposalDevelopmentDocumentContract pdDoc)
 			throws S2SException {
 
-		List<AuditError> errors = new ArrayList<AuditError>();
+		List<AuditError> errors = new ArrayList<>();
 		DevelopmentProposalContract developmentProposal = pdDoc
 				.getDevelopmentProposal();
         String proposalNumber = developmentProposal.getProposalNumber();
@@ -367,25 +373,24 @@ public class FormPrintServiceImpl implements FormPrintService {
             FormMappingInfo info = formMappingService.getFormInfo(namespace,proposalNumber);
 			if(info==null) continue;
             S2SFormGenerator s2sFormGenerator = s2SFormGeneratorService.getS2SGenerator(proposalNumber,info.getNameSpace());
-            errors.addAll(s2sFormGenerator.getAuditErrors());
 			XmlObject formObject = s2sFormGenerator.getFormObject(pdDoc);
-			
+			errors.addAll(s2sFormGenerator.getAuditErrors());
 			if (s2SValidatorService.validate(formObject, errors, info.getFormName()) && errors.isEmpty() && StringUtils.isNotBlank(info.getStyleSheet())) {
 			    String applicationXml = formObject.xmlText(s2SFormGeneratorService.getXmlOptionsPrefixes());
 			    String filteredApplicationXml = s2SDateTimeService.removeTimezoneFactor(applicationXml);
 				byte[] formXmlBytes = filteredApplicationXml.getBytes();
                 GenericPrintable formPrintable = new GenericPrintable();
 				// Linkedhashmap is used to preserve the order of entry.
-				Map<String, byte[]> formXmlDataMap = new LinkedHashMap<String, byte[]>();
+				Map<String, byte[]> formXmlDataMap = new LinkedHashMap<>();
 				formXmlDataMap.put(info.getFormName(), formXmlBytes);
 				formPrintable.setStreamMap(formXmlDataMap);
 
-				ArrayList<Source> templates = new ArrayList<Source>();
+				ArrayList<Source> templates = new ArrayList<>();
 
                 DefaultResourceLoader resourceLoader = new DefaultResourceLoader(ClassLoaderUtils.getDefaultClassLoader());
                 Resource resource = resourceLoader.getResource(info.getStyleSheet());
 
-                Source xsltSource = null;
+                Source xsltSource;
                 try {
                     xsltSource = new StreamSource(resource.getInputStream());
                 } catch (IOException e) {
@@ -397,7 +402,7 @@ public class FormPrintServiceImpl implements FormPrintService {
 				List<AttachmentData> attachmentList = s2sFormGenerator.getAttachments();
 				try {
 				    if(developmentProposal.getGrantsGovSelectFlag()){
-				    	List<S2sAppAttachmentsContract> attachmentLists = new ArrayList<S2sAppAttachmentsContract>();
+				    	List<S2sAppAttachmentsContract> attachmentLists = new ArrayList<>();
 				    	setFormObject(forms, formObject);
                     	saveGrantsGovXml(pdDoc,formEntryFlag,forms,attachmentList,attachmentLists);
                     	formEntryFlag = false;
@@ -406,7 +411,7 @@ public class FormPrintServiceImpl implements FormPrintService {
                 catch (Exception e) {
                         LOG.error(e.getMessage(), e);
                 }
-				Map<String, byte[]> formAttachments = new LinkedHashMap<String, byte[]>();
+				Map<String, byte[]> formAttachments = new LinkedHashMap<>();
 				if (attachmentList != null && !attachmentList.isEmpty()) {
 					for (AttachmentData attachmentData : attachmentList) {
 						if (!isPdfType(attachmentData.getContent()))
@@ -436,15 +441,12 @@ public class FormPrintServiceImpl implements FormPrintService {
 	 * 
 	 * @param submittedXml
 	 *            GrantApplicationDocument object of the submitted form.
-	 * @param info
-	 *            form mapping information of the form.
 	 * @return XmlObject form object corresponding to the
 	 *         GrantApplicationDocument and FormMappingInfo objects.
 	 * @throws S2SException
 	 */
 
-	protected XmlObject getFormObject(GrantApplicationDocument submittedXml,
-			FormMappingInfo info) {
+	protected XmlObject getFormObject(GrantApplicationDocument submittedXml) {
 		Forms forms = submittedXml.getGrantApplication().getForms();
 		return forms.newCursor().getObject();
 	}
@@ -464,24 +466,31 @@ public class FormPrintServiceImpl implements FormPrintService {
 			String contentId) {
 		String[] contentIds = contentId.split("-");
 		String[] contentDesc = contentIds[1].split("_");
-		if (StringUtils.equals(contentIds[0], "N")) {
-    		for (NarrativeContract narrative : pdDoc.getDevelopmentProposal()
-    				.getNarratives()) {
-				if (narrative.getModuleNumber().equals(Integer.valueOf(contentDesc[0]))) {
-				    return narrative.getNarrativeAttachment().getData();
-				}
-    		}
-		} else if (StringUtils.equals(contentIds[0], "B")){
-		    for (ProposalPersonBiographyContract biography : pdDoc.getDevelopmentProposal().getPropPersonBios()) {
-		        if (biography.getProposalPersonNumber().equals(Integer.valueOf(contentDesc[0]))
-		                && biography.getBiographyNumber().equals(Integer.valueOf(contentDesc[1]))) {
-		            return biography.getPersonnelAttachment().getData();
-		        }
-		    }
-    	}
+		if (StringUtils.equals(contentIds[0], NARRATIVE_CONTENT_ID_PREFIX)) {
+			return pdDoc.getDevelopmentProposal().getNarratives().stream().filter(narrative -> 
+			(narrative.getModuleNumber().equals(Integer.valueOf(contentDesc[0])))).findAny().get().getNarrativeAttachment().getData();
+		} else if (StringUtils.equals(contentIds[0], BIOGRAPHY_CONTENT_ID_PREFIX)) {
+			return pdDoc.getDevelopmentProposal().getPropPersonBios().stream().filter(biography -> 
+			(biography.getProposalPersonNumber().equals(Integer.valueOf(contentDesc[0])) && 
+					biography.getBiographyNumber().equals(Integer.valueOf(contentDesc[1])))).findAny().get().getPersonnelAttachment().getData();
+		} else {
+			return getLegacyCoeusAttachmentContent(pdDoc, contentIds, contentDesc);
+		}
+	}
+	
+
+	protected byte[] getLegacyCoeusAttachmentContent(ProposalDevelopmentDocumentContract pdDoc, String[] contentIds, String[] contentDesc) {
+		if (StringUtils.equals(contentIds[0], NARRATIVE_LEGACY_DATA_CONTENT_ID_PREFIX )) {
+			return pdDoc.getDevelopmentProposal().getNarratives().stream().filter(narrative -> 
+			(narrative.getModuleNumber().equals(Integer.valueOf(contentDesc[0])))).findAny().get().getNarrativeAttachment().getData();
+		} else if (StringUtils.equals(contentIds[0], BIOGRAPHY_LEGACY_DATA_CONTENT_ID_PREFIX) && StringUtils.equals(contentDesc[1], BIOGRAPHY_LEGACY_DATA_CONTENT_ID_ELEMENT)) {
+			String[] biographyDescrption = contentIds[2].split("_");
+			return pdDoc.getDevelopmentProposal().getPropPersonBios().stream().filter(biography -> 
+			(biography.getPersonId().equals(contentDesc[0]) && biography.getBiographyNumber().equals(Integer.valueOf(biographyDescrption[0])))).findAny().get().getPersonnelAttachment().getData();
+		}
 		return null;
 	}
-
+	
 	protected KcFile getAttributeContent(ProposalDevelopmentDocumentContract pdDoc,
             String contentId) {
         String[] contentIds = contentId.split("-");
@@ -520,9 +529,9 @@ public class FormPrintServiceImpl implements FormPrintService {
 		for (S2sAppSubmissionContract s2sAppSubmission : pdDoc.getDevelopmentProposal()
 				.getS2sAppSubmission()) {
 			if (s2sAppSubmission.getSubmissionNumber() != null
-					&& s2sAppSubmission.getSubmissionNumber().intValue() > submissionNo) {
+					&& s2sAppSubmission.getSubmissionNumber() > submissionNo) {
 				s2sSubmission = s2sAppSubmission;
-				submissionNo = s2sAppSubmission.getSubmissionNumber().intValue();
+				submissionNo = s2sAppSubmission.getSubmissionNumber();
 			}
 		}
 		return s2sSubmission;
@@ -539,11 +548,11 @@ public class FormPrintServiceImpl implements FormPrintService {
 	 * @return List&lt;String&gt; list of sorted name spaces.
 	 */
 	protected List<String> getSortedNameSpaces(String proposalNumber,List<? extends S2sOppFormsContract> s2sOppForms) {
-		List<String> orderedNamespaces = new ArrayList<String>();
+		List<String> orderedNamespaces = new ArrayList<>();
 		Set<String> namespaces;
         formMappingService.getBindings();
 		Map<Integer, Set<String>> sortedNamespaces = formMappingService.getSortedNameSpaces();
-		List<Integer> sortedIndices = new ArrayList<Integer>(sortedNamespaces
+		List<Integer> sortedIndices = new ArrayList<>(sortedNamespaces
 				.keySet());
 		int index = 0;
 		for (Integer sortedIndex : sortedIndices) {
@@ -559,13 +568,10 @@ public class FormPrintServiceImpl implements FormPrintService {
 			}
 		}
 		List<String> userAttachedFormNamespaces = findUserAttachedNamespaces(proposalNumber);
-        for (S2sOppFormsContract oppForm : s2sOppForms) {
-            if(userAttachedFormNamespaces.contains(oppForm.getOppNameSpace())){
-            	if (Boolean.TRUE.equals(oppForm.getSelectToPrint())) {
-                 orderedNamespaces.add(oppForm.getOppNameSpace());
-            	}
-            }
-        }
+		orderedNamespaces.addAll(s2sOppForms.stream()
+				.filter(oppForm -> userAttachedFormNamespaces.contains(oppForm.getOppNameSpace()))
+				.filter(oppForm -> Boolean.TRUE.equals(oppForm.getSelectToPrint()))
+				.map(S2sOppFormsContract::getOppNameSpace).collect(Collectors.toList()));
 		return orderedNamespaces;
 	}
 
@@ -611,9 +617,7 @@ public class FormPrintServiceImpl implements FormPrintService {
 				}
 			} else {
 				// Push Data, Fill last index
-				for (int fillIndex = 0; fillIndex < str.length - 1; fillIndex++) {
-					byteDataArr[fillIndex] = byteDataArr[fillIndex + 1];
-				}
+				System.arraycopy(byteDataArr, 1, byteDataArr, 0, str.length - 1);
 				byteDataArr[str.length - 1] = toUnsignedByte(data[str.length
 						- 1 + forwardIndex]);
 			}
