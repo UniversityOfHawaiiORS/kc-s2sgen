@@ -19,7 +19,6 @@
 package org.kuali.coeus.s2sgen.impl.generate.support;
 
 import gov.grants.apply.forms.rrSF42420V20.*;
-import gov.grants.apply.forms.rrSF42420V20.ApplicationTypeCodeDataType.Enum;
 import gov.grants.apply.forms.rrSF42420V20.RRSF42420Document.RRSF42420;
 import gov.grants.apply.forms.rrSF42420V20.RRSF42420Document.RRSF42420.*;
 import gov.grants.apply.forms.rrSF42420V20.RRSF42420Document.RRSF42420.ApplicantInfo.ContactPersonInfo;
@@ -33,8 +32,6 @@ import gov.grants.apply.system.globalLibraryV20.OrganizationDataType;
 import gov.grants.apply.system.globalLibraryV20.YesNoDataType;
 import gov.grants.apply.system.universalCodesV20.CountryCodeDataType;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.xmlbeans.XmlObject;
 import org.kuali.coeus.common.api.person.KcPersonContract;
 import org.kuali.coeus.common.api.person.KcPersonRepositoryService;
@@ -70,7 +67,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 
-
 import java.math.BigDecimal;
 import java.util.*;
 
@@ -80,9 +76,11 @@ import java.util.*;
  * 
  * @author Kuali Research Administration Team (kualidev@oncourse.iu.edu)
  */
-@FormGenerator("RRSF424_2_0_V2Generator")
-public class RRSF424_2_0_V2Generator extends RRSF424BaseGenerator {
-	private static final Logger LOG = LoggerFactory.getLogger(RRSF424_2_0_V2Generator.class);
+@FormGenerator("RRSF424_2_0V2_0Generator")
+public class RRSF424_2_0V2_0Generator extends RRSF424BaseGenerator {
+	private static final int CFDA_TITLE_MAX_LENGTH = 119;
+	private static final int PROJECT_TITLE_MAX_LENGTH = 200;
+
 	private DepartmentalPersonDto departmentalPerson;
 	protected static final int RRSF424_Cover_Letter = 139;
     private List<? extends AnswerHeaderContract> answerHeaders;
@@ -146,11 +144,14 @@ public class RRSF424_2_0_V2Generator extends RRSF424BaseGenerator {
 		if(pdDoc.getDevelopmentProposal().getCfdaNumber()!=null){
 		    rrsf42420.setCFDANumber(pdDoc.getDevelopmentProposal().getCfdaNumber());
 		}
-		rrsf42420.setActivityTitle(getActivityTitle());
+        String activityTitle = getActivityTitle();
+        if (!StringUtils.isEmpty(activityTitle)) {
+            rrsf42420.setActivityTitle(activityTitle);
+        }
 		setFederalId(rrsf42420);
 		rrsf42420.setPDPIContactInfo(getPDPI());
 		rrsf42420.setEstimatedProjectFunding(getProjectFunding());
-		rrsf42420.setTrustAgree(YesNoDataType.Y_YES);// Value is hardcoded
+		rrsf42420.setTrustAgree(YesNoDataType.Y_YES);
 		rrsf42420.setStateReview(getStateReview());
 		rrsf42420.setAORInfo(getAORInfoType());
 		rrsf42420.setAORSignature(getAORSignature());
@@ -355,9 +356,9 @@ public class RRSF424_2_0_V2Generator extends RRSF424BaseGenerator {
         Map<String, String> eoStateReview = getEOStateReview(pdDoc);
         StateReviewCodeTypeDataType.Enum stateReviewCodeType = null;
         String strReview = eoStateReview.get(YNQ_ANSWER);
-        String stateReviewData = null;
-        String stateReviewDate = null;
-        Calendar reviewDate = null;
+        String stateReviewData;
+        String stateReviewDate;
+        Calendar reviewDate;
         
         if (STATE_REVIEW_YES.equals(strReview)) {
             stateReviewCodeType = StateReviewCodeTypeDataType.Y_YES;
@@ -385,38 +386,40 @@ public class RRSF424_2_0_V2Generator extends RRSF424BaseGenerator {
 	private ApplicationType getApplicationType() {
 		ApplicationType applicationType = ApplicationType.Factory.newInstance();
 		Map<String, String> submissionInfo = getSubmissionType(pdDoc);
-		if (pdDoc.getDevelopmentProposal().getProposalType() != null
-				&& Integer.parseInt(pdDoc.getDevelopmentProposal()
-						.getProposalType().getCode()) < PROPOSAL_TYPE_CODE_6) {
-			// Check <6 to ensure that if proposalType='TASk ORDER", it must not
-			// set. THis is because enum ApplicationType has no
-			// entry for TASK ORDER
-			applicationType
-					.setApplicationTypeCode(getApplicationTypeCodeDataType());
-			if (Integer.parseInt(pdDoc.getDevelopmentProposal()
-					.getProposalType().getCode()) == ApplicationTypeCodeDataType.INT_REVISION) {
-
-				String revisionCode = null;
+		String proposalTypeCode=pdDoc.getDevelopmentProposal().getProposalType().getCode();
+		if (s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_REVISION).contains(proposalTypeCode)) {
+			applicationType.setApplicationTypeCode(ApplicationTypeCodeDataType.Enum.forInt(ApplicationTypeCodeDataType.INT_REVISION));
+			String revisionCode;
 				if (submissionInfo.get(KEY_REVISION_CODE) != null) {
-					revisionCode = submissionInfo
-							.get(KEY_REVISION_CODE);
-					RevisionTypeCodeDataType.Enum revisionCodeApplication = RevisionTypeCodeDataType.Enum
-							.forString(revisionCode);
+				revisionCode = submissionInfo.get(KEY_REVISION_CODE);
+				RevisionTypeCodeDataType.Enum revisionCodeApplication = RevisionTypeCodeDataType.Enum.forString(revisionCode);
 					applicationType.setRevisionCode(revisionCodeApplication);
 				}
-
-				String revisionCodeOtherDesc = null;
-				if (submissionInfo
-						.get(KEY_REVISION_OTHER_DESCRIPTION) != null) {
-					revisionCodeOtherDesc = submissionInfo
-							.get(KEY_REVISION_OTHER_DESCRIPTION);
-					applicationType
-							.setRevisionCodeOtherExplanation(revisionCodeOtherDesc);
+			String revisionCodeOtherDesc;
+			if (submissionInfo.get(KEY_REVISION_OTHER_DESCRIPTION) != null) {
+				revisionCodeOtherDesc = submissionInfo.get(KEY_REVISION_OTHER_DESCRIPTION);
+				applicationType.setRevisionCodeOtherExplanation(revisionCodeOtherDesc);
 				}
 			}
+		if (pdDoc.getDevelopmentProposal().getProposalType() != null) {
+			setProposalApplicationType(proposalTypeCode,applicationType);
 		}
 		setOtherAgencySubmissionDetails(applicationType);
 		return applicationType;
+	}
+
+	private void setProposalApplicationType(String proposalTypeCode,ApplicationType applicationType) {
+		if(s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_NEW).contains(proposalTypeCode)) {
+			applicationType.setApplicationTypeCode(ApplicationTypeCodeDataType.Enum.forInt(ApplicationTypeCodeDataType.INT_NEW));
+		}else if(s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_REVISION).contains(proposalTypeCode)) {
+			applicationType.setApplicationTypeCode(ApplicationTypeCodeDataType.Enum.forInt(ApplicationTypeCodeDataType.INT_REVISION));
+		}else if(s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_RENEWAL).contains(proposalTypeCode))  {
+			applicationType.setApplicationTypeCode(ApplicationTypeCodeDataType.Enum.forInt(ApplicationTypeCodeDataType.INT_RENEWAL));
+		}else if(s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_RESUBMISSION).contains(proposalTypeCode)) {
+			applicationType.setApplicationTypeCode(ApplicationTypeCodeDataType.Enum.forInt(ApplicationTypeCodeDataType.INT_RESUBMISSION));
+		}else if(s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_CONTINUATION).contains(proposalTypeCode)) {
+			applicationType.setApplicationTypeCode(ApplicationTypeCodeDataType.Enum.forInt(ApplicationTypeCodeDataType.INT_CONTINUATION));
+		}
 	}
 
 	private void setOtherAgencySubmissionDetails(ApplicationType applicationType) {
@@ -432,11 +435,6 @@ public class RRSF424_2_0_V2Generator extends RRSF424BaseGenerator {
 	    if (answer !=null && answer.equals(YesNoDataType.Y_YES)) {
             applicationType.setOtherAgencySubmissionExplanation(getOtherAgencySubmissionExplanation());
 	    }
-	}
-
-	private Enum getApplicationTypeCodeDataType() {
-		return ApplicationTypeCodeDataType.Enum.forInt(Integer.parseInt(pdDoc
-				.getDevelopmentProposal().getProposalType().getCode()));
 	}
 
 	/**
@@ -489,7 +487,7 @@ public class RRSF424_2_0_V2Generator extends RRSF424BaseGenerator {
 	private OrganizationContactPersonDataType getPDPI() {
 		OrganizationContactPersonDataType PDPI = OrganizationContactPersonDataType.Factory
 				.newInstance();
-		ProposalPersonContract PI = null;
+		ProposalPersonContract PI;
 		for (ProposalPersonContract proposalPerson : pdDoc.getDevelopmentProposal()
 				.getProposalPersons()) {
 			if (PRINCIPAL_INVESTIGATOR.equals(proposalPerson
@@ -523,7 +521,7 @@ public class RRSF424_2_0_V2Generator extends RRSF424BaseGenerator {
 		} else {
 			String personId = PI.getPersonId();
 			KcPersonContract kcPersons = kcPersonRepositoryService.findKcPersonByPersonId(personId);
-
+			
 			// KC-998 Turning on Data Validation causes STE if S2S is connected
 			// added check for empty string 
 			if (kcPersons.getOrganizationIdentifier() != null && !kcPersons.getOrganizationIdentifier().isEmpty()) {
@@ -569,9 +567,7 @@ public class RRSF424_2_0_V2Generator extends RRSF424BaseGenerator {
 
 	private void setDepartmentName(OrganizationContactPersonDataType PDPI,ProposalPersonContract PI) {
 	    if(PI.getHomeUnit() != null) {
-	    	String personId = PI.getPersonId();
-	    	String departmentName = getPrimaryDepartment(personId);
-	        PDPI.setDepartmentName(StringUtils.substring(departmentName, 0, DEPARTMENT_NAME_MAX_LENGTH));
+			PDPI.setDepartmentName(getDepartmentName(PI.getPerson()));
 	    }
 	    else
 	    {
@@ -580,11 +576,6 @@ public class RRSF424_2_0_V2Generator extends RRSF424BaseGenerator {
 	    }
 	}
 	
-	private String getPrimaryDepartment(String personId) {		
-		KcPersonContract kcPersons = kcPersonRepositoryService.findKcPersonByPersonId(personId);
-		return getUnitName(kcPersons.getOrganizationIdentifier());
-	}	
-
 	private void setDirectoryTitle(OrganizationContactPersonDataType PDPI,
 			ProposalPersonContract PI) {
 		if (PI.getDirectoryTitle() != null) {
@@ -716,7 +707,7 @@ public class RRSF424_2_0_V2Generator extends RRSF424BaseGenerator {
 					.getApplicantOrganization().getOrganization()
 					.getOrganizationTypes().get(0).getOrganizationTypeList().getCode();
 		}
-		ApplicantTypeCodeDataType.Enum applicantTypeCode = null;
+		ApplicantTypeCodeDataType.Enum applicantTypeCode;
 
 		switch (orgTypeCode) {
 		case 1:
@@ -807,6 +798,18 @@ public class RRSF424_2_0_V2Generator extends RRSF424BaseGenerator {
 		if (s2sOpportunity != null
 				&& s2sOpportunity.getS2sSubmissionType() != null) {
 			submissionTypeCode = s2sOpportunity.getS2sSubmissionType().getCode();
+		}
+
+		if (pdDoc.getDevelopmentProposal().getProposalType() != null) {
+			String proposalTypeCode=pdDoc.getDevelopmentProposal().getProposalType().getCode();
+			if(s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_NEW_CHANGE_CORRECTED).contains(proposalTypeCode) ||
+					s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_SUPPLEMENT_CHANGE_CORRECTED).contains(proposalTypeCode) ||
+					s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_RENEWAL_CHANGE_CORRECTED).contains(proposalTypeCode) ||
+					s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_RESUBMISSION_CHANGE_CORRECTED).contains(proposalTypeCode)) {
+				submissionTypeCode=Integer.toString(SubmissionTypeDataType.INT_CHANGE_CORRECTED_APPLICATION);
+			}else if(s2SConfigurationService.getValuesFromCommaSeparatedParam(ConfigurationConstants.PROPOSAL_TYPE_CODE_PRE_PROPOSAL).contains(proposalTypeCode)) {
+				submissionTypeCode=Integer.toString(SubmissionTypeDataType.INT_PREAPPLICATION);
+			}
 		}
 		return submissionTypeCode;
 	}
@@ -899,47 +902,27 @@ public class RRSF424_2_0_V2Generator extends RRSF424BaseGenerator {
 	}
 
     private void setFederalId(RRSF42420 rrsf42420) {
-        String federalId = pdDoc.getDevelopmentProposal().getSponsorProposalNumber();
-        if (federalId != null) {
-            if (federalId.length() > 30) {
-                rrsf42420.setFederalID(federalId.substring(0, 30));
-            }
-            else {
+        final String federalId = getFederalId();
+		if (StringUtils.isNotBlank(federalId)) {
                 rrsf42420.setFederalID(federalId);
             }
         }
-    }
 
 	private String getActivityTitle() {
-		String announcementTitle = "";
-		if (pdDoc.getDevelopmentProposal().getProgramAnnouncementTitle() != null) {
-			if (pdDoc.getDevelopmentProposal().getProgramAnnouncementTitle()
-					.length() > 120) {
-				announcementTitle = pdDoc.getDevelopmentProposal()
-						.getProgramAnnouncementTitle().substring(0, 120);
-			} else {
-				announcementTitle = pdDoc.getDevelopmentProposal()
-						.getProgramAnnouncementTitle();
+		return StringUtils.substring(pdDoc.getDevelopmentProposal().getS2sOpportunity().getCfdaDescription(), 0, CFDA_TITLE_MAX_LENGTH);
 			}
-		}
-		return announcementTitle;
-	}
 
 	private String getProjectTitle() {
-		String title = pdDoc.getDevelopmentProposal().getTitle();
-		if (title != null && title.length() > 200) {
-			title = title.substring(0, 200);
+			return StringUtils.substring(pdDoc.getDevelopmentProposal().getTitle(), 0, PROJECT_TITLE_MAX_LENGTH);
 		}
-		return title;
-	}
+
 	private String getAgencyRoutingNumber(){
-		String sponserProgramCode= pdDoc.getDevelopmentProposal().getAgencyRoutingIdentifier();
-	       return sponserProgramCode;
+		return pdDoc.getDevelopmentProposal().getAgencyRoutingIdentifier();
+
 	    }
 
     private String getGGTrackingID() {
-    	String grantsGovTrackingId = pdDoc.getDevelopmentProposal().getPrevGrantsGovTrackingID();
-        return grantsGovTrackingId;
+    	return pdDoc.getDevelopmentProposal().getPrevGrantsGovTrackingID();
     }
 	/**
 	 * This method creates {@link XmlObject} of type {@link RRSF42420Document}

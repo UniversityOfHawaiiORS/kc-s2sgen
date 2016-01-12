@@ -19,6 +19,7 @@
 package org.kuali.coeus.s2sgen.impl.person;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.kuali.coeus.common.api.org.OrganizationContract;
 import org.kuali.coeus.common.api.person.KcPersonContract;
 import org.kuali.coeus.common.api.person.KcPersonRepositoryService;
@@ -74,11 +75,12 @@ public class DepartmentalPersonServiceImpl implements DepartmentalPersonService 
     public DepartmentalPersonDto getDepartmentalPerson(ProposalDevelopmentDocumentContract pdDoc) {
         int count = 0;
         DepartmentalPersonDto depPerson = new DepartmentalPersonDto();
-/* KC-640 AOR contact switch when submitting causes exception in background process                
-        List<? extends ProposalAdminDetailsContract> proposalAdminDetailsList = proposalAdminDetailsService.findProposalAdminDetailsByPropDevNumber(pdDoc.getDevelopmentProposal().getProposalNumber());
-        count = proposalAdminDetailsList.size();
-        if (count < 1) {
-*/        
+/* KC-640 AOR contact switch when submitting causes exception in background process 
+ * As of 1512.0004 version KualiCo modified this code to the next few lines but we don't want the contact person changing anyway so keeping our modification
+        ProposalAdminDetailsContract proposalAdminDetails = proposalAdminDetailsService.findProposalAdminDetailsByPropDevNumber(pdDoc.getDevelopmentProposal().getProposalNumber()).stream()
+        		.findFirst().orElse(null);
+        if (proposalAdminDetails == null || StringUtils.isBlank(proposalAdminDetails.getSignedBy())) {
+*/
             // Proposal has not been submitted
 
             OrganizationContract organization = pdDoc.getDevelopmentProposal().getApplicantOrganization().getOrganization();
@@ -119,7 +121,6 @@ public class DepartmentalPersonServiceImpl implements DepartmentalPersonService 
 /* KC-640 AOR contact switch when submitting causes exception in background process   
         }
         else {
-            ProposalAdminDetailsContract proposalAdminDetails = proposalAdminDetailsList.get(0);
             KcPersonContract person = this.kcPersonRepositoryService.findKcPersonByUserName(proposalAdminDetails.getSignedBy());
 
             if (person != null) {

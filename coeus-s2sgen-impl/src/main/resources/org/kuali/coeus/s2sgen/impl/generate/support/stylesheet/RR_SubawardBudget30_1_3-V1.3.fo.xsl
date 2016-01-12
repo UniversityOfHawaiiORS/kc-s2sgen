@@ -413,39 +413,6 @@
 						</xsl:for-each>
 					</fo:flow>
 				</fo:page-sequence>
-				<!--fo:page-sequence master-reference="primary" format="1">
-					<fo:static-content flow-name="xsl-region-after">
-						<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt" table-layout="fixed">
-							<fo:table-column column-width="proportional-column-width(1)"/>
-							<fo:table-column column-width="proportional-column-width(1)"/>
-							<fo:table-body>
-								<fo:table-row>
-									<fo:table-cell hyphenate="true" language="en" padding-start="0pt" padding-end="0pt" padding-before="1pt" padding-after="1pt" display-align="before" text-align="left" border-style="solid" border-width="0pt" border-color="white">
-										<fo:block>
-											<fo:inline font-size="6px" font-weight="bold">Tracking Number: <xsl:value-of select="/*/*/footer:Grants_govTrackingNumber"/>
-											</fo:inline>
-										</fo:block>
-									</fo:table-cell>
-									<fo:table-cell hyphenate="true" language="en" line-height="9pt" padding-start="0pt" padding-end="0pt" padding-before="1pt" padding-after="1pt" display-align="before" text-align="right" border-style="solid" border-width="0pt" border-color="white">
-										<fo:block>
-											<fo:inline font-size="6px" font-weight="bold">OMB Number: 4040-0001</fo:inline>
-										</fo:block>
-										<fo:block>
-											<fo:inline font-size="6px" font-weight="bold">Expiration Date: 04/30/2008</fo:inline>
-										</fo:block>
-									</fo:table-cell>
-								</fo:table-row>
-							</fo:table-body>
-						</fo:table>
-					</fo:static-content>
-					<fo:flow flow-name="xsl-region-body">
-						<xsl:for-each select="RR_Budget_1_3:BudgetYear">
-							<xsl:call-template name="SingleYearPart2">
-								<xsl:with-param name="year"><xsl:value-of select="position()"/></xsl:with-param>
-							</xsl:call-template>
-						</xsl:for-each>
-					</fo:flow>
-				</fo:page-sequence-->
 		
 				<!-- ====================================== new section SUMMARY ===============================-->
 				<fo:page-sequence master-reference="summary" format="1">
@@ -474,7 +441,7 @@
 						</fo:table>
 					</fo:static-content>
 					<fo:flow flow-name="xsl-region-body">
-						<!--<xsl:for-each select="XXX">-->
+
 						<fo:table width="100%" space-before.optimum="3pt" space-after.optimum="2pt">
 							<fo:table-column/>
 							<fo:table-body>
@@ -499,9 +466,7 @@
 								<fo:table-column column-width="proportional-column-width(20)"/>
 								<fo:table-column column-width="proportional-column-width(20)"/>
 								<fo:table-body>
-                                                                <!--<fo:table-row>
-                                                                   <fo:table-cell>
-                                                                     <fo:block>-->
+
 									<!--============= ROWS Begin ======================-->
 									<xsl:for-each select="RR_Budget_1_3:BudgetSummary">
 										<fo:table-row>
@@ -528,7 +493,6 @@
 											</fo:table-cell>
 											<fo:table-cell text-align="right">
 												<fo:block>
-													<!--<xsl:for-each select="RR_Budget_1_3:CumulativeTotalFundsRequestedSeniorKeyPerson[. != '0.00']">-->
 													<xsl:for-each select="RR_Budget_1_3:CumulativeTotalFundsRequestedSeniorKeyPerson">
 														<fo:inline font-weight="bold">
 															<xsl:value-of select="format-number(., '#,##0.00')"/>
@@ -576,7 +540,6 @@
 											</fo:table-cell>
 											<fo:table-cell text-align="right">
 												<fo:block>
-													<!--<xsl:for-each select="RR_Budget_1_3:CumulativeTotalFundsRequestedPersonnel[. != '0.00']">-->
 													<xsl:for-each select="RR_Budget_1_3:CumulativeTotalFundsRequestedPersonnel">
 														<fo:inline font-weight="bold">
 															<xsl:value-of select="format-number(., '#,##0.00')"/>
@@ -964,7 +927,6 @@
 											</fo:table-cell>
 											<fo:table-cell text-align="right">
 												<fo:block>
-													<!--<xsl:for-each select="RR_Budget_1_3:CumulativeTotalFundsRequestedDirectCosts[. != '0.00']">-->
 													<xsl:for-each select="RR_Budget_1_3:CumulativeTotalFundsRequestedDirectCosts">
 														<fo:inline font-weight="bold">
 															<xsl:value-of select="format-number(., '#,##0.00')"/>
@@ -999,7 +961,6 @@
 											</fo:table-cell>
 											<fo:table-cell text-align="right">
 												<fo:block>
-													<!--<xsl:for-each select="RR_Budget_1_3:CumulativeTotalFundsRequestedDirectIndirectCosts[. != '0.00']">-->
 													<xsl:for-each select="RR_Budget_1_3:CumulativeTotalFundsRequestedDirectIndirectCosts">
 														<fo:inline font-weight="bold">
 															<xsl:value-of select="format-number(., '#,##0.00')"/>
@@ -1027,13 +988,9 @@
 										</fo:table-row>
 										<!--============ ROWS End ================================-->
 									</xsl:for-each>
-<!--                                                                          </fo:block>
-                                                                    </fo:table-cell>
-                                                                </fo:table-row>
--->								</fo:table-body>
+							</fo:table-body>
 							</fo:table>
 						</fo:block>
-						<!--</xsl:for-each>-->
 						<!--================== end new section summary ======================= -->
 					</fo:flow>
 				</fo:page-sequence>
@@ -1198,9 +1155,8 @@
 							<fo:table-cell border-style="solid" border-color="black" text-align="left" padding-start="1pt" padding-end="1pt" padding-before="1pt" padding-after="1pt" display-align="before">
 								<fo:block>
 									<fo:inline font-size="8pt" font-weight="bold">A. Senior/Key Person</fo:inline>
-									<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt" border="1">
+									<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt" border="1" table-layout="fixed">
 										<fo:table-column column-width="proportional-column-width(4)"/>
-										<!--fo:table-column column-width="proportional-column-width(6)"/-->
 										<fo:table-column column-width="proportional-column-width(10)"/>
 										<fo:table-column column-width="proportional-column-width(10)"/>
 										<fo:table-column column-width="proportional-column-width(22)"/>
@@ -1284,9 +1240,8 @@
 										</fo:table-body>
 									</fo:table>
 									<xsl:for-each select="RR_Budget_1_3:KeyPerson">
-										<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt">
+										<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt" table-layout="fixed">
 											<fo:table-column column-width="proportional-column-width(4)"/>
-											<!--fo:table-column column-width="proportional-column-width(6)"/-->
 											<fo:table-column column-width="proportional-column-width(10)"/>
 											<fo:table-column column-width="proportional-column-width(10)"/>
 											<fo:table-column column-width="proportional-column-width(22)"/>
@@ -1301,12 +1256,6 @@
 											<fo:table-column column-width="proportional-column-width(16)"/>
 											<fo:table-body>
 												<fo:table-row>
-													<!--fo:table-cell hyphenate="true" language="en" line-height="9pt" text-align="center" padding-start="1pt" padding-end="1pt" padding-before="1pt" padding-after="1pt" display-align="before">
-														<fo:block>
-															<fo:inline font-size="8pt">
-																<xsl:value-of select="position()"/>.&#160;</fo:inline>
-														</fo:block>
-													</fo:table-cell-->
 													<fo:table-cell hyphenate="true" language="en" line-height="9pt" text-align="center" padding-start="1pt" padding-end="1pt" padding-before="1pt" padding-after="1pt" display-align="before">
 														<fo:block>
 															<xsl:for-each select="RR_Budget_1_3:Name">
@@ -1524,9 +1473,7 @@
 			<fo:block>
 				<fo:leader leader-pattern="space"/>
 			</fo:block>
-			<!--
-      
-          -->
+
 			<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt">
 				<fo:table-column/>
 				<fo:table-body>
@@ -1537,7 +1484,7 @@
 								<fo:block>
 									<xsl:text>&#xA;</xsl:text>
 								</fo:block>
-								<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt">
+								<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt" table-layout="fixed">
 									<fo:table-column column-width="proportional-column-width(10)"/>
 									<fo:table-column column-width="proportional-column-width(75)"/>
 									<fo:table-column column-width="proportional-column-width(6)"/>
@@ -1931,7 +1878,7 @@
 								</fo:table>
 								<xsl:for-each select="RR_Budget_1_3:OtherPersonnel">
 									<xsl:for-each select="RR_Budget_1_3:Other">
-										<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt">
+										<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt" table-layout="fixed">
 											<fo:table-column column-width="proportional-column-width(10)"/>
 											<fo:table-column column-width="proportional-column-width(75)"/>
 											<fo:table-column column-width="proportional-column-width(6)"/>
@@ -2019,7 +1966,7 @@
 										</fo:table>
 									</xsl:for-each>
 								</xsl:for-each>
-								<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt">
+								<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt" table-layout="fixed">
 									<fo:table-column column-width="proportional-column-width(10)"/>
 									<fo:table-column column-width="proportional-column-width(75)"/>
 									<fo:table-column column-width="proportional-column-width(6)"/>
@@ -2196,7 +2143,7 @@
                                           
                                        </fo:block>
 								<fo:inline font-size="8pt" font-weight="bold">List items and dollar amount for each item exceeding $5,000</fo:inline>
-								<fo:table width="100%" space-before.optimum="1pt" space-after.optimum="2pt">
+								<fo:table width="100%" space-before.optimum="1pt" space-after.optimum="2pt" table-layout="fixed">
 									<fo:table-column column-width="proportional-column-width(85)"/>
 									<fo:table-column column-width="proportional-column-width(16)"/>
 									<fo:table-header>
@@ -2214,10 +2161,7 @@
 										</fo:table-row>
 									</fo:table-header>
 									<fo:table-body>
-<!--                                                                              <fo:table-row>
-                                                                                 <fo:table-cell>
-                                                                                  <fo:block>
--->									
+
 										<xsl:if test="string-length(RR_Budget_1_3:Equipment)=0">
 											<fo:table-row>
 												<fo:table-cell >
@@ -2251,12 +2195,9 @@
 												</fo:table-row>
 											</xsl:for-each>
 										</xsl:for-each>
-<!--                                                                      </fo:block>
-                                                                   </fo:table-cell>
-                                                               </fo:table-row>
--->                            </fo:table-body>
+                           </fo:table-body>
 							</fo:table>
-								<fo:table width="100%" space-before.optimum="1pt" space-after.optimum="2pt">
+								<fo:table width="100%" space-before.optimum="1pt" space-after.optimum="2pt" table-layout="fixed">
 									<fo:table-column column-width="proportional-column-width(85)"/>
 									<fo:table-column column-width="proportional-column-width(16)"/>
 									<fo:table-header>
@@ -2346,7 +2287,7 @@
 			<fo:block>
 				<fo:leader leader-pattern="space"/>
 			</fo:block>
-			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt">
+			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt" table-layout="fixed">
 				<fo:table-column column-width="proportional-column-width(85)"/>
 				<fo:table-column column-width="proportional-column-width(16)"/>
 				<fo:table-body>
@@ -2415,7 +2356,7 @@
 			<fo:block>
 				<fo:leader leader-pattern="space"/>
 			</fo:block>
-			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt">
+			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt" table-layout="fixed">
 				<fo:table-column column-width="proportional-column-width(85)"/>
 				<fo:table-column column-width="proportional-column-width(16)"/>
 				<fo:table-body>
@@ -2635,7 +2576,7 @@
 					</fo:table-row>
 				</fo:table-body>
 			</fo:table>
-			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt">
+			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt" table-layout="fixed">
 				<fo:table-column column-width="proportional-column-width(85)"/>
 				<fo:table-column column-width="proportional-column-width(16)"/>
 				<fo:table-body>
@@ -2810,7 +2751,7 @@
 			<fo:block>
 				<fo:leader leader-pattern="space"/>
 			</fo:block>
-			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt">
+			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt" table-layout="fixed">
 				<fo:table-column column-width="proportional-column-width(85)"/>
 				<fo:table-column column-width="proportional-column-width(16)"/>
 				<fo:table-body>
@@ -2847,7 +2788,7 @@
 			<fo:block>
 				<fo:leader leader-pattern="space"/>
 			</fo:block>
-			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt">
+			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt" table-layout="fixed">
 				<fo:table-column column-width="proportional-column-width(45)"/>
 				<fo:table-column column-width="proportional-column-width(20)"/>
 				<fo:table-column column-width="proportional-column-width(20)"/>
@@ -2884,10 +2825,7 @@
 					</fo:table-row>
 				</fo:table-header>
 				<fo:table-body>
-<!--                                      <fo:table-row>
-                                          <fo:table-cell>
-                                              <fo:block>
--->					<xsl:for-each select="RR_Budget_1_3:IndirectCosts">
+				<xsl:for-each select="RR_Budget_1_3:IndirectCosts">
 						<xsl:for-each select="RR_Budget_1_3:IndirectCost">
 							<fo:table-row>
 								<fo:table-cell hyphenate="true" language="en" line-height="9pt" padding-start="1pt" padding-end="1pt" padding-before="1pt" padding-after="1pt" display-align="before" text-align="start">
@@ -2931,10 +2869,7 @@
 							</fo:table-row>
 						</xsl:for-each>
 					</xsl:for-each>
-<!--                                        </fo:block>
-                                      </fo:table-cell>
-                                    </fo:table-row>
--->					<fo:table-row>
+				<fo:table-row>
 						<fo:table-cell number-columns-spanned="3" text-align="right" padding-start="1pt" padding-end="1pt" padding-before="1pt" padding-after="1pt" display-align="before">
 							<fo:block>
 								<fo:inline font-size="8pt" font-weight="bold">Total Indirect Costs</fo:inline>
@@ -2947,7 +2882,7 @@
 										<xsl:when test="RR_Budget_1_3:IndirectCosts/RR_Budget_1_3:TotalIndirectCosts">
 											<xsl:value-of select="format-number(RR_Budget_1_3:IndirectCosts/RR_Budget_1_3:TotalIndirectCosts, '#,##0.00')"/>
 										</xsl:when>
-										<!--<xsl:otherwise>0.00</xsl:otherwise>-->
+
 									</xsl:choose>
 								</fo:inline>
 							</fo:block>
@@ -2956,7 +2891,7 @@
 					<fo:table-row>
 						<fo:table-cell hyphenate="true" language="en" number-columns-spanned="4" text-align="left" padding-start="1pt" padding-end="1pt" padding-before="1pt" padding-after="0pt" display-align="before">
                                                     <fo:block>
-                                                    <fo:table>
+                                                    <fo:table table-layout="fixed">
 								<fo:table-column column-width="proportional-column-width(40)"/>
 								<fo:table-column column-width="proportional-column-width(60)"/>
 								<fo:table-body>
@@ -2992,7 +2927,7 @@
 			<fo:block>
 				<fo:leader leader-pattern="space"/>
 			</fo:block>
-			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt">
+			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt" table-layout="fixed">
 				<fo:table-column column-width="proportional-column-width(85)"/>
 				<fo:table-column column-width="proportional-column-width(16)"/>
 				<fo:table-body>
@@ -3029,7 +2964,7 @@
 			<fo:block>
 				<fo:leader leader-pattern="space"/>
 			</fo:block>
-			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt">
+			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt" table-layout="fixed">
 				<fo:table-column column-width="proportional-column-width(85)"/>
 				<fo:table-column column-width="proportional-column-width(16)"/>
 				<fo:table-body>
@@ -3066,45 +3001,6 @@
 			<fo:block>
 				<fo:leader leader-pattern="space"/>
 			</fo:block>
-			<!--
-         <fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt">
-            <fo:table-column/>
-            <fo:table-body>
-               <fo:table-row>
-                  <fo:table-cell display-align="before" height="36pt" text-align="left" padding-start="1pt" padding-end="1pt" padding-before="1pt" padding-after="1pt">
-                     <fo:block>
-                        <fo:inline font-size="8pt" font-weight="bold">K. Subprojects/Subaward Budgets Attachment(s)</fo:inline>
-                        <xsl:for-each select="RR_Budget_1_3:SubawardSubprojectBudgetAttachment/att:AttachedFile">
-                           <fo:table width="100%" space-before.optimum="1pt" space-after.optimum="2pt">
-                              <fo:table-column column-width="proportional-column-width(1)"/>
-                              <fo:table-column column-width="proportional-column-width(1)"/>
-                              <fo:table-body>
-                                 <fo:table-row>
-                                    <fo:table-cell hyphenate="true" language="en" line-height="9pt" padding-start="1pt" padding-end="1pt" padding-before="1pt" padding-after="1pt" display-align="before" text-align="start">
-                                       <fo:block font-size="8pt">File Name: <xsl:for-each select="att:FileName">
-                                             <xsl:apply-templates/>
-                                          </xsl:for-each>
-                                       </fo:block>
-                                    </fo:table-cell>
-                                    <fo:table-cell line-height="9pt" padding-start="1pt" padding-end="1pt" padding-before="1pt" padding-after="1pt" display-align="before" text-align="start">
-                                       <fo:block font-size="8pt">Mime Type: <xsl:for-each select="att:MimeType">
-                                             <xsl:apply-templates/>
-                                          </xsl:for-each>
-                                       </fo:block>
-                                    </fo:table-cell>
-                                 </fo:table-row>
-                              </fo:table-body>
-                           </fo:table>
-                        </xsl:for-each>
-                     </fo:block>
-                  </fo:table-cell>
-               </fo:table-row>
-            </fo:table-body>
-         </fo:table>
-         <fo:block>
-            <fo:leader leader-pattern="space"/>
-         </fo:block>
--->
 			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt">
 				<fo:table-column/>
 				<fo:table-column/>
