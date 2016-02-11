@@ -30,14 +30,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 public abstract class RRKeyPersonExpandedBaseGenerator extends
 		RRKeyPersonBase {
 
-
-	protected static final int PROFILE_TYPE = 18;
 	protected static final String CO_INVESTIGATOR = "COI";
 	protected static final int MAX_KEY_PERSON_COUNT = 40;
-	protected static final int DIRECTORY_TITLE_MAX_LENGTH = 45;
-	protected static final int ROLE_DESCRIPTION_MAX_LENGTH = 40;
-
-	protected String pIPersonOrRolodexId = null;
+	
 	//added for KC-398 For non-employees, Organization shows as University of Hawaii on grants.gov forms
 	protected static final int DIVISION_NAME_MAX_LENGTH = 30;
 	protected static final int DEPARTMENT_NAME_MAX_LENGTH = 30;

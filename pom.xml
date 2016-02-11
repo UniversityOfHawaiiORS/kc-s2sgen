@@ -21,7 +21,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.kuali.coeus</groupId>
     <artifactId>coeus-s2sgen</artifactId>
-    <version>1512.0014-uh</version>
+    <version>1601.0007-uh</version>
     <packaging>pom</packaging>
     <description>
         This coeus s2s generator project contains s2s generators for grants.gov and research.gov form submission
@@ -64,7 +64,7 @@
         <xalan.version>2.7.1</xalan.version>
         <xmlsec.version>1.5.6</xmlsec.version>
         <xmlbeans.version>2.6.0</xmlbeans.version>
-        
+
         <maven-clean-plugin.version>3.0.0</maven-clean-plugin.version>
         <maven-deploy-plugin.version>2.8.2</maven-deploy-plugin.version>
         <maven-install-plugin.version>2.5.2</maven-install-plugin.version>
@@ -74,7 +74,7 @@
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
         <maven-resources-plugin.version>2.7</maven-resources-plugin.version>
         <maven-source-plugin.version>2.4</maven-source-plugin.version>
-        <maven-surefire-plugin.version>2.19</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <xmlbeans-maven-plugin.version>2.3.3</xmlbeans-maven-plugin.version>
         <kuali.javadoc.maxmemory>3g</kuali.javadoc.maxmemory>
@@ -84,7 +84,7 @@
         <project.encoding>UTF-8</project.encoding>
         <project.build.sourceEncoding>${project.encoding}</project.build.sourceEncoding>
         <project.reporting.outputEncoding>${project.encoding}</project.reporting.outputEncoding>
-        
+
         <project.java.version>1.8</project.java.version>
         <!-- These are used by multiple plugins (compiler, javadoc, xref, etc) -->
         <project.compile.source>${project.java.version}</project.compile.source>
@@ -522,7 +522,7 @@
             </activation>
 
             <properties>
-                <error_prone_core.version>2.0.6</error_prone_core.version>
+                <error_prone_core.version>2.0.7</error_prone_core.version>
                 <plexus-compiler-javac.version>2.6</plexus-compiler-javac.version>
                 <plexus-compiler-javac-errorprone.version>2.6</plexus-compiler-javac-errorprone.version>
             </properties>
@@ -600,7 +600,7 @@
         <connection>${scm.connection}</connection>
         <developerConnection>${scm.developerConnection}</developerConnection>
         <url>${scm.url}</url>
-      <tag>coeus-s2sgen-1512.0014</tag>
+      <tag>coeus-s2sgen-1601.0007</tag>
   </scm>
 
     <distributionManagement>
