@@ -21,7 +21,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.kuali.coeus</groupId>
     <artifactId>coeus-s2sgen</artifactId>
-    <version>1512.0014</version>
+    <version>1601.0007</version>
     <packaging>pom</packaging>
     <description>
         This coeus s2s generator project contains s2s generators for grants.gov and research.gov form submission
@@ -74,7 +74,7 @@
         <maven-release-plugin.version>2.5.3</maven-release-plugin.version>
         <maven-resources-plugin.version>2.7</maven-resources-plugin.version>
         <maven-source-plugin.version>2.4</maven-source-plugin.version>
-        <maven-surefire-plugin.version>2.19</maven-surefire-plugin.version>
+        <maven-surefire-plugin.version>2.19.1</maven-surefire-plugin.version>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
         <xmlbeans-maven-plugin.version>2.3.3</xmlbeans-maven-plugin.version>
         <kuali.javadoc.maxmemory>3g</kuali.javadoc.maxmemory>
@@ -522,7 +522,7 @@
             </activation>
 
             <properties>
-                <error_prone_core.version>2.0.6</error_prone_core.version>
+                <error_prone_core.version>2.0.7</error_prone_core.version>
                 <plexus-compiler-javac.version>2.6</plexus-compiler-javac.version>
                 <plexus-compiler-javac-errorprone.version>2.6</plexus-compiler-javac-errorprone.version>
             </properties>
@@ -600,7 +600,7 @@
         <connection>${scm.connection}</connection>
         <developerConnection>${scm.developerConnection}</developerConnection>
         <url>${scm.url}</url>
-      <tag>coeus-s2sgen-1512.0014</tag>
+      <tag>coeus-s2sgen-1601.0007</tag>
   </scm>
 
     <distributionManagement>

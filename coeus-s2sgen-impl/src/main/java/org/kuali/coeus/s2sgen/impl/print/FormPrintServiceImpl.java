@@ -25,6 +25,8 @@ import org.apache.xmlbeans.XmlCursor;
 import org.apache.xmlbeans.XmlException;
 import org.apache.xmlbeans.XmlObject;
 import org.apache.xpath.XPathAPI;
+import org.kuali.coeus.common.budget.api.core.BudgetContract;
+import org.kuali.coeus.propdev.api.budget.subaward.BudgetSubAwardAttachmentContract;
 import org.kuali.coeus.propdev.api.core.DevelopmentProposalContract;
 import org.kuali.coeus.propdev.api.person.attachment.ProposalPersonBiographyContract;
 import org.kuali.coeus.propdev.api.s2s.*;
@@ -34,6 +36,7 @@ import org.kuali.coeus.s2sgen.api.generate.FormMappingInfo;
 import org.kuali.coeus.s2sgen.api.generate.FormMappingService;
 import org.kuali.coeus.s2sgen.api.print.FormPrintService;
 import org.kuali.coeus.s2sgen.api.print.FormPrintResult;
+import org.kuali.coeus.s2sgen.impl.budget.S2SCommonBudgetService;
 import org.kuali.coeus.s2sgen.impl.generate.S2SFormGenerator;
 import org.kuali.coeus.s2sgen.impl.util.ClassLoaderUtils;
 import org.kuali.coeus.s2sgen.impl.util.XPathExecutor;
@@ -54,12 +57,19 @@ import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 
 import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import java.io.*;
+import java.io.StringWriter;
 import java.util.*;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -76,8 +86,16 @@ public class FormPrintServiceImpl implements FormPrintService {
     private static final String NARRATIVE_LEGACY_DATA_CONTENT_ID_PREFIX = "M";
     private static final String BIOGRAPHY_LEGACY_DATA_CONTENT_ID_PREFIX = "ID";
     private static final String BIOGRAPHY_LEGACY_DATA_CONTENT_ID_ELEMENT = "BN";
-    
-    @Autowired
+	private static final String HYPHEN = "-";
+	private static final String UNDERSCORE = "_";
+
+	private static final List<String> ATT_PREFIXES = Stream.of(NARRATIVE_CONTENT_ID_PREFIX + HYPHEN,
+			BIOGRAPHY_CONTENT_ID_PREFIX + HYPHEN,
+			NARRATIVE_LEGACY_DATA_CONTENT_ID_PREFIX + HYPHEN,
+			BIOGRAPHY_LEGACY_DATA_CONTENT_ID_PREFIX + HYPHEN,
+			BIOGRAPHY_LEGACY_DATA_CONTENT_ID_ELEMENT + HYPHEN).collect(Collectors.toList());
+
+	@Autowired
     @Qualifier("s2sApplicationService")
 	private S2sApplicationService s2sApplicationService;
 
@@ -112,6 +130,10 @@ public class FormPrintServiceImpl implements FormPrintService {
     @Autowired
     @Qualifier("userAttachedFormService")
     private UserAttachedFormService userAttachedFormService;
+
+	@Autowired
+	@Qualifier("s2SCommonBudgetService")
+	protected S2SCommonBudgetService s2SCommonBudgetService;
 
 	/**
 	 * 
@@ -158,7 +180,7 @@ public class FormPrintServiceImpl implements FormPrintService {
 	    String loggingDirectory = s2SConfigurationService.getValueAsString(ConfigurationConstants.PRINT_XML_DIRECTORY);
         String opportunityId = pdDoc.getDevelopmentProposal().getS2sOpportunity().getOpportunityId();
         String proposalnumber = pdDoc.getDevelopmentProposal().getProposalNumber();
-        String exportDate = StringUtils.replaceChars((pdDoc.getDevelopmentProposal().getUpdateTimestamp().toString()), ":", "_");
+        String exportDate = StringUtils.replaceChars((pdDoc.getDevelopmentProposal().getUpdateTimestamp().toString()), ":", UNDERSCORE);
         exportDate = StringUtils.replaceChars(exportDate, " ", ".");
 
         File grantsGovXmlDirectoryFile = new File(loggingDirectory + opportunityId + "." + proposalnumber + "." + exportDate);
@@ -177,11 +199,13 @@ public class FormPrintServiceImpl implements FormPrintService {
         for (S2sAppAttachmentsContract attAppAttachments : attachmentLists) {
             File attachmentFile = new File(grantsGovXmlDirectoryFile,"Attachments");   
             attachmentFile.mkdir();
-            KcFile ads = getAttributeContent(pdDoc,attAppAttachments.getContentId());
-            File attachedFile = new File(attachmentFile,ads.getName());
-            try (FileOutputStream output = new FileOutputStream(attachedFile)) {
-                output.write(getAttContent(pdDoc, attAppAttachments.getContentId()));
-            }
+            final KcFile ads = getAttributeContent(pdDoc,attAppAttachments.getContentId());
+            if (ads != null) {
+				File attachedFile = new File(attachmentFile, ads.getName());
+				try (FileOutputStream output = new FileOutputStream(attachedFile)) {
+					output.write(ads.getData());
+				}
+			}
         }
         File xmlFile= new File(grantsGovXmlDirectoryFile,opportunityId + "." + proposalnumber + "." + exportDate+".xml");
         try (BufferedWriter out = new BufferedWriter(new FileWriter(xmlFile))) {
@@ -242,7 +266,6 @@ public class FormPrintServiceImpl implements FormPrintService {
 			ProposalDevelopmentDocumentContract pdDoc) throws S2SException {
 		GrantApplicationDocument submittedDocument;
 		String frmXpath;
-        String frmAttXpath;
 		try {
 		    S2sAppSubmissionContract s2sAppSubmission = getLatestS2SAppSubmission(pdDoc);
 		    String submittedApplicationXml = findSubmittedXml(s2sAppSubmission);
@@ -264,7 +287,6 @@ public class FormPrintServiceImpl implements FormPrintService {
 			if(StringUtils.isNotBlank(info.getStyleSheet())){
 				formFragment = getFormObject(submittedDocument);
 				frmXpath = "//*[namespace-uri(.) = '"+namespace+"']";               
-				frmAttXpath = "//*[namespace-uri(.) = '"+namespace+"']//*[local-name(.) = 'FileLocation' and namespace-uri(.) = 'http://apply.grants.gov/system/Attachments-V1.0']";           
 
 				byte[] formXmlBytes = formFragment.xmlText().getBytes();
 				GenericPrintable formPrintable = new GenericPrintable();
@@ -282,10 +304,6 @@ public class FormPrintServiceImpl implements FormPrintService {
 				templates.add(xsltSource);
 				formPrintable.setXSLTemplates(templates);
 
-				// Linkedhashmap is used to preserve the order of entry.
-				Map<String, byte[]> formXmlDataMap = new LinkedHashMap<>();
-				formXmlDataMap.put(info.getFormName(), formXmlBytes);
-				formPrintable.setStreamMap(formXmlDataMap);
 				S2sApplicationContract s2sApplciation = s2sApplicationService.findS2sApplicationByProposalNumber(pdDoc.getDevelopmentProposal().getProposalNumber());
 				List<? extends S2sAppAttachmentsContract> attachmentList = s2sApplciation.getS2sAppAttachmentList();
 
@@ -294,7 +312,16 @@ public class FormPrintServiceImpl implements FormPrintService {
 				try{
 					XPathExecutor executer = new XPathExecutor(formFragment.toString());
 					org.w3c.dom.Node d = executer.getNode(frmXpath);
-					org.w3c.dom.NodeList attList = XPathAPI.selectNodeList(d, frmAttXpath);
+					Element el = (Element)d;
+					// Linkedhashmap is used to preserve the order of entry.
+					Map<String, byte[]> formXmlDataMap = new LinkedHashMap<>();
+					byte[] formNodeBytes = convertNodeToBytes(d);
+					if(formNodeBytes!=null) {
+						formXmlDataMap.put(info.getFormName(), convertNodeToBytes(d));
+					}
+					formPrintable.setStreamMap(formXmlDataMap);
+
+					org.w3c.dom.NodeList attList = el.getElementsByTagNameNS("http://apply.grants.gov/system/Attachments-V1.0","FileLocation");
 					int attLen = attList.getLength();
 
 					for(int i=0;i<attLen;i++){
@@ -303,20 +330,21 @@ public class FormPrintServiceImpl implements FormPrintService {
 
 						if (attachmentList != null && !attachmentList.isEmpty()) {
 							for (S2sAppAttachmentsContract attAppAttachments : attachmentList) {
-								if(attAppAttachments.getContentId().equals(contentId)){
-									try (ByteArrayOutputStream attStream = new ByteArrayOutputStream()) {
-										attStream.write(getAttContent(pdDoc,
-												attAppAttachments.getContentId()));
-									} catch (IOException e) {
-										LOG.error(e.getMessage(), e);
-										throw new S2SException(e);
+								if(attAppAttachments.getContentId().equals(contentId)) {
+									KcFile file = getAttributeContent(pdDoc, contentId);
+									if (file != null) {
+										try (ByteArrayOutputStream attStream = new ByteArrayOutputStream()) {
+											attStream.write(file.getData());
+										} catch (IOException e) {
+											LOG.error(e.getMessage(), e);
+											throw new S2SException(e);
+										}
+										StringBuilder attachment = new StringBuilder();
+										attachment.append("   ATT : ");
+										attachment.append(attAppAttachments.getContentId());
+										formAttachments.put(attachment.toString(),
+												file.getData());
 									}
-									StringBuilder attachment = new StringBuilder();
-									attachment.append("   ATT : ");
-									attachment.append(attAppAttachments.getContentId());
-									formAttachments.put(attachment.toString(),
-											getAttContent(pdDoc, attAppAttachments
-													.getContentId()));
 								}
 							}
 						}
@@ -342,6 +370,20 @@ public class FormPrintServiceImpl implements FormPrintService {
 		return result;
 	}
 
+	private byte[] convertNodeToBytes(Node node){
+		try {
+			DOMSource domSource = new DOMSource(node);
+			StringWriter writer = new StringWriter();
+			StreamResult result = new StreamResult(writer);
+			TransformerFactory tf = TransformerFactory.newInstance();
+			Transformer transformer = tf.newTransformer();
+			transformer.transform(domSource, result);
+			return writer.toString().getBytes();
+		}catch (Exception ex){
+			LOG.warn("Not able convert form node to byte array "+ex.getMessage(),ex);
+		}
+		return null;
+	}
 	protected String findSubmittedXml(S2sAppSubmissionContract appSubmission) {
 	    S2sApplicationContract s2sApplication = s2sApplicationService.findS2sApplicationByProposalNumber(appSubmission.getProposalNumber());
 	    return s2sApplication.getApplication();
@@ -451,67 +493,82 @@ public class FormPrintServiceImpl implements FormPrintService {
 		return forms.newCursor().getObject();
 	}
 
-	/**
-	 * 
-	 * This method gets attachment contents from narrative based on content ID
-	 * 
-	 * @param pdDoc
-	 *            Proposal Development Document.
-	 * @param contentId
-	 *            for the particular attachment in the Narrative.
-	 * @return byte[] byte array of attachments based on the contentId object.
-	 */
-
-	protected byte[] getAttContent(ProposalDevelopmentDocumentContract pdDoc,
-			String contentId) {
-		String[] contentIds = contentId.split("-");
-		String[] contentDesc = contentIds[1].split("_");
-		if (StringUtils.equals(contentIds[0], NARRATIVE_CONTENT_ID_PREFIX)) {
-			return pdDoc.getDevelopmentProposal().getNarratives().stream().filter(narrative -> 
-			(narrative.getModuleNumber().equals(Integer.valueOf(contentDesc[0])))).findAny().get().getNarrativeAttachment().getData();
-		} else if (StringUtils.equals(contentIds[0], BIOGRAPHY_CONTENT_ID_PREFIX)) {
-			return pdDoc.getDevelopmentProposal().getPropPersonBios().stream().filter(biography -> 
-			(biography.getProposalPersonNumber().equals(Integer.valueOf(contentDesc[0])) && 
-					biography.getBiographyNumber().equals(Integer.valueOf(contentDesc[1])))).findAny().get().getPersonnelAttachment().getData();
-		} else {
-			return getLegacyCoeusAttachmentContent(pdDoc, contentIds, contentDesc);
+	protected KcFile getAttributeContent(ProposalDevelopmentDocumentContract pdDoc,
+            String contentId) {
+		final KcFile bsAtt = getBudgetSubawardAttachment(pdDoc, contentId);
+		if (bsAtt != null) {
+			return bsAtt;
 		}
-	}
-	
 
-	protected byte[] getLegacyCoeusAttachmentContent(ProposalDevelopmentDocumentContract pdDoc, String[] contentIds, String[] contentDesc) {
+		final KcFile uafAtt = getUserAttachedFormAttachment(pdDoc, contentId);
+		if (uafAtt != null) {
+			return uafAtt;
+		}
+
+		if (ATT_PREFIXES.stream().anyMatch(contentId::startsWith)) {
+			final String[] contentIds = contentId.split(HYPHEN);
+			final String[] contentDesc = contentIds[1].split(UNDERSCORE);
+			if (StringUtils.equals(contentIds[0], NARRATIVE_CONTENT_ID_PREFIX)) {
+				for (NarrativeContract narrative : pdDoc.getDevelopmentProposal()
+						.getNarratives()) {
+					if (narrative.getModuleNumber().equals(Integer.valueOf(contentDesc[0]))) {
+						return narrative.getNarrativeAttachment();
+					}
+				}
+			} else if (StringUtils.equals(contentIds[0], BIOGRAPHY_CONTENT_ID_PREFIX)) {
+				for (ProposalPersonBiographyContract biography : pdDoc.getDevelopmentProposal().getPropPersonBios()) {
+					if (biography.getProposalPersonNumber().equals(Integer.valueOf(contentDesc[0]))
+							&& biography.getBiographyNumber().equals(Integer.valueOf(contentDesc[1]))) {
+						return biography.getPersonnelAttachment();
+					}
+				}
+			} else {
+				return getLegacyCoeusAttachmentContent(pdDoc, contentIds, contentDesc);
+			}
+		} else {
+			LOG.warn("contentId: " + contentId + " has an invalid format");
+		}
+        return null;
+    }
+
+	protected KcFile getLegacyCoeusAttachmentContent(ProposalDevelopmentDocumentContract pdDoc, String[] contentIds, String[] contentDesc) {
 		if (StringUtils.equals(contentIds[0], NARRATIVE_LEGACY_DATA_CONTENT_ID_PREFIX )) {
-			return pdDoc.getDevelopmentProposal().getNarratives().stream().filter(narrative -> 
-			(narrative.getModuleNumber().equals(Integer.valueOf(contentDesc[0])))).findAny().get().getNarrativeAttachment().getData();
+			return pdDoc.getDevelopmentProposal().getNarratives().stream().filter(narrative ->
+					(narrative.getModuleNumber().equals(Integer.valueOf(contentDesc[0])))).findAny().get().getNarrativeAttachment();
 		} else if (StringUtils.equals(contentIds[0], BIOGRAPHY_LEGACY_DATA_CONTENT_ID_PREFIX) && StringUtils.equals(contentDesc[1], BIOGRAPHY_LEGACY_DATA_CONTENT_ID_ELEMENT)) {
-			String[] biographyDescrption = contentIds[2].split("_");
-			return pdDoc.getDevelopmentProposal().getPropPersonBios().stream().filter(biography -> 
-			(biography.getPersonId().equals(contentDesc[0]) && biography.getBiographyNumber().equals(Integer.valueOf(biographyDescrption[0])))).findAny().get().getPersonnelAttachment().getData();
+			String[] biographyDescrption = contentIds[2].split(UNDERSCORE);
+			return pdDoc.getDevelopmentProposal().getPropPersonBios().stream().filter(biography ->
+					(biography.getPersonId().equals(contentDesc[0]) && biography.getBiographyNumber().equals(Integer.valueOf(biographyDescrption[0])))).findAny().get().getPersonnelAttachment();
 		}
 		return null;
 	}
-	
-	protected KcFile getAttributeContent(ProposalDevelopmentDocumentContract pdDoc,
-            String contentId) {
-        String[] contentIds = contentId.split("-");
-        String[] contentDesc = contentIds[1].split("_");
-        if (StringUtils.equals(contentIds[0], "N")) {
-            for (NarrativeContract narrative : pdDoc.getDevelopmentProposal()
-                    .getNarratives()) {
-                if (narrative.getModuleNumber().equals(Integer.valueOf(contentDesc[0]))) {
-                    return narrative.getNarrativeAttachment();
-                }
-            }
-        } else if (StringUtils.equals(contentIds[0], "B")){
-            for (ProposalPersonBiographyContract biography : pdDoc.getDevelopmentProposal().getPropPersonBios()) {
-                if (biography.getProposalPersonNumber().equals(Integer.valueOf(contentDesc[0]))
-                        && biography.getBiographyNumber().equals(Integer.valueOf(contentDesc[1]))) {
-                    return biography.getPersonnelAttachment();
-                }
-            }
-        }
-        return null;
-    }
+
+	private KcFile getUserAttachedFormAttachment(ProposalDevelopmentDocumentContract pdDoc, String contentId) {
+		final Optional<? extends S2sUserAttachedFormAttContract> uafAtt = pdDoc.getDevelopmentProposal().getS2sUserAttachedForms().stream()
+				.flatMap(uaf -> uaf.getS2sUserAttachedFormAtts().stream())
+				.filter(att -> contentId.equals(att.getContentId()))
+				.findAny();
+		if (uafAtt.isPresent()) {
+			return uafAtt.get();
+		}
+		return null;
+	}
+
+	private KcFile getBudgetSubawardAttachment(ProposalDevelopmentDocumentContract pdDoc, String contentId) {
+		BudgetContract budget = s2SCommonBudgetService.getBudget(pdDoc.getDevelopmentProposal());
+		if (budget != null) {
+			final Optional<? extends BudgetSubAwardAttachmentContract> att = budget.getBudgetSubAwards().stream()
+					.flatMap(sa -> sa.getBudgetSubAwardAttachments().stream())
+					.filter(attachment -> contentId.equals(attachment.getName()))
+					.findAny();
+
+			if (att.isPresent()) {
+				return att.get();
+			}
+		}
+		return null;
+	}
+
 	/**
 	 * 
 	 * This method gets the latest S2SAppSubmission record from the list of
@@ -721,7 +778,15 @@ public class FormPrintServiceImpl implements FormPrintService {
         this.s2SDateTimeService = s2SDateTimeService;
     }
 
-    protected static class PrintableResult {
+	public S2SCommonBudgetService getS2SCommonBudgetService() {
+		return s2SCommonBudgetService;
+	}
+
+	public void setS2SCommonBudgetService(S2SCommonBudgetService s2SCommonBudgetService) {
+		this.s2SCommonBudgetService = s2SCommonBudgetService;
+	}
+
+	protected static class PrintableResult {
         private List<S2SPrintable> printables;
         private List<AuditError> errors;
     }
