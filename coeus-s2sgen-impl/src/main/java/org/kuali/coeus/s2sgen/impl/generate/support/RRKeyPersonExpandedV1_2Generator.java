@@ -295,7 +295,7 @@ public class RRKeyPersonExpandedV1_2Generator extends
 	 */
 	private void setDepartmentNameToProfile(Profile profile, ProposalPersonContract PI) {
 		if(PI.getHomeUnit() != null && PI.getPerson() != null) {
-            final String departmentName =  PI.getPerson().getOrganizationIdentifier();
+            String departmentName =  PI.getPerson().getOrganizationIdentifier();
             // KC-398 Prevent S2S errors because length is too long
             if(departmentName.length() > DEPARTMENT_NAME_MAX_LENGTH) {
             	departmentName = departmentName.substring(0, DEPARTMENT_NAME_MAX_LENGTH);
