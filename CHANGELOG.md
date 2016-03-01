@@ -1,6 +1,25 @@
 
 
 ##CURRENT
+*  updating existing copyright header
+  * Travis Schneeberger on Wed, 24 Feb 2016 10:17:09 -0500 [View Commit](../../commit/d39e2e78cefd8bf549f9796952d8405bfac442d4)
+
+##coeus-s2sgen-1602.0001
+*  RR_SubawardBudget10_30_1_3 print form missing personnel details (base salary, months, costs) from subaward file.
+
+  * Steps to Reproduce:
+  * Create a new proposal with basic info to save (With start and end dates that include period 2016-07-01-2026-06-30)
+  * Naviagte to Basics -> S2S Opportunity Search -> select GG opportunity PA-DD-000
+  * Create a new, detailed budget
+  * Enter a single non-personnel line item for M&S
+  * Go to Subaward section. Enter subaward uploading attached Harvard10_1_3_A30-V1.3.pdf file
+  * Save
+  * Naviagte to Basics -> S2S Opportunity Search -> Forms Tab
+  * Check the Select checkbox for RR_SubawardBudget10_10_1_3 From
+  * Click the [Create PDF] button
+  * Travis Schneeberger on Mon, 8 Feb 2016 13:21:56 -0500 [View Commit](../../commit/9585b74f7a2c06142cc576a667e991cbd2e5e85b)
+
+##coeus-s2sgen-1601.0007
 *  there were couple of issues with printing submitted applications. For getting attachent list, it should search within Form DOM object instead of using global xpath search. It should apply stylesheet on the selected Form DOM objects byte array instead of the GrantApplication xml bytes
   * Geo Thomas on Sun, 24 Jan 2016 03:01:35 -0500 [View Commit](../../commit/381ff174b53abc7d7a58229b83b7f6dbd855b5e0)
 
