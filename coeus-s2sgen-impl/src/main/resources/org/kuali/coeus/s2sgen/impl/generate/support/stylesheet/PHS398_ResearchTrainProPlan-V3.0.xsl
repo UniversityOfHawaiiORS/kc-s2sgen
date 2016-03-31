@@ -1,35 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-   - Kuali Coeus, a comprehensive research administration system for higher education.
-   - 
-   - Copyright 2005-2016 Kuali, Inc.
-   - 
-   - This program is free software: you can redistribute it and/or modify
-   - it under the terms of the GNU Affero General Public License as
-   - published by the Free Software Foundation, either version 3 of the
-   - License, or (at your option) any later version.
-   - 
-   - This program is distributed in the hope that it will be useful,
-   - but WITHOUT ANY WARRANTY; without even the implied warranty of
-   - MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   - GNU Affero General Public License for more details.
-   - 
-   - You should have received a copy of the GNU Affero General Public License
-   - along with this program.  If not, see <http://www.gnu.org/licenses/>.
- -->
 <xsl:stylesheet version="1.0"
 	xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:PHS398_ResearchTrainingProgramPlan_2_0="http://apply.grants.gov/forms/PHS398_ResearchTrainingProgramPlan_2_0-V2.0"
+	xmlns:PHS398_ResearchTrainingProgramPlan_3_0="http://apply.grants.gov/forms/PHS398_ResearchTrainingProgramPlan_3_0-V3.0"
 	xmlns:att="http://apply.grants.gov/system/Attachments-V1.0"
 	xmlns:codes="http://apply.grants.gov/system/UniversalCodes-V2.0"
 	xmlns:fn="http://www.w3.org/2005/xpath-functions" xmlns:glob="http://apply.grants.gov/system/Global-V1.0"
 	xmlns:globLib="http://apply.grants.gov/system/GlobalLibrary-V2.0"
 	xmlns:xdt="http://www.w3.org/2005/xpath-datatypes" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:fo="http://www.w3.org/1999/XSL/Format">
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:header="http://apply.grants.gov/system/Header-V1.0"
+	xmlns:footer="http://apply.grants.gov/system/Footer-V1.0" xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
 	<xsl:variable name="XML" select="/" />
 	<xsl:template
-		match="PHS398_ResearchTrainingProgramPlan_2_0:PHS398_ResearchTrainingProgramPlan_2_0">
+		match="PHS398_ResearchTrainingProgramPlan_3_0:PHS398_ResearchTrainingProgramPlan_3_0">
 		<fo:root>
 			<fo:layout-master-set>
 				<fo:simple-page-master master-name="first"
@@ -39,7 +22,7 @@
 					<fo:region-before region-name="region-before-first"
 						extent="0.2in" />
 					<fo:region-after region-name="region-after-all"
-						extent="0.4in" />
+						extent="0.3in" />
 				</fo:simple-page-master>
 
 				<fo:simple-page-master master-name="rest"
@@ -80,6 +63,47 @@
 						</fo:table-body>
 					</fo:table>
 				</fo:static-content>
+            <fo:static-content flow-name="region-after-all">
+               <fo:table width="100%"
+                  space-before.optimum="0pt"
+                  space-after.optimum="0pt"
+                  table-layout="fixed">
+                  <fo:table-column column-width="proportional-column-width(1)"/>
+                  <fo:table-column column-width="proportional-column-width(1)"/>
+                  <fo:table-body>
+                     <fo:table-row>
+                        <fo:table-cell hyphenate="true" language="en"
+                         padding-start="0pt"
+                         padding-end="0pt"
+                         padding-before="1pt"
+                         padding-after="1pt"
+                         display-align="before"
+                         text-align="left"
+                         border-style="solid"
+                         border-width="0pt"
+                         border-color="white">
+                           <fo:block>
+                              <fo:inline font-size="8px">Tracking Number: <xsl:value-of select="/*/*/footer:Grants_govTrackingNumber"/>
+                              </fo:inline>
+                           </fo:block>
+                        </fo:table-cell>
+                        <fo:table-cell hyphenate="true" language="en" line-height="10pt"
+                         padding-start="0pt"
+                         padding-end="0pt"
+                         padding-before="1pt"
+                         padding-after="1pt"
+                         display-align="before"
+                         text-align="right"
+                         border-style="solid"
+                         border-width="0pt"
+                         border-color="white">
+                           <fo:block><fo:inline font-size="8px">Funding Opportunity Number: <xsl:value-of select="/*/*/header:OpportunityID"/></fo:inline>
+                                     <fo:inline font-size="8px">.       Received Date: <xsl:value-of select="/*/*/footer:ReceivedDateTime"/></fo:inline></fo:block>
+                        </fo:table-cell>
+                     </fo:table-row>
+                  </fo:table-body>
+               </fo:table>
+            </fo:static-content>
 
 				<fo:flow flow-name="xsl-region-body">
 					<fo:block>
@@ -105,7 +129,7 @@
 							padding-end="2pt" padding-before="20pt" padding-after="1pt"
 							display-align="center" border-style="solid" border-width="1pt"
 							border-color="white">
-							<fo:block font-family="Helvetica" font-size="12px" font-weight="bold">
+							<fo:block font-family="arialuni" font-size="12px" font-weight="bold">
 								PHS 398 Research
 								Training Program Plan
 							</fo:block>
@@ -154,7 +178,18 @@
 													0925-0001
 												</fo:block>
 											</fo:table-cell>
+											
+											
 										</fo:table-row>
+						<fo:table-row>
+                        	<fo:table-cell font-size="smaller" padding="0" number-columns-spanned="2" text-align="right" display-align="center">
+                                <fo:block>
+                                    <fo:inline font-family="arialuni" font-size="6px">
+                                        <xsl:text>Expiration Date: 10/31/2018</xsl:text>
+                                    </fo:inline>
+                                </fo:block>
+                        </fo:table-cell>
+                        </fo:table-row>
 									</fo:table-body>
 								</fo:table>
 							</fo:block>
@@ -177,16 +212,26 @@
 							</fo:block>
 						</fo:table-cell>
 					</fo:table-row>
+							<fo:table-row>
+                                  <fo:table-cell number-columns-spanned="2" padding="2pt" display-align="center">
+                                                                <fo:block>
+                                                                    <fo:inline font-weight="bold" font-size="10px">
+                                                                        <xsl:text>Introduction</xsl:text>
+                                                                    </fo:inline>
+                                                                </fo:block>
+                                                            </fo:table-cell>
+                                                        </fo:table-row>
+					
 					<!-- 1. Introduction to Application -->
 					<fo:table-row>
 						<fo:table-cell text-align="left" padding-start="3pt"
 							padding-end="3pt" padding-before="1pt" padding-after="6pt"
 							display-align="left">
-							<fo:block font-family="Helvetica" font-size="9px">
+							<fo:block font-family="arialuni" font-size="9px">
 								1. Introduction to Application
 							</fo:block>
 							<fo:block font-size="6px">
-								(for RESUBMISSION or REVISION only)
+								(for RESUBMISSION and REVISION)
 							</fo:block>
 						</fo:table-cell>
 						<fo:table-cell text-align="left" padding-start="3pt"
@@ -204,18 +249,18 @@
 										<fo:table-row>
 											<fo:table-cell border="solid 1pt white"
 												border-spacing="1pt" padding="2pt" display-align="center">
-												<fo:block font-family="Georgia" font-size="10px">
+												<fo:block font-family="arialuni" font-size="10px">
 													<fo:inline>
 														<xsl:text>&#160;</xsl:text>
 													</fo:inline>
 													<xsl:for-each
-														select="PHS398_ResearchTrainingProgramPlan_2_0:PHS398_ResearchTrainingProgramPlan_2_0">
+														select="//PHS398_ResearchTrainingProgramPlan_3_0:PHS398_ResearchTrainingProgramPlan_3_0">
 														<xsl:for-each
-															select="PHS398_ResearchTrainingProgramPlan_2_0:ResearchTrainingProgramPlanAttachments">
+															select="PHS398_ResearchTrainingProgramPlan_3_0:ResearchTrainingProgramPlanAttachments">
 															<xsl:for-each
-																select="PHS398_ResearchTrainingProgramPlan_2_0:IntroductionToApplication">
+																select="PHS398_ResearchTrainingProgramPlan_3_0:IntroductionToApplication">
 																<xsl:for-each
-																	select="PHS398_ResearchTrainingProgramPlan_2_0:attFile">
+																	select="PHS398_ResearchTrainingProgramPlan_3_0:attFile">
 																	<xsl:for-each select="att:FileName">
 																		<xsl:variable name="value-of-template">
 																			<xsl:apply-templates />
@@ -247,80 +292,23 @@
 						</fo:table-cell>
 					</fo:table-row>
 
-					<!-- Background -->
-					<fo:table-row>
-						<fo:table-cell text-align="left" padding-start="3pt"
-							padding-end="3pt" padding-before="2pt" padding-after="2pt"
-							display-align="left">
-							<fo:block font-family="Helvetica" font-size="9px">
-								2. Background
-							</fo:block>
-						</fo:table-cell>
-						<fo:table-cell text-align="left" padding-start="3pt"
-							padding-end="3pt" padding-before="2pt" padding-after="2pt"
-							display-align="left">
-							<fo:block>
-								<fo:inline-container>
-									<fo:block>
-										<xsl:text>&#x2029;</xsl:text>
-									</fo:block>
-								</fo:inline-container>
-								<fo:table font-size="9px" table-layout="fixed" width="100%">
-									<fo:table-column column-width="proportional-column-width(1)" />
-									<fo:table-body start-indent="0pt">
-										<fo:table-row>
-											<fo:table-cell border="solid 1pt white"
-												border-spacing="1pt" padding="2pt" display-align="center">
-												<fo:block font-family="Georgia" font-size="10px">
-													<fo:inline>
-														<xsl:text>&#160;</xsl:text>
-													</fo:inline>
-													<xsl:for-each
-														select="PHS398_ResearchTrainingProgramPlan_2_0:PHS398_ResearchTrainingProgramPlan_2_0">
-														<xsl:for-each
-															select="PHS398_ResearchTrainingProgramPlan_2_0:ResearchTrainingProgramPlanAttachments">
-															<xsl:for-each
-																select="PHS398_ResearchTrainingProgramPlan_2_0:Background">
-																<xsl:for-each
-																	select="PHS398_ResearchTrainingProgramPlan_2_0:attFile">
-																	<xsl:for-each select="att:FileName">
-																		<xsl:variable name="value-of-template">
-																			<xsl:apply-templates />
-																		</xsl:variable>
-																		<xsl:choose>
-																			<xsl:when
-																				test="contains(string($value-of-template),'&#x2029;')">
-																				<fo:block>
-																					<xsl:copy-of select="$value-of-template" />
-																				</fo:block>
-																			</xsl:when>
-																			<xsl:otherwise>
-																				<fo:inline>
-																					<xsl:copy-of select="$value-of-template" />
-																				</fo:inline>
-																			</xsl:otherwise>
-																		</xsl:choose>
-																	</xsl:for-each>
-																</xsl:for-each>
-															</xsl:for-each>
-														</xsl:for-each>
-													</xsl:for-each>
-												</fo:block>
-											</fo:table-cell>
-										</fo:table-row>
-									</fo:table-body>
-								</fo:table>
-							</fo:block>
-						</fo:table-cell>
-					</fo:table-row>
+							<fo:table-row>
+                                  <fo:table-cell number-columns-spanned="2" padding="2pt" display-align="center">
+                                                                <fo:block>
+                                                                    <fo:inline font-weight="bold" font-size="10px">
+                                                                        <xsl:text>Training Program Section</xsl:text>
+                                                                    </fo:inline>
+                                                                </fo:block>
+                                                            </fo:table-cell>
+                                                        </fo:table-row>
 
 					<!-- Program Plan -->
 					<fo:table-row>
 						<fo:table-cell text-align="left" padding-start="3pt"
 							padding-end="3pt" padding-before="2pt" padding-after="2pt"
 							display-align="left">
-							<fo:block font-family="Helvetica" font-size="9px">
-								3. Program Plan
+							<fo:block font-family="arialuni" font-size="9px">
+							* 2. Program Plan
 							</fo:block>
 						</fo:table-cell>
 						<fo:table-cell text-align="left" padding-start="3pt"
@@ -338,18 +326,18 @@
 										<fo:table-row>
 											<fo:table-cell border="solid 1pt white"
 												border-spacing="1pt" padding="2pt" display-align="center">
-												<fo:block font-family="Georgia" font-size="10px">
+												<fo:block font-family="arialuni" font-size="10px">
 													<fo:inline>
 														<xsl:text>&#160;</xsl:text>
 													</fo:inline>
 													<xsl:for-each
-														select="PHS398_ResearchTrainingProgramPlan_2_0:PHS398_ResearchTrainingProgramPlan_2_0">
+														select="//PHS398_ResearchTrainingProgramPlan_3_0:PHS398_ResearchTrainingProgramPlan_3_0">
 														<xsl:for-each
-															select="PHS398_ResearchTrainingProgramPlan_2_0:ResearchTrainingProgramPlanAttachments">
+															select="PHS398_ResearchTrainingProgramPlan_3_0:ResearchTrainingProgramPlanAttachments">
 															<xsl:for-each
-																select="PHS398_ResearchTrainingProgramPlan_2_0:ProgramPlan">
+																select="PHS398_ResearchTrainingProgramPlan_3_0:ProgramPlan">
 																<xsl:for-each
-																	select="PHS398_ResearchTrainingProgramPlan_2_0:attFile">
+																	select="PHS398_ResearchTrainingProgramPlan_3_0:attFile">
 																	<xsl:for-each select="att:FileName">
 																		<xsl:variable name="value-of-template">
 																			<xsl:apply-templates />
@@ -380,82 +368,14 @@
 							</fo:block>
 						</fo:table-cell>
 					</fo:table-row>
-
-					<!-- Recruitment and Retention Plan to Enhance Diversity -->
-					<fo:table-row>
-						<fo:table-cell text-align="left" padding-start="3pt"
-							padding-end="3pt" padding-before="2pt" padding-after="6pt"
-							display-align="left">
-							<fo:block font-family="Helvetica" font-size="9px">
-								4. Recruitment and Retention Plan to
-								Enhance Diversity
-							</fo:block>
-						</fo:table-cell>
-						<fo:table-cell text-align="left" padding-start="3pt"
-							padding-end="3pt" padding-before="2pt" padding-after="6pt"
-							display-align="left">
-							<fo:block>
-								<fo:inline-container>
-									<fo:block>
-										<xsl:text>&#x2029;</xsl:text>
-									</fo:block>
-								</fo:inline-container>
-								<fo:table font-size="9px" table-layout="fixed" width="100%">
-									<fo:table-column column-width="proportional-column-width(1)" />
-									<fo:table-body start-indent="0pt">
-										<fo:table-row>
-											<fo:table-cell border="solid 1pt white"
-												border-spacing="1pt" padding="2pt" display-align="center">
-												<fo:block font-family="Georgia" font-size="10px">
-													<fo:inline>
-														<xsl:text>&#160;</xsl:text>
-													</fo:inline>
-													<xsl:for-each
-														select="PHS398_ResearchTrainingProgramPlan_2_0:PHS398_ResearchTrainingProgramPlan_2_0">
-														<xsl:for-each
-															select="PHS398_ResearchTrainingProgramPlan_2_0:ResearchTrainingProgramPlanAttachments">
-															<xsl:for-each
-																select="PHS398_ResearchTrainingProgramPlan_2_0:RecruitmentAndRetentionPlanToEnhanceDiversity">
-																<xsl:for-each
-																	select="PHS398_ResearchTrainingProgramPlan_2_0:attFile">
-																	<xsl:for-each select="att:FileName">
-																		<xsl:variable name="value-of-template">
-																			<xsl:apply-templates />
-																		</xsl:variable>
-																		<xsl:choose>
-																			<xsl:when
-																				test="contains(string($value-of-template),'&#x2029;')">
-																				<fo:block>
-																					<xsl:copy-of select="$value-of-template" />
-																				</fo:block>
-																			</xsl:when>
-																			<xsl:otherwise>
-																				<fo:inline>
-																					<xsl:copy-of select="$value-of-template" />
-																				</fo:inline>
-																			</xsl:otherwise>
-																		</xsl:choose>
-																	</xsl:for-each>
-																</xsl:for-each>
-															</xsl:for-each>
-														</xsl:for-each>
-													</xsl:for-each>
-												</fo:block>
-											</fo:table-cell>
-										</fo:table-row>
-									</fo:table-body>
-								</fo:table>
-							</fo:block>
-						</fo:table-cell>
-					</fo:table-row>
-
+					
 					<!-- Plan for Instruction in the Responsible Conduct of Research -->
 					<fo:table-row>
 						<fo:table-cell text-align="left" padding-start="3pt"
 							padding-end="3pt" padding-before="2pt" padding-after="6pt"
 							display-align="left">
-							<fo:block font-family="Helvetica" font-size="9px">
-								5. Plan for Instruction in the
+							<fo:block font-family="arialuni" font-size="9px">
+								3. Plan for Instruction in the
 								Responsible Conduct of Research
 							</fo:block>
 						</fo:table-cell>
@@ -474,18 +394,18 @@
 										<fo:table-row>
 											<fo:table-cell border="solid 1pt white"
 												border-spacing="1pt" padding="2pt" display-align="center">
-												<fo:block font-family="Georgia" font-size="10px">
+												<fo:block font-family="arialuni" font-size="10px">
 													<fo:inline>
 														<xsl:text>&#160;</xsl:text>
 													</fo:inline>
 													<xsl:for-each
-														select="PHS398_ResearchTrainingProgramPlan_2_0:PHS398_ResearchTrainingProgramPlan_2_0">
+														select="//PHS398_ResearchTrainingProgramPlan_3_0:PHS398_ResearchTrainingProgramPlan_3_0">
 														<xsl:for-each
-															select="PHS398_ResearchTrainingProgramPlan_2_0:ResearchTrainingProgramPlanAttachments">
+															select="PHS398_ResearchTrainingProgramPlan_3_0:ResearchTrainingProgramPlanAttachments">
 															<xsl:for-each
-																select="PHS398_ResearchTrainingProgramPlan_2_0:ResponsibleConductOfResearch">
+																select="PHS398_ResearchTrainingProgramPlan_3_0:ResponsibleConductOfResearch">
 																<xsl:for-each
-																	select="PHS398_ResearchTrainingProgramPlan_2_0:attFile">
+																	select="PHS398_ResearchTrainingProgramPlan_3_0:attFile">
 																	<xsl:for-each select="att:FileName">
 																		<xsl:variable name="value-of-template">
 																			<xsl:apply-templates />
@@ -516,13 +436,148 @@
 							</fo:block>
 						</fo:table-cell>
 					</fo:table-row>
-
-					<!-- Progress Report (for RENEWAL applications only) -->
+					
+					<!-- Plan for instruction in Methods for Enhancing Reproducibility -->
 					<fo:table-row>
 						<fo:table-cell text-align="left" padding-start="3pt"
 							padding-end="3pt" padding-before="2pt" padding-after="6pt"
 							display-align="left">
-							<fo:block font-family="Helvetica" font-size="9px">
+							<fo:block font-family="arialuni" font-size="9px">
+								4. Plan for Instruction in Methods for Enhancing Reproducibility
+							</fo:block>
+						</fo:table-cell>
+						<fo:table-cell text-align="left" padding-start="3pt"
+							padding-end="3pt" padding-before="2pt" padding-after="6pt"
+							display-align="left">
+							<fo:block>
+								<fo:inline-container>
+									<fo:block>
+										<xsl:text>&#x2029;</xsl:text>
+									</fo:block>
+								</fo:inline-container>
+								<fo:table font-size="9px" table-layout="fixed" width="100%">
+									<fo:table-column column-width="proportional-column-width(1)" />
+									<fo:table-body start-indent="0pt">
+										<fo:table-row>
+											<fo:table-cell border="solid 1pt white"
+												border-spacing="1pt" padding="2pt" display-align="center">
+												<fo:block font-family="arialuni" font-size="10px">
+													<fo:inline>
+														<xsl:text>&#160;</xsl:text>
+													</fo:inline>
+													<xsl:for-each
+														select="//PHS398_ResearchTrainingProgramPlan_3_0:PHS398_ResearchTrainingProgramPlan_3_0">
+														<xsl:for-each
+															select="PHS398_ResearchTrainingProgramPlan_3_0:ResearchTrainingProgramPlanAttachments">
+															<xsl:for-each
+																select="PHS398_ResearchTrainingProgramPlan_3_0:MethodsForEnhancingReproducibility">
+																<xsl:for-each
+																	select="PHS398_ResearchTrainingProgramPlan_3_0:attFile">
+																	<xsl:for-each select="att:FileName">
+																		<xsl:variable name="value-of-template">
+																			<xsl:apply-templates />
+																		</xsl:variable>
+																		<xsl:choose>
+																			<xsl:when
+																				test="contains(string($value-of-template),'&#x2029;')">
+																				<fo:block>
+																					<xsl:copy-of select="$value-of-template" />
+																				</fo:block>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<fo:inline>
+																					<xsl:copy-of select="$value-of-template" />
+																				</fo:inline>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																</xsl:for-each>
+															</xsl:for-each>
+														</xsl:for-each>
+													</xsl:for-each>
+												</fo:block>
+											</fo:table-cell>
+										</fo:table-row>
+									</fo:table-body>
+								</fo:table>
+							</fo:block>
+						</fo:table-cell>
+					</fo:table-row>
+					
+
+				<!-- Multiple PD/PI Leadership Plan (if applicable) -->
+					<fo:table-row>
+						<fo:table-cell text-align="left" padding-start="3pt"
+							padding-end="3pt" padding-before="2pt" padding-after="2pt"
+							display-align="left">
+							<fo:block font-family="arialuni" font-size="9px">
+								5. Multiple PD/PI Leadership Plan(if applicable)
+							</fo:block>
+						</fo:table-cell>
+						<fo:table-cell text-align="left" padding-start="3pt"
+							padding-end="3pt" padding-before="2pt" padding-after="2pt"
+							display-align="left">
+							<fo:block>
+								<fo:inline-container>
+									<fo:block>
+										<xsl:text>&#x2029;</xsl:text>
+									</fo:block>
+								</fo:inline-container>
+								<fo:table font-size="9px" table-layout="fixed" width="100%">
+									<fo:table-column column-width="proportional-column-width(1)" />
+									<fo:table-body start-indent="0pt">
+										<fo:table-row>
+											<fo:table-cell border="solid 1pt white"
+												border-spacing="1pt" padding="2pt" display-align="center">
+												<fo:block font-family="arialuni" font-size="10px">
+													<fo:inline>
+														<xsl:text>&#160;</xsl:text>
+													</fo:inline>
+													<xsl:for-each
+														select="//PHS398_ResearchTrainingProgramPlan_3_0:PHS398_ResearchTrainingProgramPlan_3_0">
+														<xsl:for-each
+															select="PHS398_ResearchTrainingProgramPlan_3_0:ResearchTrainingProgramPlanAttachments">
+															<xsl:for-each
+																select="PHS398_ResearchTrainingProgramPlan_3_0:MultiplePDPILeadershipPlan">
+																<xsl:for-each
+																	select="PHS398_ResearchTrainingProgramPlan_3_0:attFile">
+																	<xsl:for-each select="att:FileName">
+																		<xsl:variable name="value-of-template">
+																			<xsl:apply-templates />
+																		</xsl:variable>
+																		<xsl:choose>
+																			<xsl:when
+																				test="contains(string($value-of-template),'&#x2029;')">
+																				<fo:block>
+																					<xsl:copy-of select="$value-of-template" />
+																				</fo:block>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<fo:inline>
+																					<xsl:copy-of select="$value-of-template" />
+																				</fo:inline>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																</xsl:for-each>
+															</xsl:for-each>
+														</xsl:for-each>
+													</xsl:for-each>
+												</fo:block>
+											</fo:table-cell>
+										</fo:table-row>
+									</fo:table-body>
+								</fo:table>
+							</fo:block>
+						</fo:table-cell>
+					</fo:table-row>
+					
+						<!-- Progress Report (for RENEWAL applications only) -->
+					<fo:table-row>
+						<fo:table-cell text-align="left" padding-start="3pt"
+							padding-end="3pt" padding-before="2pt" padding-after="6pt"
+							display-align="left">
+							<fo:block font-family="arialuni" font-size="9px">
 								6. Progress Report 								
 							</fo:block>
 							<fo:block font-size="6px">&#160;(for RENEWAL applications only)</fo:block>
@@ -542,18 +597,18 @@
 										<fo:table-row>
 											<fo:table-cell border="solid 1pt white"
 												border-spacing="1pt" padding="2pt" display-align="center">
-												<fo:block font-family="Georgia" font-size="10px">
+												<fo:block font-family="arialuni" font-size="10px">
 													<fo:inline>
 														<xsl:text>&#160;</xsl:text>
 													</fo:inline>
 													<xsl:for-each
-														select="PHS398_ResearchTrainingProgramPlan_2_0:PHS398_ResearchTrainingProgramPlan_2_0">
+														select="//PHS398_ResearchTrainingProgramPlan_3_0:PHS398_ResearchTrainingProgramPlan_3_0">
 														<xsl:for-each
-															select="PHS398_ResearchTrainingProgramPlan_2_0:ResearchTrainingProgramPlanAttachments">
+															select="PHS398_ResearchTrainingProgramPlan_3_0:ResearchTrainingProgramPlanAttachments">
 															<xsl:for-each
-																select="PHS398_ResearchTrainingProgramPlan_2_0:ProgressReport">
+																select="PHS398_ResearchTrainingProgramPlan_3_0:ProgressReport">
 																<xsl:for-each
-																	select="PHS398_ResearchTrainingProgramPlan_2_0:attFile">
+																	select="PHS398_ResearchTrainingProgramPlan_3_0:attFile">
 																	<xsl:for-each select="att:FileName">
 																		<xsl:variable name="value-of-template">
 																			<xsl:apply-templates />
@@ -584,351 +639,24 @@
 							</fo:block>
 						</fo:table-cell>
 					</fo:table-row>
-
-					<!-- Human Subjects -->
-					<fo:table-row>
-						<fo:table-cell text-align="left" padding-start="3pt"
-							padding-end="3pt" padding-before="2pt" padding-after="2pt"
-							display-align="left">
-							<fo:block font-family="Helvetica" font-size="9px">
-								7. Human Subjects
-							</fo:block>
-						</fo:table-cell>
-						<fo:table-cell text-align="left" padding-start="3pt"
-							padding-end="3pt" padding-before="2pt" padding-after="2pt"
-							display-align="left">
-							<fo:block>
-								<fo:inline-container>
-									<fo:block>
-										<xsl:text>&#x2029;</xsl:text>
-									</fo:block>
-								</fo:inline-container>
-								<fo:table font-size="9px" table-layout="fixed" width="100%">
-									<fo:table-column column-width="proportional-column-width(1)" />
-									<fo:table-body start-indent="0pt">
-										<fo:table-row>
-											<fo:table-cell border="solid 1pt white"
-												border-spacing="1pt" padding="2pt" display-align="center">
-												<fo:block font-family="Georgia" font-size="10px">
-													<fo:inline>
-														<xsl:text>&#160;</xsl:text>
-													</fo:inline>
-													<xsl:for-each
-														select="PHS398_ResearchTrainingProgramPlan_2_0:PHS398_ResearchTrainingProgramPlan_2_0">
-														<xsl:for-each
-															select="PHS398_ResearchTrainingProgramPlan_2_0:ResearchTrainingProgramPlanAttachments">
-															<xsl:for-each
-																select="PHS398_ResearchTrainingProgramPlan_2_0:HumanSubjects">
-																<xsl:for-each
-																	select="PHS398_ResearchTrainingProgramPlan_2_0:attFile">
-																	<xsl:for-each select="att:FileName">
-																		<xsl:variable name="value-of-template">
-																			<xsl:apply-templates />
-																		</xsl:variable>
-																		<xsl:choose>
-																			<xsl:when
-																				test="contains(string($value-of-template),'&#x2029;')">
-																				<fo:block>
-																					<xsl:copy-of select="$value-of-template" />
-																				</fo:block>
-																			</xsl:when>
-																			<xsl:otherwise>
-																				<fo:inline>
-																					<xsl:copy-of select="$value-of-template" />
-																				</fo:inline>
-																			</xsl:otherwise>
-																		</xsl:choose>
-																	</xsl:for-each>
-																</xsl:for-each>
-															</xsl:for-each>
-														</xsl:for-each>
-													</xsl:for-each>
-												</fo:block>
-											</fo:table-cell>
-										</fo:table-row>
-									</fo:table-body>
-								</fo:table>
-							</fo:block>
-						</fo:table-cell>
-					</fo:table-row>
-
-					<!-- Vertebrate Animals -->
-					<fo:table-row>
-						<fo:table-cell text-align="left" padding-start="3pt"
-							padding-end="3pt" padding-before="2pt" padding-after="2pt"
-							display-align="left">
-							<fo:block font-family="Helvetica" font-size="9px">
-								8. Vertebrate Animals
-							</fo:block>
-						</fo:table-cell>
-						<fo:table-cell text-align="left" padding-start="3pt"
-							padding-end="3pt" padding-before="2pt" padding-after="2pt"
-							display-align="left">
-							<fo:block>
-								<fo:inline-container>
-									<fo:block>
-										<xsl:text>&#x2029;</xsl:text>
-									</fo:block>
-								</fo:inline-container>
-								<fo:table font-size="9px" table-layout="fixed" width="100%">
-									<fo:table-column column-width="proportional-column-width(1)" />
-									<fo:table-body start-indent="0pt">
-										<fo:table-row>
-											<fo:table-cell border="solid 1pt white"
-												border-spacing="1pt" padding="2pt" display-align="center">
-												<fo:block font-family="Georgia" font-size="10px">
-													<fo:inline>
-														<xsl:text>&#160;</xsl:text>
-													</fo:inline>
-													<xsl:for-each
-														select="PHS398_ResearchTrainingProgramPlan_2_0:PHS398_ResearchTrainingProgramPlan_2_0">
-														<xsl:for-each
-															select="PHS398_ResearchTrainingProgramPlan_2_0:ResearchTrainingProgramPlanAttachments">
-															<xsl:for-each
-																select="PHS398_ResearchTrainingProgramPlan_2_0:VertebrateAnimals">
-																<xsl:for-each
-																	select="PHS398_ResearchTrainingProgramPlan_2_0:attFile">
-																	<xsl:for-each select="att:FileName">
-																		<xsl:variable name="value-of-template">
-																			<xsl:apply-templates />
-																		</xsl:variable>
-																		<xsl:choose>
-																			<xsl:when
-																				test="contains(string($value-of-template),'&#x2029;')">
-																				<fo:block>
-																					<xsl:copy-of select="$value-of-template" />
-																				</fo:block>
-																			</xsl:when>
-																			<xsl:otherwise>
-																				<fo:inline>
-																					<xsl:copy-of select="$value-of-template" />
-																				</fo:inline>
-																			</xsl:otherwise>
-																		</xsl:choose>
-																	</xsl:for-each>
-																</xsl:for-each>
-															</xsl:for-each>
-														</xsl:for-each>
-													</xsl:for-each>
-												</fo:block>
-											</fo:table-cell>
-										</fo:table-row>
-									</fo:table-body>
-								</fo:table>
-							</fo:block>
-						</fo:table-cell>
-					</fo:table-row>
-
-					<!-- Select Agent Research -->
-					<fo:table-row>
-						<fo:table-cell text-align="left" padding-start="3pt"
-							padding-end="3pt" padding-before="2pt" padding-after="2pt"
-							display-align="left">
-							<fo:block font-family="Helvetica" font-size="9px">
-								9. Select Agent Research
-							</fo:block>
-						</fo:table-cell>
-						<fo:table-cell text-align="left" padding-start="3pt"
-							padding-end="3pt" padding-before="2pt" padding-after="2pt"
-							display-align="left">
-							<fo:block>
-								<fo:inline-container>
-									<fo:block>
-										<xsl:text>&#x2029;</xsl:text>
-									</fo:block>
-								</fo:inline-container>
-								<fo:table font-size="9px" table-layout="fixed" width="100%">
-									<fo:table-column column-width="proportional-column-width(1)" />
-									<fo:table-body start-indent="0pt">
-										<fo:table-row>
-											<fo:table-cell border="solid 1pt white"
-												border-spacing="1pt" padding="2pt" display-align="center">
-												<fo:block font-family="Georgia" font-size="10px">
-													<fo:inline>
-														<xsl:text>&#160;</xsl:text>
-													</fo:inline>
-													<xsl:for-each
-														select="PHS398_ResearchTrainingProgramPlan_2_0:PHS398_ResearchTrainingProgramPlan_2_0">
-														<xsl:for-each
-															select="PHS398_ResearchTrainingProgramPlan_2_0:ResearchTrainingProgramPlanAttachments">
-															<xsl:for-each
-																select="PHS398_ResearchTrainingProgramPlan_2_0:SelectAgentResearch">
-																<xsl:for-each
-																	select="PHS398_ResearchTrainingProgramPlan_2_0:attFile">
-																	<xsl:for-each select="att:FileName">
-																		<xsl:variable name="value-of-template">
-																			<xsl:apply-templates />
-																		</xsl:variable>
-																		<xsl:choose>
-																			<xsl:when
-																				test="contains(string($value-of-template),'&#x2029;')">
-																				<fo:block>
-																					<xsl:copy-of select="$value-of-template" />
-																				</fo:block>
-																			</xsl:when>
-																			<xsl:otherwise>
-																				<fo:inline>
-																					<xsl:copy-of select="$value-of-template" />
-																				</fo:inline>
-																			</xsl:otherwise>
-																		</xsl:choose>
-																	</xsl:for-each>
-																</xsl:for-each>
-															</xsl:for-each>
-														</xsl:for-each>
-													</xsl:for-each>
-												</fo:block>
-											</fo:table-cell>
-										</fo:table-row>
-									</fo:table-body>
-								</fo:table>
-							</fo:block>
-						</fo:table-cell>
-					</fo:table-row>
-
-					<!-- Multiple PD/PI Leadership Plan (if applicable) -->
-					<fo:table-row>
-						<fo:table-cell text-align="left" padding-start="3pt"
-							padding-end="3pt" padding-before="2pt" padding-after="2pt"
-							display-align="left">
-							<fo:block font-family="Helvetica" font-size="9px">
-								10. Multiple PD/PI Leadership Plan
-								(if applicable)
-							</fo:block>
-						</fo:table-cell>
-						<fo:table-cell text-align="left" padding-start="3pt"
-							padding-end="3pt" padding-before="2pt" padding-after="2pt"
-							display-align="left">
-							<fo:block>
-								<fo:inline-container>
-									<fo:block>
-										<xsl:text>&#x2029;</xsl:text>
-									</fo:block>
-								</fo:inline-container>
-								<fo:table font-size="9px" table-layout="fixed" width="100%">
-									<fo:table-column column-width="proportional-column-width(1)" />
-									<fo:table-body start-indent="0pt">
-										<fo:table-row>
-											<fo:table-cell border="solid 1pt white"
-												border-spacing="1pt" padding="2pt" display-align="center">
-												<fo:block font-family="Georgia" font-size="10px">
-													<fo:inline>
-														<xsl:text>&#160;</xsl:text>
-													</fo:inline>
-													<xsl:for-each
-														select="PHS398_ResearchTrainingProgramPlan_2_0:PHS398_ResearchTrainingProgramPlan_2_0">
-														<xsl:for-each
-															select="PHS398_ResearchTrainingProgramPlan_2_0:ResearchTrainingProgramPlanAttachments">
-															<xsl:for-each
-																select="PHS398_ResearchTrainingProgramPlan_2_0:MultiplePDPILeadershipPlan">
-																<xsl:for-each
-																	select="PHS398_ResearchTrainingProgramPlan_2_0:attFile">
-																	<xsl:for-each select="att:FileName">
-																		<xsl:variable name="value-of-template">
-																			<xsl:apply-templates />
-																		</xsl:variable>
-																		<xsl:choose>
-																			<xsl:when
-																				test="contains(string($value-of-template),'&#x2029;')">
-																				<fo:block>
-																					<xsl:copy-of select="$value-of-template" />
-																				</fo:block>
-																			</xsl:when>
-																			<xsl:otherwise>
-																				<fo:inline>
-																					<xsl:copy-of select="$value-of-template" />
-																				</fo:inline>
-																			</xsl:otherwise>
-																		</xsl:choose>
-																	</xsl:for-each>
-																</xsl:for-each>
-															</xsl:for-each>
-														</xsl:for-each>
-													</xsl:for-each>
-												</fo:block>
-											</fo:table-cell>
-										</fo:table-row>
-									</fo:table-body>
-								</fo:table>
-							</fo:block>
-						</fo:table-cell>
-					</fo:table-row>
-
-					<!-- Consortium/Contractual Arrangements -->
-					<fo:table-row>
-						<fo:table-cell text-align="left" padding-start="3pt"
-							padding-end="3pt" padding-before="2pt" padding-after="2pt"
-							display-align="left">
-							<fo:block font-family="Helvetica" font-size="9px">
-								11. Consortium/Contractual
-								Arrangements
-							</fo:block>
-						</fo:table-cell>
-						<fo:table-cell text-align="left" padding-start="3pt"
-							padding-end="3pt" padding-before="2pt" padding-after="2pt"
-							display-align="left">
-							<fo:block>
-								<fo:inline-container>
-									<fo:block>
-										<xsl:text>&#x2029;</xsl:text>
-									</fo:block>
-								</fo:inline-container>
-								<fo:table font-size="9px" table-layout="fixed" width="100%">
-									<fo:table-column column-width="proportional-column-width(1)" />
-									<fo:table-body start-indent="0pt">
-										<fo:table-row>
-											<fo:table-cell border="solid 1pt white"
-												border-spacing="1pt" padding="2pt" display-align="center">
-												<fo:block font-family="Georgia" font-size="10px">
-													<fo:inline>
-														<xsl:text>&#160;</xsl:text>
-													</fo:inline>
-													<xsl:for-each
-														select="PHS398_ResearchTrainingProgramPlan_2_0:PHS398_ResearchTrainingProgramPlan_2_0">
-														<xsl:for-each
-															select="PHS398_ResearchTrainingProgramPlan_2_0:ResearchTrainingProgramPlanAttachments">
-															<xsl:for-each
-																select="PHS398_ResearchTrainingProgramPlan_2_0:ConsortiumContractualArrangements">
-																<xsl:for-each
-																	select="PHS398_ResearchTrainingProgramPlan_2_0:attFile">
-																	<xsl:for-each select="att:FileName">
-																		<xsl:variable name="value-of-template">
-																			<xsl:apply-templates />
-																		</xsl:variable>
-																		<xsl:choose>
-																			<xsl:when
-																				test="contains(string($value-of-template),'&#x2029;')">
-																				<fo:block>
-																					<xsl:copy-of select="$value-of-template" />
-																				</fo:block>
-																			</xsl:when>
-																			<xsl:otherwise>
-																				<fo:inline>
-																					<xsl:copy-of select="$value-of-template" />
-																				</fo:inline>
-																			</xsl:otherwise>
-																		</xsl:choose>
-																	</xsl:for-each>
-																</xsl:for-each>
-															</xsl:for-each>
-														</xsl:for-each>
-													</xsl:for-each>
-												</fo:block>
-											</fo:table-cell>
-										</fo:table-row>
-									</fo:table-body>
-								</fo:table>
-							</fo:block>
-						</fo:table-cell>
-					</fo:table-row>
-
+					
+						<fo:table-row>
+                                  <fo:table-cell number-columns-spanned="2" padding="2pt" display-align="center">
+                                                                <fo:block>
+                                                                    <fo:inline font-weight="bold" font-size="10px">
+                                                                        <xsl:text>Faculty, Trainees and Training Record Section</xsl:text>
+                                                                    </fo:inline>
+                                                                </fo:block>
+                                                            </fo:table-cell>
+                                                        </fo:table-row>
+					
 					<!-- Participating Faculty Biosketches -->
 					<fo:table-row>
 						<fo:table-cell text-align="left" padding-start="3pt"
 							padding-end="3pt" padding-before="2pt" padding-after="2pt"
 							display-align="left">
-							<fo:block font-family="Helvetica" font-size="9px">
-								12. Participating Faculty
+							<fo:block font-family="arialuni" font-size="9px">
+								7. Participating Faculty
 								Biosketches
 							</fo:block>
 						</fo:table-cell>
@@ -947,18 +675,18 @@
 										<fo:table-row>
 											<fo:table-cell border="solid 1pt white"
 												border-spacing="1pt" padding="2pt" display-align="center">
-												<fo:block font-family="Georgia" font-size="10px">
+												<fo:block font-family="arialuni" font-size="10px">
 													<fo:inline>
 														<xsl:text>&#160;</xsl:text>
 													</fo:inline>
 													<xsl:for-each
-														select="PHS398_ResearchTrainingProgramPlan_2_0:PHS398_ResearchTrainingProgramPlan_2_0">
+														select="//PHS398_ResearchTrainingProgramPlan_3_0:PHS398_ResearchTrainingProgramPlan_3_0">
 														<xsl:for-each
-															select="PHS398_ResearchTrainingProgramPlan_2_0:ResearchTrainingProgramPlanAttachments">
+															select="PHS398_ResearchTrainingProgramPlan_3_0:ResearchTrainingProgramPlanAttachments">
 															<xsl:for-each
-																select="PHS398_ResearchTrainingProgramPlan_2_0:ParticipatingFacultyBiosketches">
+																select="PHS398_ResearchTrainingProgramPlan_3_0:ParticipatingFacultyBiosketches">
 																<xsl:for-each
-																	select="PHS398_ResearchTrainingProgramPlan_2_0:attFile">
+																	select="PHS398_ResearchTrainingProgramPlan_3_0:attFile">
 																	<xsl:for-each select="att:FileName">
 																		<xsl:variable name="value-of-template">
 																			<xsl:apply-templates />
@@ -989,81 +717,15 @@
 							</fo:block>
 						</fo:table-cell>
 					</fo:table-row>
-
-					<!-- Data Tables -->
-					<fo:table-row>
-						<fo:table-cell text-align="left" padding-start="3pt"
-							padding-end="3pt" padding-before="2pt" padding-after="2pt"
-							display-align="left">
-							<fo:block font-family="Helvetica" font-size="9px">
-								13. Data Tables
-							</fo:block>
-						</fo:table-cell>
-						<fo:table-cell text-align="left" padding-start="3pt"
-							padding-end="3pt" padding-before="2pt" padding-after="2pt"
-							display-align="left">
-							<fo:block>
-								<fo:inline-container>
-									<fo:block>
-										<xsl:text>&#x2029;</xsl:text>
-									</fo:block>
-								</fo:inline-container>
-								<fo:table font-size="9px" table-layout="fixed" width="100%">
-									<fo:table-column column-width="proportional-column-width(1)" />
-									<fo:table-body start-indent="0pt">
-										<fo:table-row>
-											<fo:table-cell border="solid 1pt white"
-												border-spacing="1pt" padding="2pt" display-align="center">
-												<fo:block font-family="Georgia" font-size="10px">
-													<fo:inline>
-														<xsl:text>&#160;</xsl:text>
-													</fo:inline>
-													<xsl:for-each
-														select="PHS398_ResearchTrainingProgramPlan_2_0:PHS398_ResearchTrainingProgramPlan_2_0">
-														<xsl:for-each
-															select="PHS398_ResearchTrainingProgramPlan_2_0:ResearchTrainingProgramPlanAttachments">
-															<xsl:for-each
-																select="PHS398_ResearchTrainingProgramPlan_2_0:DataTables">
-																<xsl:for-each
-																	select="PHS398_ResearchTrainingProgramPlan_2_0:attFile">
-																	<xsl:for-each select="att:FileName">
-																		<xsl:variable name="value-of-template">
-																			<xsl:apply-templates />
-																		</xsl:variable>
-																		<xsl:choose>
-																			<xsl:when
-																				test="contains(string($value-of-template),'&#x2029;')">
-																				<fo:block>
-																					<xsl:copy-of select="$value-of-template" />
-																				</fo:block>
-																			</xsl:when>
-																			<xsl:otherwise>
-																				<fo:inline>
-																					<xsl:copy-of select="$value-of-template" />
-																				</fo:inline>
-																			</xsl:otherwise>
-																		</xsl:choose>
-																	</xsl:for-each>
-																</xsl:for-each>
-															</xsl:for-each>
-														</xsl:for-each>
-													</xsl:for-each>
-												</fo:block>
-											</fo:table-cell>
-										</fo:table-row>
-									</fo:table-body>
-								</fo:table>
-							</fo:block>
-						</fo:table-cell>
-					</fo:table-row>
-
+					
+					
 					<!-- Letters of Support -->
 					<fo:table-row>
 						<fo:table-cell text-align="left" padding-start="3pt"
 							padding-end="3pt" padding-before="2pt" padding-after="2pt"
 							display-align="left">
-							<fo:block font-family="Helvetica" font-size="9px">
-								14. Letters of Support
+							<fo:block font-family="arialuni" font-size="9px">
+								8. Letters of Support
 							</fo:block>
 						</fo:table-cell>
 						<fo:table-cell text-align="left" padding-start="3pt"
@@ -1081,18 +743,431 @@
 										<fo:table-row>
 											<fo:table-cell border="solid 1pt white"
 												border-spacing="1pt" padding="2pt" display-align="center">
-												<fo:block font-family="Georgia" font-size="10px">
+												<fo:block font-family="arialuni" font-size="10px">
 													<fo:inline>
 														<xsl:text>&#160;</xsl:text>
 													</fo:inline>
 													<xsl:for-each
-														select="PHS398_ResearchTrainingProgramPlan_2_0:PHS398_ResearchTrainingProgramPlan_2_0">
+														select="//PHS398_ResearchTrainingProgramPlan_3_0:PHS398_ResearchTrainingProgramPlan_3_0">
 														<xsl:for-each
-															select="PHS398_ResearchTrainingProgramPlan_2_0:ResearchTrainingProgramPlanAttachments">
+															select="PHS398_ResearchTrainingProgramPlan_3_0:ResearchTrainingProgramPlanAttachments">
 															<xsl:for-each
-																select="PHS398_ResearchTrainingProgramPlan_2_0:LettersOfSupport">
+																select="PHS398_ResearchTrainingProgramPlan_3_0:LettersOfSupport">
 																<xsl:for-each
-																	select="PHS398_ResearchTrainingProgramPlan_2_0:attFile">
+																	select="PHS398_ResearchTrainingProgramPlan_3_0:attFile">
+																	<xsl:for-each select="att:FileName">
+																		<xsl:variable name="value-of-template">
+																			<xsl:apply-templates />
+																		</xsl:variable>
+																		<xsl:choose>
+																			<xsl:when
+																				test="contains(string($value-of-template),'&#x2029;')">
+																				<fo:block>
+																					<xsl:copy-of select="$value-of-template" />
+																				</fo:block>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<fo:inline>
+																					<xsl:copy-of select="$value-of-template" />
+																				</fo:inline>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																</xsl:for-each>
+															</xsl:for-each>
+														</xsl:for-each>
+													</xsl:for-each>
+												</fo:block>
+											</fo:table-cell>
+										</fo:table-row>
+									</fo:table-body>
+								</fo:table>
+							</fo:block>
+						</fo:table-cell>
+					</fo:table-row>
+					
+					<!-- Data Tables -->
+					<fo:table-row>
+						<fo:table-cell text-align="left" padding-start="3pt"
+							padding-end="3pt" padding-before="2pt" padding-after="2pt"
+							display-align="left">
+							<fo:block font-family="arialuni" font-size="9px">
+								9. Data Tables
+							</fo:block>
+						</fo:table-cell>
+						<fo:table-cell text-align="left" padding-start="3pt"
+							padding-end="3pt" padding-before="2pt" padding-after="2pt"
+							display-align="left">
+							<fo:block>
+								<fo:inline-container>
+									<fo:block>
+										<xsl:text>&#x2029;</xsl:text>
+									</fo:block>
+								</fo:inline-container>
+								<fo:table font-size="9px" table-layout="fixed" width="100%">
+									<fo:table-column column-width="proportional-column-width(1)" />
+									<fo:table-body start-indent="0pt">
+										<fo:table-row>
+											<fo:table-cell border="solid 1pt white"
+												border-spacing="1pt" padding="2pt" display-align="center">
+												<fo:block font-family="arialuni" font-size="10px">
+													<fo:inline>
+														<xsl:text>&#160;</xsl:text>
+													</fo:inline>
+													<xsl:for-each
+														select="//PHS398_ResearchTrainingProgramPlan_3_0:PHS398_ResearchTrainingProgramPlan_3_0">
+														<xsl:for-each
+															select="PHS398_ResearchTrainingProgramPlan_3_0:ResearchTrainingProgramPlanAttachments">
+															<xsl:for-each
+																select="PHS398_ResearchTrainingProgramPlan_3_0:DataTables">
+																<xsl:for-each
+																	select="PHS398_ResearchTrainingProgramPlan_3_0:attFile">
+																	<xsl:for-each select="att:FileName">
+																		<xsl:variable name="value-of-template">
+																			<xsl:apply-templates />
+																		</xsl:variable>
+																		<xsl:choose>
+																			<xsl:when
+																				test="contains(string($value-of-template),'&#x2029;')">
+																				<fo:block>
+																					<xsl:copy-of select="$value-of-template" />
+																				</fo:block>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<fo:inline>
+																					<xsl:copy-of select="$value-of-template" />
+																				</fo:inline>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																</xsl:for-each>
+															</xsl:for-each>
+														</xsl:for-each>
+													</xsl:for-each>
+												</fo:block>
+											</fo:table-cell>
+										</fo:table-row>
+									</fo:table-body>
+								</fo:table>
+							</fo:block>
+						</fo:table-cell>
+					</fo:table-row>
+						<fo:table-row>
+                                  <fo:table-cell number-columns-spanned="2" padding="2pt" display-align="center">
+                                                                <fo:block>
+                                                                    <fo:inline font-weight="bold" font-size="10px">
+                                                                        <xsl:text>Other Training Program Section</xsl:text>
+                                                                    </fo:inline>
+                                                                </fo:block>
+                                                            </fo:table-cell>
+                                                        </fo:table-row>
+					
+					<!-- Human Subjects -->
+					<fo:table-row>
+						<fo:table-cell text-align="left" padding-start="3pt"
+							padding-end="3pt" padding-before="2pt" padding-after="2pt"
+							display-align="left">
+							<fo:block font-family="arialuni" font-size="9px">
+								10. Human Subjects
+							</fo:block>
+						</fo:table-cell>
+						<fo:table-cell text-align="left" padding-start="3pt"
+							padding-end="3pt" padding-before="2pt" padding-after="2pt"
+							display-align="left">
+							<fo:block>
+								<fo:inline-container>
+									<fo:block>
+										<xsl:text>&#x2029;</xsl:text>
+									</fo:block>
+								</fo:inline-container>
+								<fo:table font-size="9px" table-layout="fixed" width="100%">
+									<fo:table-column column-width="proportional-column-width(1)" />
+									<fo:table-body start-indent="0pt">
+										<fo:table-row>
+											<fo:table-cell border="solid 1pt white"
+												border-spacing="1pt" padding="2pt" display-align="center">
+												<fo:block font-family="arialuni" font-size="10px">
+													<fo:inline>
+														<xsl:text>&#160;</xsl:text>
+													</fo:inline>
+													<xsl:for-each
+														select="//PHS398_ResearchTrainingProgramPlan_3_0:PHS398_ResearchTrainingProgramPlan_3_0">
+														<xsl:for-each
+															select="PHS398_ResearchTrainingProgramPlan_3_0:ResearchTrainingProgramPlanAttachments">
+															<xsl:for-each
+																select="PHS398_ResearchTrainingProgramPlan_3_0:HumanSubjects">
+																<xsl:for-each
+																	select="PHS398_ResearchTrainingProgramPlan_3_0:attFile">
+																	<xsl:for-each select="att:FileName">
+																		<xsl:variable name="value-of-template">
+																			<xsl:apply-templates />
+																		</xsl:variable>
+																		<xsl:choose>
+																			<xsl:when
+																				test="contains(string($value-of-template),'&#x2029;')">
+																				<fo:block>
+																					<xsl:copy-of select="$value-of-template" />
+																				</fo:block>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<fo:inline>
+																					<xsl:copy-of select="$value-of-template" />
+																				</fo:inline>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																</xsl:for-each>
+															</xsl:for-each>
+														</xsl:for-each>
+													</xsl:for-each>
+												</fo:block>
+											</fo:table-cell>
+										</fo:table-row>
+									</fo:table-body>
+								</fo:table>
+							</fo:block>
+						</fo:table-cell>
+					</fo:table-row>
+					
+					<!-- Data safety Monitoring Plan Subjects -->
+					<fo:table-row>
+						<fo:table-cell text-align="left" padding-start="3pt"
+							padding-end="3pt" padding-before="2pt" padding-after="2pt"
+							display-align="left">
+							<fo:block font-family="arialuni" font-size="9px">
+								11. Data Safety Monitoring Plan
+							</fo:block>
+						</fo:table-cell>
+						<fo:table-cell text-align="left" padding-start="3pt"
+							padding-end="3pt" padding-before="2pt" padding-after="2pt"
+							display-align="left">
+							<fo:block>
+								<fo:inline-container>
+									<fo:block>
+										<xsl:text>&#x2029;</xsl:text>
+									</fo:block>
+								</fo:inline-container>
+								<fo:table font-size="9px" table-layout="fixed" width="100%">
+									<fo:table-column column-width="proportional-column-width(1)" />
+									<fo:table-body start-indent="0pt">
+										<fo:table-row>
+											<fo:table-cell border="solid 1pt white"
+												border-spacing="1pt" padding="2pt" display-align="center">
+												<fo:block font-family="arialuni" font-size="10px">
+													<fo:inline>
+														<xsl:text>&#160;</xsl:text>
+													</fo:inline>
+													<xsl:for-each
+														select="//PHS398_ResearchTrainingProgramPlan_3_0:PHS398_ResearchTrainingProgramPlan_3_0">
+														<xsl:for-each
+															select="PHS398_ResearchTrainingProgramPlan_3_0:ResearchTrainingProgramPlanAttachments">
+															<xsl:for-each
+																select="PHS398_ResearchTrainingProgramPlan_3_0:DataSafetyMonitoringPlan">
+																<xsl:for-each
+																	select="PHS398_ResearchTrainingProgramPlan_3_0:attFile">
+																	<xsl:for-each select="att:FileName">
+																		<xsl:variable name="value-of-template">
+																			<xsl:apply-templates />
+																		</xsl:variable>
+																		<xsl:choose>
+																			<xsl:when
+																				test="contains(string($value-of-template),'&#x2029;')">
+																				<fo:block>
+																					<xsl:copy-of select="$value-of-template" />
+																				</fo:block>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<fo:inline>
+																					<xsl:copy-of select="$value-of-template" />
+																				</fo:inline>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																</xsl:for-each>
+															</xsl:for-each>
+														</xsl:for-each>
+													</xsl:for-each>
+												</fo:block>
+											</fo:table-cell>
+										</fo:table-row>
+									</fo:table-body>
+								</fo:table>
+							</fo:block>
+						</fo:table-cell>
+					</fo:table-row>
+					
+					<!-- Vertebrate Animals -->
+					<fo:table-row>
+						<fo:table-cell text-align="left" padding-start="3pt"
+							padding-end="3pt" padding-before="2pt" padding-after="2pt"
+							display-align="left">
+							<fo:block font-family="arialuni" font-size="9px">
+								12. Vertebrate Animals
+							</fo:block>
+						</fo:table-cell>
+						<fo:table-cell text-align="left" padding-start="3pt"
+							padding-end="3pt" padding-before="2pt" padding-after="2pt"
+							display-align="left">
+							<fo:block>
+								<fo:inline-container>
+									<fo:block>
+										<xsl:text>&#x2029;</xsl:text>
+									</fo:block>
+								</fo:inline-container>
+								<fo:table font-size="9px" table-layout="fixed" width="100%">
+									<fo:table-column column-width="proportional-column-width(1)" />
+									<fo:table-body start-indent="0pt">
+										<fo:table-row>
+											<fo:table-cell border="solid 1pt white"
+												border-spacing="1pt" padding="2pt" display-align="center">
+												<fo:block font-family="arialuni" font-size="10px">
+													<fo:inline>
+														<xsl:text>&#160;</xsl:text>
+													</fo:inline>
+													<xsl:for-each
+														select="//PHS398_ResearchTrainingProgramPlan_3_0:PHS398_ResearchTrainingProgramPlan_3_0">
+														<xsl:for-each
+															select="PHS398_ResearchTrainingProgramPlan_3_0:ResearchTrainingProgramPlanAttachments">
+															<xsl:for-each
+																select="PHS398_ResearchTrainingProgramPlan_3_0:VertebrateAnimals">
+																<xsl:for-each
+																	select="PHS398_ResearchTrainingProgramPlan_3_0:attFile">
+																	<xsl:for-each select="att:FileName">
+																		<xsl:variable name="value-of-template">
+																			<xsl:apply-templates />
+																		</xsl:variable>
+																		<xsl:choose>
+																			<xsl:when
+																				test="contains(string($value-of-template),'&#x2029;')">
+																				<fo:block>
+																					<xsl:copy-of select="$value-of-template" />
+																				</fo:block>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<fo:inline>
+																					<xsl:copy-of select="$value-of-template" />
+																				</fo:inline>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																</xsl:for-each>
+															</xsl:for-each>
+														</xsl:for-each>
+													</xsl:for-each>
+												</fo:block>
+											</fo:table-cell>
+										</fo:table-row>
+									</fo:table-body>
+								</fo:table>
+							</fo:block>
+						</fo:table-cell>
+					</fo:table-row>
+					
+						<!-- Select Agent Research -->
+					<fo:table-row>
+						<fo:table-cell text-align="left" padding-start="3pt"
+							padding-end="3pt" padding-before="2pt" padding-after="2pt"
+							display-align="left">
+							<fo:block font-family="arialuni" font-size="9px">
+								13. Select Agent Research
+							</fo:block>
+						</fo:table-cell>
+						<fo:table-cell text-align="left" padding-start="3pt"
+							padding-end="3pt" padding-before="2pt" padding-after="2pt"
+							display-align="left">
+							<fo:block>
+								<fo:inline-container>
+									<fo:block>
+										<xsl:text>&#x2029;</xsl:text>
+									</fo:block>
+								</fo:inline-container>
+								<fo:table font-size="9px" table-layout="fixed" width="100%">
+									<fo:table-column column-width="proportional-column-width(1)" />
+									<fo:table-body start-indent="0pt">
+										<fo:table-row>
+											<fo:table-cell border="solid 1pt white"
+												border-spacing="1pt" padding="2pt" display-align="center">
+												<fo:block font-family="arialuni" font-size="10px">
+													<fo:inline>
+														<xsl:text>&#160;</xsl:text>
+													</fo:inline>
+													<xsl:for-each
+														select="//PHS398_ResearchTrainingProgramPlan_3_0:PHS398_ResearchTrainingProgramPlan_3_0">
+														<xsl:for-each
+															select="PHS398_ResearchTrainingProgramPlan_3_0:ResearchTrainingProgramPlanAttachments">
+															<xsl:for-each
+																select="PHS398_ResearchTrainingProgramPlan_3_0:SelectAgentResearch">
+																<xsl:for-each
+																	select="PHS398_ResearchTrainingProgramPlan_3_0:attFile">
+																	<xsl:for-each select="att:FileName">
+																		<xsl:variable name="value-of-template">
+																			<xsl:apply-templates />
+																		</xsl:variable>
+																		<xsl:choose>
+																			<xsl:when
+																				test="contains(string($value-of-template),'&#x2029;')">
+																				<fo:block>
+																					<xsl:copy-of select="$value-of-template" />
+																				</fo:block>
+																			</xsl:when>
+																			<xsl:otherwise>
+																				<fo:inline>
+																					<xsl:copy-of select="$value-of-template" />
+																				</fo:inline>
+																			</xsl:otherwise>
+																		</xsl:choose>
+																	</xsl:for-each>
+																</xsl:for-each>
+															</xsl:for-each>
+														</xsl:for-each>
+													</xsl:for-each>
+												</fo:block>
+											</fo:table-cell>
+										</fo:table-row>
+									</fo:table-body>
+								</fo:table>
+							</fo:block>
+						</fo:table-cell>
+					</fo:table-row>
+					
+					
+					<!-- Consortium/Contractual Arrangements -->
+					<fo:table-row>
+						<fo:table-cell text-align="left" padding-start="3pt"
+							padding-end="3pt" padding-before="2pt" padding-after="2pt"
+							display-align="left">
+							<fo:block font-family="arialuni" font-size="9px">
+								14. Consortium/Contractual
+								Arrangements
+							</fo:block>
+						</fo:table-cell>
+						<fo:table-cell text-align="left" padding-start="3pt"
+							padding-end="3pt" padding-before="2pt" padding-after="2pt"
+							display-align="left">
+							<fo:block>
+								<fo:inline-container>
+									<fo:block>
+										<xsl:text>&#x2029;</xsl:text>
+									</fo:block>
+								</fo:inline-container>
+								<fo:table font-size="9px" table-layout="fixed" width="100%">
+									<fo:table-column column-width="proportional-column-width(1)" />
+									<fo:table-body start-indent="0pt">
+										<fo:table-row>
+											<fo:table-cell border="solid 1pt white"
+												border-spacing="1pt" padding="2pt" display-align="center">
+												<fo:block font-family="arialuni" font-size="10px">
+													<fo:inline>
+														<xsl:text>&#160;</xsl:text>
+													</fo:inline>
+													<xsl:for-each
+														select="//PHS398_ResearchTrainingProgramPlan_3_0:PHS398_ResearchTrainingProgramPlan_3_0">
+														<xsl:for-each
+															select="PHS398_ResearchTrainingProgramPlan_3_0:ResearchTrainingProgramPlanAttachments">
+															<xsl:for-each
+																select="PHS398_ResearchTrainingProgramPlan_3_0:ConsortiumContractualArrangements">
+																<xsl:for-each
+																	select="PHS398_ResearchTrainingProgramPlan_3_0:attFile">
 																	<xsl:for-each select="att:FileName">
 																		<xsl:variable name="value-of-template">
 																			<xsl:apply-templates />
@@ -1130,40 +1205,49 @@
 				<fo:table-column column-width="40%" />
 				<fo:table-column column-width="60%" />
 				<fo:table-body start-indent="0pt">
+					<fo:table-row>
+                                  <fo:table-cell number-columns-spanned="2" padding="2pt" display-align="center">
+                                                                <fo:block>
+                                                                    <fo:inline font-weight="bold" font-size="10px">
+                                                                        <xsl:text>Appendix</xsl:text>
+                                                                    </fo:inline>
+                                                                </fo:block>
+                                                            </fo:table-cell>
+                                                        </fo:table-row>
 					<!-- Appendix -->
 					<fo:table-row>
 						<fo:table-cell text-align="left" padding-start="3pt"
 							padding-end="3pt" padding-before="1pt" padding-after="2pt"
 							display-align="before">
-							<fo:block font-family="Helvetica" font-size="9px">
+							<fo:block font-family="arialuni" font-size="9px">
 								15. Appendix
 							</fo:block>
 						</fo:table-cell>
 						<fo:table-cell text-align="left" padding-start="3pt"
 							padding-end="3pt" padding-before="1pt" padding-after="2pt"
 							display-align="left">
-							<fo:block font-family="Georgia" font-size="10px">
+							<fo:block font-family="arialuni" font-size="10px">
 								<fo:inline-container>
 									<fo:block>
 										<xsl:text>&#x2029;</xsl:text>
 									</fo:block>
 								</fo:inline-container>
 								<xsl:if
-									test="PHS398_ResearchTrainingProgramPlan_2_0:PHS398_ResearchTrainingProgramPlan_2_0/PHS398_ResearchTrainingProgramPlan_2_0:ResearchTrainingProgramPlanAttachments/PHS398_ResearchTrainingProgramPlan_2_0:Appendix/att:AttachedFile">
+									test="//PHS398_ResearchTrainingProgramPlan_3_0:PHS398_ResearchTrainingProgramPlan_3_0/PHS398_ResearchTrainingProgramPlan_3_0:ResearchTrainingProgramPlanAttachments/PHS398_ResearchTrainingProgramPlan_3_0:Appendix/att:AttachedFile">
 									<fo:table font-size="9px" table-layout="fixed" width="100%">
 										<fo:table-column column-width="proportional-column-width(1)" />
 										<fo:table-body start-indent="0pt">
 											<xsl:for-each
-												select="PHS398_ResearchTrainingProgramPlan_2_0:PHS398_ResearchTrainingProgramPlan_2_0">
+												select="//PHS398_ResearchTrainingProgramPlan_3_0:PHS398_ResearchTrainingProgramPlan_3_0">
 												<xsl:for-each
-													select="PHS398_ResearchTrainingProgramPlan_2_0:ResearchTrainingProgramPlanAttachments">
+													select="PHS398_ResearchTrainingProgramPlan_3_0:ResearchTrainingProgramPlanAttachments">
 													<xsl:for-each
-														select="PHS398_ResearchTrainingProgramPlan_2_0:Appendix">
+														select="PHS398_ResearchTrainingProgramPlan_3_0:Appendix">
 														<xsl:for-each select="att:AttachedFile">
 															<fo:table-row>
 																<fo:table-cell border="solid 1pt white"
 																	padding="2pt" display-align="center">
-																	<fo:block font-family="Georgia">
+																	<fo:block font-family="arialuni">
 																		<xsl:for-each select="att:FileName">
 																			<xsl:variable name="value-of-template">
 																				<xsl:apply-templates />
