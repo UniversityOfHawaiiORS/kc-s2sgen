@@ -1,6 +1,55 @@
 
 
 ##CURRENT
+* RESKC-1288: Fix state validation when DC is used as the state. (#91)
+
+  * When adding an organization with a Washington DC address to an S2S proposal, KC flags the state field as an error. DC is an active entry in KC's State table, and it also exists in the XML schema here that's used by the PerformanceSite form here:
+  * http://apply07.grants.gov/apply/system/schemas/UniversalCodes-V2.0.xsd
+  * So I'm not sure why KC is flagging this as an error. Changing the state to a "standard" one like FL resolves the error.
+  * Reproduced this issue on res-demo2 with proposal 399; screenshots are attached.
+  * Also in Demo 1 Proposal 1322
+  * Errors re state occur identified so far:
+  * SF 424 R&R 2.0
+  * Senior/Key Person Expanded 2.0  * Gayathri Athreya on Wed, 27 Apr 2016 11:22:01 -0700 [View Commit](../../commit/9a62f124384021cc6090b815e5969acde5ee8885)
+
+##coeus-s2sgen-1604.0005
+* RESKC-1260: System was throwing exception while printing RRFedNonFedBudgetV1.1 form.
+  * Fixed stylesheet to render the elements properly even if there are equipment line items in the budget
+  * Geo Thomas on Wed, 13 Apr 2016 13:49:21 -0400 [View Commit](../../commit/2a53bfebf5449e9256282c3c4274c384fafa3671)
+
+##coeus-s2sgen-1604.0004
+* RESKC-942: Support for printing some PHS forms. (#89)
+
+  * Style Sheet is available from PHS to support print/preview. https://grants.nih.gov/grants/ElectronicReceipt/Forms_D_development.htm
+  * PHS Inclusion Enrollment Report has been managed as a user attached form for Kuali.
+  * This case is to support QA testing to confirm we can still manage this form with the sponsor's changes:
+  * •    Combines Planned Enrollment Report and Cumulative Inclusion Enrollment Report forms into a single form
+  * o    Questions used to identify type of report:
+  *     Delayed onset study? Yes/No
+  *     Enrollment Type? Planned/Cumulative (Actual)
+  *     Using an Existing Dataset or Resource? Yes/No
+  *     Participants Location? Domestic/Foreign
+  *     Clinical Trial? Yes/No
+  * •    NIH-Defined Phase II Clinical Trial? Yes/No
+  * •    Added/updated burden statement and form expiration date
+  * •    Updated form instructions  * Gayathri Athreya on Wed, 13 Apr 2016 10:25:47 -0700 [View Commit](../../commit/d51259d5c9c81437fc55f8e040844f6680174bb4)
+
+##coeus-s2sgen-1604.0003
+* No Changes
+
+
+##coeus-s2sgen-1604.0002
+* RESKC-1254: Adding support for new user attached forms.
+  * The user attached form tool is not recognizing or translating newly issued user attached forms (UAF)
+  * To be specific: NIH issued the Inclusion Enrollment Report 1.0 and the Assignment Request 1.0, among other forms that are best supported in the UAF process in Kuali. The Inclusion Enrollment Report is mandatory when human participants (compliance/special review) is part of the proposal.
+  * When I upload either of these 2 new unstitched forms, they are not translated. I am returned to the upload screen with an error message "Please add a budget to the proposal".
+  * Gayathri Athreya on Tue, 12 Apr 2016 09:16:24 -0700 [View Commit](../../commit/7d508ee5ae460913a34cc09536e0cbd8485ec888)
+
+##coeus-s2sgen-1604.0001
+* RESKC-933: add support for: S2S Form D: PHS 398 Career Development Award Supplemental Form 3.0 update for 2016
+  * Travis Schneeberger on Tue, 12 Apr 2016 12:24:11 -0400 [View Commit](../../commit/1903e91a2ff444cfe0b0322e7a83840788e52331)
+
+##coeus-s2sgen-1603.0009
 * RESKC-938, RESKC-939: update PHS398 TrainingBudget stylesheet
   * Travis Schneeberger on Wed, 23 Mar 2016 11:11:09 -0400 [View Commit](../../commit/ae3b01db21950c61f66e3c21c13abf37b5a52ffc)
 
