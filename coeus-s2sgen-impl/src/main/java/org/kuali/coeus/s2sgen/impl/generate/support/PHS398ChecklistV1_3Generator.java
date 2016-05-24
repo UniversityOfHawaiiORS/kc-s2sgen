@@ -25,8 +25,6 @@ import gov.grants.apply.forms.phs398Checklist13V13.PHS398Checklist13Document.PHS
 import gov.grants.apply.system.globalLibraryV20.HumanNameDataType;
 import gov.grants.apply.system.globalLibraryV20.YesNoDataType;
 import gov.grants.apply.system.globalLibraryV20.YesNoDataType.Enum;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.apache.xmlbeans.XmlObject;
 import org.kuali.coeus.common.api.ynq.YnqConstant;
 import org.kuali.coeus.common.questionnaire.api.answer.AnswerHeaderContract;
@@ -107,7 +105,7 @@ public class PHS398ChecklistV1_3Generator extends PHS398ChecklistBaseGenerator {
 
 		if (budget != null) {
 			int numPeriods = budget.getBudgetPeriods().size();
-			setIncomeBudgetPeriods(phsChecklist, budget.getBudgetProjectIncomes(),numPeriods);
+			setIncomeBudgetPeriods(phsChecklist, budget.getBudgetProjectIncomes());
 		} else {
 			phsChecklist.setProgramIncome(YesNoDataType.N_NO);
 		}
@@ -142,7 +140,7 @@ public class PHS398ChecklistV1_3Generator extends PHS398ChecklistBaseGenerator {
 	 * This method will set values to income budget periods
 	 */
 	private static void setIncomeBudgetPeriods(PHS398Checklist13 phsChecklist,
-			List<? extends BudgetProjectIncomeContract> projectIncomes, int numPeriods) {
+											   List<? extends BudgetProjectIncomeContract> projectIncomes) {
 		if (projectIncomes.isEmpty()) {
 			phsChecklist.setProgramIncome(YesNoDataType.N_NO);
 		} else {
@@ -156,7 +154,7 @@ public class PHS398ChecklistV1_3Generator extends PHS398ChecklistBaseGenerator {
 	private static IncomeBudgetPeriod[] getIncomeBudgetPeriod(
 			final List<? extends BudgetProjectIncomeContract> projectIncomes) {
 		//TreeMap Used to maintain the order of the Budget periods.
-		Map<Integer, IncomeBudgetPeriod> incomeBudgetPeriodMap = new TreeMap<Integer, IncomeBudgetPeriod>();
+		Map<Integer, IncomeBudgetPeriod> incomeBudgetPeriodMap = new TreeMap<>();
 		BigDecimal anticipatedAmount;
 		for (BudgetProjectIncomeContract projectIncome : projectIncomes) {
 
@@ -165,7 +163,7 @@ public class PHS398ChecklistV1_3Generator extends PHS398ChecklistBaseGenerator {
 					.get(budgetPeriodNumber);
 			if (incomeBudgPeriod == null) {
 				incomeBudgPeriod = IncomeBudgetPeriod.Factory.newInstance();
-				incomeBudgPeriod.setBudgetPeriod(budgetPeriodNumber.intValue());
+				incomeBudgPeriod.setBudgetPeriod(budgetPeriodNumber);
 				anticipatedAmount = BigDecimal.ZERO;
 			} else {
 				anticipatedAmount = incomeBudgPeriod.getAnticipatedAmount();
@@ -311,6 +309,7 @@ public class PHS398ChecklistV1_3Generator extends PHS398ChecklistBaseGenerator {
 	 * @return {@link XmlObject} which is generated using the given
 	 *         {@link ProposalDevelopmentDocumentContract}
 	 */
+	@Override
 	public XmlObject getFormObject(
 			ProposalDevelopmentDocumentContract proposalDevelopmentDocument) {
 		this.pdDoc = proposalDevelopmentDocument;

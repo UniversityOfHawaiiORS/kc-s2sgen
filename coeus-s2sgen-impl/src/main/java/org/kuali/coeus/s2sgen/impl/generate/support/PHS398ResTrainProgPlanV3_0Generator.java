@@ -216,9 +216,21 @@ public class PHS398ResTrainProgPlanV3_0Generator extends S2SBaseFormGenerator{
         
          ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(phs398ResTrainProgPlan.toString().getBytes());            
          sortAttachments(byteArrayInputStream);
+
+        setMandatoryAttachments(researchTrainingProgramPlanAttachments);
         return phs398ResTrainProgPlan;        
     }
 
+    /**
+     * This set any mandatory attachments that aren't set to blank objects so that validation errors can be more user friendly.
+     */
+    private void setMandatoryAttachments(ResearchTrainingProgramPlanAttachments researchTrainingProgramPlanAttachments) {
+        if (researchTrainingProgramPlanAttachments.getProgramPlan() == null) {
+            researchTrainingProgramPlanAttachments.setProgramPlan(ProgramPlan.Factory.newInstance());
+        }
+    }
+
+    @Override
     public XmlObject getFormObject(ProposalDevelopmentDocumentContract proposalDevelopmentDocument) throws S2SException {
         PHS398ResearchTrainingProgramPlan30 phs398ResearchTrainingProgramPlan = getPHS398ResearchTrainingProgramPlan(proposalDevelopmentDocument);
         PHS398ResearchTrainingProgramPlan30Document pHS398ResearchTrainingProgramPlan20Document = PHS398ResearchTrainingProgramPlan30Document.Factory.newInstance();

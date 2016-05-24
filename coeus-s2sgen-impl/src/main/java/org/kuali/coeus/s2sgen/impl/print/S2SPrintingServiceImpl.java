@@ -19,7 +19,6 @@
 package org.kuali.coeus.s2sgen.impl.print;
 
 import com.lowagie.text.*;
-import com.lowagie.text.Font;
 import com.lowagie.text.pdf.*;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.fop.apps.*;
@@ -54,9 +53,9 @@ public class S2SPrintingServiceImpl implements S2SPrintingService {
     private static final Logger LOG = LoggerFactory.getLogger(S2SPrintingServiceImpl.class);
     public static final String PDF_REPORT_CONTENT_TYPE = "application/pdf";
     public static final String PDF_FILE_EXTENSION = ".pdf";
-    public char SPACE_SEPARATOR = 32;
-    public int WHITESPACE_LENGTH_76 = 76;
-    public int WHITESPACE_LENGTH_60 = 60;
+    public final char SPACE_SEPARATOR = 32;
+    public final int WHITESPACE_LENGTH_76 = 76;
+    public final int WHITESPACE_LENGTH_60 = 60;
 
     @Autowired
     @Qualifier("s2SConfigurationService")
@@ -161,6 +160,7 @@ public class S2SPrintingServiceImpl implements S2SPrintingService {
      * @param printableArtifacts to be printed
      * @return PDF bytes
      */
+    @Override
     public S2SFile print(S2SPrintable printableArtifacts) {
         List<S2SPrintable> printables = new ArrayList<>();
         printables.add(printableArtifacts);
@@ -174,6 +174,7 @@ public class S2SPrintingServiceImpl implements S2SPrintingService {
      * @param printableArtifactList List of printableArtifact to be printed
      * @return {@link S2SFile} PDF bytes
      */
+    @Override
     public S2SFile print(List<S2SPrintable> printableArtifactList) {
         return print(printableArtifactList, false);
     }

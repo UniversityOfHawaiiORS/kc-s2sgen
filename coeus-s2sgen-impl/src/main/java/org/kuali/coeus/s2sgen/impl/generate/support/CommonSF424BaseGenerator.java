@@ -62,11 +62,13 @@ public abstract class CommonSF424BaseGenerator extends S2SBaseFormGenerator  {
     @Qualifier("questionAnswerService")
     private QuestionAnswerService questionAnswerService;
 
+    @Override
     public QuestionAnswerService getQuestionAnswerService() {
 		return questionAnswerService;
 	}
 
-	public void setQuestionAnswerService(QuestionAnswerService questionAnswerService) {
+	@Override
+    public void setQuestionAnswerService(QuestionAnswerService questionAnswerService) {
 		this.questionAnswerService = questionAnswerService;
 	}
 
@@ -77,25 +79,19 @@ public abstract class CommonSF424BaseGenerator extends S2SBaseFormGenerator  {
      * @return Map&lt;String, String&gt; map containing the answers related to EOState Review for a given proposal.
      */
     public Map<String, String> getEOStateReview(ProposalDevelopmentDocumentContract pdDoc) {
-        Map<String, String> stateReview = new HashMap<String, String>();
+        Map<String, String> stateReview = new HashMap<>();
         List<? extends AnswerHeaderContract> answerHeaders = propDevQuestionAnswerService.getQuestionnaireAnswerHeaders(pdDoc.getDevelopmentProposal().getProposalNumber());
         if (!answerHeaders.isEmpty()) {
             for (AnswerContract answers : answerHeaders.get(0).getAnswers()) {
             	Integer questionSeqId = getQuestionAnswerService().findQuestionById(answers.getQuestionId()).getQuestionSeqId();
                 if (questionSeqId != null && questionSeqId.equals(PROPOSAL_YNQ_QUESTION_129)) {
-                    if (stateReview.get(YNQ_ANSWER) == null) {
-                        stateReview.put(YNQ_ANSWER, answers.getAnswer());
-                    }
+                    stateReview.putIfAbsent(YNQ_ANSWER, answers.getAnswer());
                 }
                 if (questionSeqId != null && questionSeqId.equals(PROPOSAL_YNQ_QUESTION_130)) {
-                    if (stateReview.get(YNQ_REVIEW_DATE) == null) {
-                        stateReview.put(YNQ_REVIEW_DATE, answers.getAnswer());
-                    }
+                    stateReview.putIfAbsent(YNQ_REVIEW_DATE, answers.getAnswer());
                 }
                 if (questionSeqId != null && questionSeqId.equals(PROPOSAL_YNQ_QUESTION_131)) {
-                    if (stateReview.get(YNQ_STATE_REVIEW_DATA) == null) {
-                        stateReview.put(YNQ_STATE_REVIEW_DATA, answers.getAnswer());
-                    }
+                    stateReview.putIfAbsent(YNQ_STATE_REVIEW_DATA, answers.getAnswer());
                 }
             }
         }
@@ -129,10 +125,12 @@ public abstract class CommonSF424BaseGenerator extends S2SBaseFormGenerator  {
         return divisionName;
     }
 
+    @Override
     public PropDevQuestionAnswerService getPropDevQuestionAnswerService() {
         return propDevQuestionAnswerService;
     }
 
+    @Override
     public void setPropDevQuestionAnswerService(PropDevQuestionAnswerService propDevQuestionAnswerService) {
         this.propDevQuestionAnswerService = propDevQuestionAnswerService;
     }

@@ -31,7 +31,6 @@ import org.kuali.coeus.propdev.api.location.CongressionalDistrictContract;
 import org.kuali.coeus.propdev.api.location.ProposalSiteContract;
 import org.kuali.coeus.s2sgen.impl.generate.FormGenerator;
 import org.kuali.coeus.s2sgen.impl.generate.FormVersion;
-import org.kuali.coeus.s2sgen.impl.generate.S2SBaseFormGenerator;
 import org.kuali.coeus.propdev.api.core.ProposalDevelopmentDocumentContract;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -166,6 +165,7 @@ public class PerformanceSiteV1_2Generator extends PerformanceSiteBaseGenerator {
 	 * @return {@link XmlObject} which is generated using the given
 	 *         {@link ProposalDevelopmentDocumentContract}
 	 */
+	@Override
 	public XmlObject getFormObject(
 			ProposalDevelopmentDocumentContract proposalDevelopmentDocument) {
 		this.pdDoc = proposalDevelopmentDocument;

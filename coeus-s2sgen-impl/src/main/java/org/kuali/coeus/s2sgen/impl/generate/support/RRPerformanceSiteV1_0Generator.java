@@ -117,8 +117,6 @@ public class RRPerformanceSiteV1_0Generator extends RRPerformanceSiteBaseGenerat
 
     /**
      * This method is to set the rolodex details to AddressType
-     * @param address
-     * @param rolodex
      */
     private void setAddress(Address address, RolodexContract rolodex) {
         if (rolodex != null) {
@@ -145,6 +143,7 @@ public class RRPerformanceSiteV1_0Generator extends RRPerformanceSiteBaseGenerat
      * @param proposalDevelopmentDocument for which the {@link XmlObject} needs to be created
      * @return {@link XmlObject} which is generated using the given {@link ProposalDevelopmentDocumentContract}
      */
+    @Override
     public XmlObject getFormObject(ProposalDevelopmentDocumentContract proposalDevelopmentDocument) {
         this.pdDoc = proposalDevelopmentDocument;
         return getRRPerformanceSite();

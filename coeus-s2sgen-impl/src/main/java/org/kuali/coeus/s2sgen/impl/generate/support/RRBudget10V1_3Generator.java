@@ -145,8 +145,6 @@ public class RRBudget10V1_3Generator extends RRBudgetBaseGenerator {
      * 
      * @param periodInfo
      *            (BudgetPeriodInfo) budget period entry.
-     * @return BudgetYear1DataType corresponding to the BudgetSummaryInfo
-     *         object.
      */
     private void setBudgetYearDataType(RRBudget1013 rrBudget,BudgetPeriodDto periodInfo) {
 
@@ -253,11 +251,11 @@ public class RRBudget10V1_3Generator extends RRBudgetBaseGenerator {
                 for (int j = 0; j < cvOthers.size(); j++) {
                     Map<String, String> hmCosts = cvOthers.get(j);
                     if (j==0){
-                        budgetSummary.setCumulativeOther1DirectCost(new BigDecimal(hmCosts.get(CostConstants.KEY_COST).toString()));
+                        budgetSummary.setCumulativeOther1DirectCost(new BigDecimal(hmCosts.get(CostConstants.KEY_COST)));
                        } else if (j==1) {
-                           budgetSummary.setCumulativeOther2DirectCost(new BigDecimal(hmCosts.get(CostConstants.KEY_COST).toString()));
+                           budgetSummary.setCumulativeOther2DirectCost(new BigDecimal(hmCosts.get(CostConstants.KEY_COST)));
                        } else {
-                        budgetSummary.setCumulativeOther3DirectCost(new BigDecimal(hmCosts.get(CostConstants.KEY_COST).toString()));
+                        budgetSummary.setCumulativeOther3DirectCost(new BigDecimal(hmCosts.get(CostConstants.KEY_COST)));
                      }
                 }
                 budgetSummary.setCumulativeTotalFundsRequestedDirectCosts(budgetSummaryData
@@ -411,7 +409,7 @@ public class RRBudget10V1_3Generator extends RRBudgetBaseGenerator {
                 && periodInfo.getIndirectCosts() != null
                 && periodInfo.getIndirectCosts().getIndirectCostDetails() != null) {
 
-            List<IndirectCosts.IndirectCost> indirectCostList = new ArrayList<IndirectCosts.IndirectCost>();
+            List<IndirectCosts.IndirectCost> indirectCostList = new ArrayList<>();
             int IndirectCostCount = 0;
             for (IndirectCostDetailsDto indirectCostDetails : periodInfo
                     .getIndirectCosts().getIndirectCostDetails()) {
@@ -518,7 +516,7 @@ public class RRBudget10V1_3Generator extends RRBudgetBaseGenerator {
         if (periodInfo != null && periodInfo.getEquipment() != null
                 && periodInfo.getEquipment().size() > 0) {
             // Evaluating Equipments.
-            List<EquipmentList> equipmentArrayList = new ArrayList<EquipmentList>();
+            List<EquipmentList> equipmentArrayList = new ArrayList<>();
             ScaleTwoDecimal totalFund = ScaleTwoDecimal.ZERO;
             for (CostDto costInfo : periodInfo.getEquipment().get(0)
                     .getEquipmentList()) {
@@ -532,7 +530,7 @@ public class RRBudget10V1_3Generator extends RRBudgetBaseGenerator {
             }
 
             // Evaluating Extra Equipments.
-            List<CostDto> extraEquipmentArrayList = new ArrayList<CostDto>();
+            List<CostDto> extraEquipmentArrayList = new ArrayList<>();
             ScaleTwoDecimal totalExtraEquipFund = ScaleTwoDecimal.ZERO;
             for(CostDto costInfo:periodInfo.getEquipment().get(0).getExtraEquipmentList()){
                 extraEquipmentArrayList.add(costInfo);
@@ -589,7 +587,7 @@ public class RRBudget10V1_3Generator extends RRBudgetBaseGenerator {
     private OtherPersonnel getOtherPersonnel(BudgetPeriodDto periodInfo) {
         OtherPersonnel otherPersonnel = OtherPersonnel.Factory.newInstance();
         int otherPersonnelCount = 0;
-        List<gov.grants.apply.forms.rrBudget1013V13.BudgetYearDataType.OtherPersonnel.Other> otherPersonnelList = new ArrayList<gov.grants.apply.forms.rrBudget1013V13.BudgetYearDataType.OtherPersonnel.Other>();
+        List<gov.grants.apply.forms.rrBudget1013V13.BudgetYearDataType.OtherPersonnel.Other> otherPersonnelList = new ArrayList<>();
         gov.grants.apply.forms.rrBudget1013V13.BudgetYearDataType.OtherPersonnel.Other otherPersonnelDataTypeArray[] = new gov.grants.apply.forms.rrBudget1013V13.BudgetYearDataType.OtherPersonnel.Other[1];
         if (periodInfo != null) {
             for (OtherPersonnelDto otherPersonnelInfo : periodInfo
@@ -788,7 +786,7 @@ public class RRBudget10V1_3Generator extends RRBudgetBaseGenerator {
 
         if (periodInfo != null) {
             if (periodInfo.getKeyPersons() != null) {
-                List<KeyPerson> keyPersonList = new ArrayList<KeyPerson>();
+                List<KeyPerson> keyPersonList = new ArrayList<>();
                 int keyPersonCount = 0;
                 for (KeyPersonDto keyPerson : periodInfo.getKeyPersons()) {
                   if(keyPerson.getRole().equals(NID_PD_PI) || hasPersonnelBudget(keyPerson,periodInfo.getBudgetPeriod())){
@@ -894,6 +892,7 @@ public class RRBudget10V1_3Generator extends RRBudgetBaseGenerator {
      * @return {@link XmlObject} which is generated using the given
      *         {@link ProposalDevelopmentDocumentContract}
      */
+    @Override
     public XmlObject getFormObject(
             ProposalDevelopmentDocumentContract proposalDevelopmentDocument) {
         this.pdDoc = proposalDevelopmentDocument;
