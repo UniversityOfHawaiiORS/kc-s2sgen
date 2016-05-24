@@ -26,7 +26,6 @@ import gov.grants.apply.forms.phsFellowshipSupplemental20V20.PHSFellowshipSupple
 import gov.grants.apply.forms.phsFellowshipSupplemental20V20.PHSFellowshipSupplemental20Document.PHSFellowshipSupplemental20.*;
 import gov.grants.apply.forms.phsFellowshipSupplemental20V20.PHSFellowshipSupplemental20Document.PHSFellowshipSupplemental20.AdditionalInformation.*;
 import gov.grants.apply.forms.phsFellowshipSupplemental20V20.PHSFellowshipSupplemental20Document.PHSFellowshipSupplemental20.ApplicationType.TypeOfApplication;
-import gov.grants.apply.forms.phsFellowshipSupplemental20V20.PHSFellowshipSupplemental20Document.PHSFellowshipSupplemental20.Budget;
 import gov.grants.apply.forms.phsFellowshipSupplemental20V20.PHSFellowshipSupplemental20Document.PHSFellowshipSupplemental20.Budget.FederalStipendRequested;
 import gov.grants.apply.forms.phsFellowshipSupplemental20V20.PHSFellowshipSupplemental20Document.PHSFellowshipSupplemental20.Budget.InstitutionalBaseSalary;
 import gov.grants.apply.forms.phsFellowshipSupplemental20V20.PHSFellowshipSupplemental20Document.PHSFellowshipSupplemental20.Budget.InstitutionalBaseSalary.AcademicPeriod;
@@ -156,7 +155,7 @@ public class PHS398FellowshipSupplementalV2_0Generator extends PHS398FellowshipS
         return phsFellowshipSupplementalDocument;
     }
     private List<AnswerContract> getAnswers(QuestionnaireQuestionContract questionnaireQuestion, AnswerHeaderContract answerHeader) {
-        List<AnswerContract> returnAnswers = new ArrayList<AnswerContract>();
+        List<AnswerContract> returnAnswers = new ArrayList<>();
         if (answerHeader != null) {
             List<? extends AnswerContract> answers = answerHeader.getAnswers();
             for (AnswerContract answer : answers) {
@@ -168,7 +167,7 @@ public class PHS398FellowshipSupplementalV2_0Generator extends PHS398FellowshipS
         return returnAnswers;
     }
     private void setQuestionnaireData(PHSFellowshipSupplemental20 phsFellowshipSupplemental) {
-        Map<Integer, String> hmBudgetQuestions = new HashMap<Integer, String>();
+        Map<Integer, String> hmBudgetQuestions = new HashMap<>();
         List<? extends AnswerHeaderContract> answers = findQuestionnaireWithAnswers(pdDoc.getDevelopmentProposal());
         ResearchTrainingPlan researchTrainingPlan = phsFellowshipSupplemental.addNewResearchTrainingPlan();
         setHumanSubjectInvolvedAndVertebrateAnimalUsed(researchTrainingPlan);
@@ -176,7 +175,7 @@ public class PHS398FellowshipSupplementalV2_0Generator extends PHS398FellowshipS
         AdditionalInformation additionalInfoType = phsFellowshipSupplemental.addNewAdditionalInformation();
         GraduateDegreeSought graduateDegreeSought = GraduateDegreeSought.Factory.newInstance();
         StemCells stemCellstype = StemCells.Factory.newInstance();
-        List<KirschsteinBean> cvKirsch = new ArrayList<KirschsteinBean>();
+        List<KirschsteinBean> cvKirsch = new ArrayList<>();
         for (AnswerHeaderContract answerHeader : answers) {
             QuestionnaireContract questionnaire = questionAnswerService.findQuestionnaireById(answerHeader.getQuestionnaireId());
             List<? extends QuestionnaireQuestionContract> questionnaireQuestions = questionnaire.getQuestionnaireQuestions();
@@ -414,11 +413,11 @@ public class PHS398FellowshipSupplementalV2_0Generator extends PHS398FellowshipS
             additionalInfoType.setStemCells(stemCellstype);
         if (graduateDegreeSought.getDegreeType() != null)
             additionalInfoType.setGraduateDegreeSought(graduateDegreeSought);
-        List<KirschsteinBean> cvType = new ArrayList<KirschsteinBean>();
-        List<KirschsteinBean> cvStart = new ArrayList<KirschsteinBean>();
-        List<KirschsteinBean> cvEnd = new ArrayList<KirschsteinBean>();
-        List<KirschsteinBean> cvLevel = new ArrayList<KirschsteinBean>();
-        List<KirschsteinBean> cvGrant = new ArrayList<KirschsteinBean>();
+        List<KirschsteinBean> cvType = new ArrayList<>();
+        List<KirschsteinBean> cvStart = new ArrayList<>();
+        List<KirschsteinBean> cvEnd = new ArrayList<>();
+        List<KirschsteinBean> cvLevel = new ArrayList<>();
+        List<KirschsteinBean> cvGrant = new ArrayList<>();
         KirschsteinBean kbBean1 = new KirschsteinBean();
         KirschsteinBean kbBean2 = new KirschsteinBean();
         KirschsteinBean kbBean3 = new KirschsteinBean();
@@ -429,8 +428,8 @@ public class PHS398FellowshipSupplementalV2_0Generator extends PHS398FellowshipS
             if (additionalInfoType.getCurrentPriorNRSASupportIndicator().equals(YesNoDataType.Y_YES)) {
                 KirschsteinBean kbBean = new KirschsteinBean();
                 Collections.sort(cvKirsch, BY_QUESTION_NUMBER);
-                for (int i = 0; i < cvKirsch.size(); i++) {
-                    kbBean = (KirschsteinBean) cvKirsch.get(i);
+                for (KirschsteinBean aCvKirsch : cvKirsch) {
+                    kbBean = aCvKirsch;
                     switch (kbBean.getQuestionId()) {
                         case PRE_OR_POST:
                             cvLevel.add(kbBean);
@@ -451,15 +450,15 @@ public class PHS398FellowshipSupplementalV2_0Generator extends PHS398FellowshipS
 
                 }
             }
-            List<CurrentPriorNRSASupport> currentPriorNRSASupportList = new ArrayList<CurrentPriorNRSASupport>();
+            List<CurrentPriorNRSASupport> currentPriorNRSASupportList = new ArrayList<>();
             int numberRepeats = cvLevel.size();
             if (numberRepeats > 0) {
                 for (int j = 0; j < numberRepeats; j++) {
-                    kbBean1 = (KirschsteinBean) cvLevel.get(j);
-                    kbBean2 = (KirschsteinBean) cvType.get(j);
-                    kbBean3 = (KirschsteinBean) cvStart.get(j);
-                    kbBean4 = (KirschsteinBean) cvEnd.get(j);
-                    kbBean5 = (KirschsteinBean) cvGrant.get(j);
+                    kbBean1 = cvLevel.get(j);
+                    kbBean2 = cvType.get(j);
+                    kbBean3 = cvStart.get(j);
+                    kbBean4 = cvEnd.get(j);
+                    kbBean5 = cvGrant.get(j);
                     CurrentPriorNRSASupport nrsaSupportType = CurrentPriorNRSASupport.Factory.newInstance();
                     nrsaSupportType.setLevel(CurrentPriorNRSASupport.Level.Enum.forString(kbBean1.getAnswer()));
                     nrsaSupportType.setType(CurrentPriorNRSASupport.Type.Enum.forString(kbBean2.getAnswer()));
@@ -467,7 +466,7 @@ public class PHS398FellowshipSupplementalV2_0Generator extends PHS398FellowshipS
                         nrsaSupportType.setStartDate(s2SDateTimeService.convertDateStringToCalendar(kbBean3.getAnswer()));
                     }
                     if(!kbBean4.getAnswer().equals(FieldValueConstants.VALUE_UNKNOWN)){
-                        nrsaSupportType.setEndDate(s2SDateTimeService.convertDateStringToCalendar(kbBean4.getAnswer().toString()));
+                        nrsaSupportType.setEndDate(s2SDateTimeService.convertDateStringToCalendar(kbBean4.getAnswer()));
                     }
                     nrsaSupportType.setGrantNumber(kbBean5.getAnswer());
                     currentPriorNRSASupportList.add(nrsaSupportType);
@@ -481,10 +480,7 @@ public class PHS398FellowshipSupplementalV2_0Generator extends PHS398FellowshipS
 
 
     /**
-     * This method is to return YesNoDataType enum
-     * 
-     * @param answer
-     * @return
+     * This method is to return YesNoDataType enum.
      */
     private Enum getYesNoEnum(String answer) {
         return answer.equals("Y") ? YesNoDataType.Y_YES : YesNoDataType.N_NO;
@@ -557,16 +553,16 @@ public class PHS398FellowshipSupplementalV2_0Generator extends PHS398FellowshipS
 
         if (!hmBudgetQuestions.isEmpty()) {
             if (hmBudgetQuestions.get(OTHER_SUPP_SOURCE) != null) {
-                if (hmBudgetQuestions.get(OTHER_SUPP_SOURCE).toString().toUpperCase().equals("Y")) {
+                if (hmBudgetQuestions.get(OTHER_SUPP_SOURCE).toUpperCase().equals("Y")) {
                     SupplementationFromOtherSources supplementationFromOtherSources = budget
                             .addNewSupplementationFromOtherSources();
                     if (hmBudgetQuestions.get(SUPP_SOURCE) != null) {
-                        supplementationFromOtherSources.setSource(hmBudgetQuestions.get(SUPP_SOURCE).toString());
-                        supplementationFromOtherSources.setAmount(new BigDecimal(hmBudgetQuestions.get(SUPP_FUNDING_AMT).toString()));
+                        supplementationFromOtherSources.setSource(hmBudgetQuestions.get(SUPP_SOURCE));
+                        supplementationFromOtherSources.setAmount(new BigDecimal(hmBudgetQuestions.get(SUPP_FUNDING_AMT)));
                         try {
-                            supplementationFromOtherSources.setNumberOfMonths(new BigDecimal(hmBudgetQuestions.get(SUPP_MONTHS).toString()));
+                            supplementationFromOtherSources.setNumberOfMonths(new BigDecimal(hmBudgetQuestions.get(SUPP_MONTHS)));
                         }catch (Exception ex) {}
-                        supplementationFromOtherSources.setType(hmBudgetQuestions.get(SUPP_TYPE).toString());
+                        supplementationFromOtherSources.setType(hmBudgetQuestions.get(SUPP_TYPE));
 
                     }
                 }
@@ -607,15 +603,15 @@ public class PHS398FellowshipSupplementalV2_0Generator extends PHS398FellowshipS
      */
     private void getInstitutionalBaseSalary(Budget budget, Map<Integer, String> budgetMap) {
         InstitutionalBaseSalary institutionalBaseSalary = InstitutionalBaseSalary.Factory.newInstance();
-        if (budgetMap.get(SENIOR_FELL) != null && budgetMap.get(SENIOR_FELL).toString().equals(YnqConstant.YES.code())) {
+        if (budgetMap.get(SENIOR_FELL) != null && budgetMap.get(SENIOR_FELL).equals(YnqConstant.YES.code())) {
             if (budgetMap.get(BASE_SALARY) != null) {
-                institutionalBaseSalary.setAmount(new BigDecimal(budgetMap.get(BASE_SALARY).toString()));
+                institutionalBaseSalary.setAmount(new BigDecimal(budgetMap.get(BASE_SALARY)));
             }
             if (budgetMap.get(ACAD_PERIOD) != null) {
-                institutionalBaseSalary.setAcademicPeriod(AcademicPeriod.Enum.forString(budgetMap.get(ACAD_PERIOD).toString()));
+                institutionalBaseSalary.setAcademicPeriod(AcademicPeriod.Enum.forString(budgetMap.get(ACAD_PERIOD)));
             }
             if (budgetMap.get(SALARY_MONTHS) != null) {
-                institutionalBaseSalary.setNumberOfMonths(new BigDecimal(budgetMap.get(SALARY_MONTHS).toString()));
+                institutionalBaseSalary.setNumberOfMonths(new BigDecimal(budgetMap.get(SALARY_MONTHS)));
             }
             budget.setInstitutionalBaseSalary(institutionalBaseSalary);
         }
@@ -623,8 +619,6 @@ public class PHS398FellowshipSupplementalV2_0Generator extends PHS398FellowshipS
 
     /**
      * This method is used to set Narrative Data to ResearchTrainingPlan XMLObject based on NarrativeTypeCode.
-     * 
-     * @param researchTrainingPlan
      */
     private void setNarrativeDataForResearchTrainingPlan(PHSFellowshipSupplemental20 phsFellowshipSupplemental,
             ResearchTrainingPlan researchTrainingPlan) {
@@ -776,8 +770,6 @@ public class PHS398FellowshipSupplementalV2_0Generator extends PHS398FellowshipS
 
     /**
      * This method is used to set HumanSubjectInvoved and VertebrateAnimalUsed XMLObject Data.
-     * 
-     * @param researchTrainingPlan
      */
     private void setHumanSubjectInvolvedAndVertebrateAnimalUsed(ResearchTrainingPlan researchTrainingPlan) {
         researchTrainingPlan.setHumanSubjectsInvolved(YesNoDataType.N_NO);       
@@ -913,7 +905,7 @@ public class PHS398FellowshipSupplementalV2_0Generator extends PHS398FellowshipS
      */
     private AttachmentGroupMin0Max100DataType getAppendix() {
         AttachmentGroupMin0Max100DataType attachmentGroupType = AttachmentGroupMin0Max100DataType.Factory.newInstance();
-        List<AttachedFileDataType> attachedFileDataTypeList = new ArrayList<AttachedFileDataType>();
+        List<AttachedFileDataType> attachedFileDataTypeList = new ArrayList<>();
         AttachedFileDataType attachedFileDataType = null;
         for (NarrativeContract narrative : pdDoc.getDevelopmentProposal().getNarratives()) {
             if (narrative.getNarrativeType().getCode() != null && Integer.parseInt(narrative.getNarrativeType().getCode()) == APPENDIX) {
@@ -1022,6 +1014,7 @@ public class PHS398FellowshipSupplementalV2_0Generator extends PHS398FellowshipS
      * @param proposalDevelopmentDocument for which the {@link XmlObject} needs to be created
      * @return {@link XmlObject} which is generated using the given {@link ProposalDevelopmentDocumentContract}
      */
+    @Override
     public XmlObject getFormObject(ProposalDevelopmentDocumentContract proposalDevelopmentDocument) {
         this.pdDoc = proposalDevelopmentDocument;
         return getPHSFellowshipSupplemental20();

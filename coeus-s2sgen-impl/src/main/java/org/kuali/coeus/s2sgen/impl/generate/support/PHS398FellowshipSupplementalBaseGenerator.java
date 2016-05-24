@@ -29,6 +29,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -89,28 +90,23 @@ public abstract class PHS398FellowshipSupplementalBaseGenerator extends
     protected static final int DISSERTATION = 93;
     protected static final int ACTIVITIES = 94;
 
-    protected static final Comparator<KirschsteinBean> BY_QUESTION_NUMBER =  new Comparator<KirschsteinBean>() {
-        @Override
-        public int compare(KirschsteinBean o1, KirschsteinBean o2) {
-            if (o1 == o2) {
-                return 0;
-            }
-
-            if (o1 != null && o2 != null) {
-                return ObjectUtils.compare(o1.questionNumber, o2.questionNumber);
-            }
-
-            return o1 != null ? -1 : 1;
+    protected static final Comparator<KirschsteinBean> BY_QUESTION_NUMBER = (o1, o2) -> {
+        if (o1 == o2) {
+            return 0;
         }
+
+        if (o1 != null && o2 != null) {
+            return ObjectUtils.compare(o1.questionNumber, o2.questionNumber);
+        }
+
+        return o1 != null ? -1 : 1;
     };
 
     protected List<String> getCostElementsByParam(String costElementParam) {
         String costElementsParamValue = s2SConfigurationService.getValueAsString(costElementParam);
         String[] costElements = costElementsParamValue.split(",");
-        List<String> costElementList = new ArrayList<String>();
-        for (int i = 0; i < costElements.length; i++) {
-            costElementList.add(costElements[i]);
-        }
+        List<String> costElementList = new ArrayList<>();
+        Collections.addAll(costElementList, costElements);
         return costElementList;
     }
 
@@ -130,10 +126,12 @@ public abstract class PHS398FellowshipSupplementalBaseGenerator extends
         this.s2SConfigurationService = s2SConfigurationService;
     }
 
+    @Override
     public QuestionAnswerService getQuestionAnswerService() {
         return questionAnswerService;
     }
 
+    @Override
     public void setQuestionAnswerService(QuestionAnswerService questionAnswerService) {
         this.questionAnswerService = questionAnswerService;
     }

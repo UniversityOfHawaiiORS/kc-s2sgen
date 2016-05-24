@@ -160,7 +160,6 @@ public class RRFedNonFedBudget10V1_1Generator extends RRFedNonFedBudgetBaseGener
      * DirectCosts,IndirectCosts,CognizantFederalAgency,TotalCosts based on BudgetPeriodInfo for the RRFedNonFedBudget.
      * 
      * @param periodInfo (BudgetPeriodInfo) budget period entry.
-     * @return BudgetYearDataType corresponding to the BudgetSummaryInfo object.
      */
     private void setBudgetYearDataType(RRFedNonFedBudget10 rrFedNonFedBudget,BudgetPeriodDto periodInfo) {
 
@@ -346,7 +345,7 @@ public class RRFedNonFedBudget10V1_1Generator extends RRFedNonFedBudgetBaseGener
             }
             if (budgetSummaryData.getCumTotalCosts() != null && budgetSummaryData.getCumTotalDirectCostSharing() != null) {
                 directIndirectCosts.setFederalSummary(budgetSummaryData.getCumTotalCosts().bigDecimalValue());
-                directIndirectCosts.setNonFederalSummary((cumTotalDirectCostSharing.bigDecimalValue()).add(budgetSummaryData.getCumTotalIndirectCostSharing().bigDecimalValue()));;
+                directIndirectCosts.setNonFederalSummary((cumTotalDirectCostSharing.bigDecimalValue()).add(budgetSummaryData.getCumTotalIndirectCostSharing().bigDecimalValue()));
                 directIndirectCosts.setTotalFedNonFedSummary((budgetSummaryData.getCumTotalCosts().bigDecimalValue()).add(
                        cumTotalDirectCostSharing.bigDecimalValue()).add(budgetSummaryData.getCumTotalIndirectCostSharing().bigDecimalValue()));
             }
@@ -365,7 +364,7 @@ public class RRFedNonFedBudget10V1_1Generator extends RRFedNonFedBudgetBaseGener
      * BudgetSummaryInfo for the RRFedNonFedBudget.
      * 
      * @param budgetSummaryData (BudgetSummaryInfo) budget summary entry.
-     * @return CumulativeOtherDirect corresponding to the BudgetSummaryInfo object.
+
      */
     private void setCumulativeOtherDirect(BudgetSummary budgetSummary, BudgetSummaryDto budgetSummaryData) {
         SummaryDataType summary = SummaryDataType.Factory.newInstance();
@@ -507,7 +506,6 @@ public class RRFedNonFedBudget10V1_1Generator extends RRFedNonFedBudgetBaseGener
      * CumulativeNoofTrainees based on BudgetSummaryInfo for the RRFedNonFedBudget.
      * 
      * @param budgetSummaryData (BudgetSummaryInfo) budget summary entry.
-     * @return CumulativeTrainee corresponding to the BudgetSummaryInfo object.
      */
     private void setCumulativeTrainee(BudgetSummary budgetSummary,BudgetSummaryDto budgetSummaryData) {
         SummaryDataType summaryTraineeCosts = SummaryDataType.Factory.newInstance();
@@ -627,7 +625,6 @@ public class RRFedNonFedBudget10V1_1Generator extends RRFedNonFedBudgetBaseGener
      * form RRFedNonFedBudget.
      * 
      * @param budgetSummaryData (BudgetSummaryInfo) budget summary entry.
-     * @return CumulativeEquipments corresponding to the BudgetSummaryInfo object.
      */
     private void setCumulativeEquipments(BudgetSummary budgetSummary, BudgetSummaryDto budgetSummaryData) {
 
@@ -655,7 +652,6 @@ public class RRFedNonFedBudget10V1_1Generator extends RRFedNonFedBudgetBaseGener
      * CumulativeForeignTravelCosts based on BudgetSummaryInfo for the RRFedNonFedBudget.
      * 
      * @param budgetSummaryData (BudgetSummaryInfo) budget summary entry.
-     * @return CumulativeTravels corresponding to the BudgetSummaryInfo object.
      */
     private void setCumulativeTravels(BudgetSummary budgetSummary, BudgetSummaryDto budgetSummaryData) {
         SummaryDataType summary = SummaryDataType.Factory.newInstance();
@@ -722,7 +718,7 @@ public class RRFedNonFedBudget10V1_1Generator extends RRFedNonFedBudgetBaseGener
                 && periodInfo.getIndirectCosts().getIndirectCostDetails() != null) {
 
             int IndirectCostCount = 0;
-            List<IndirectCosts.IndirectCost> indirectCostList = new ArrayList<IndirectCosts.IndirectCost>();
+            List<IndirectCosts.IndirectCost> indirectCostList = new ArrayList<>();
             for (IndirectCostDetailsDto indirectCostDetails : periodInfo.getIndirectCosts().getIndirectCostDetails()) {
                 IndirectCosts.IndirectCost indirectCost = IndirectCosts.IndirectCost.Factory.newInstance();
                 indirectCost.setCostType(indirectCostDetails.getCostType());
@@ -1118,7 +1114,7 @@ public class RRFedNonFedBudget10V1_1Generator extends RRFedNonFedBudgetBaseGener
     private Equipment getEquipment(BudgetPeriodDto periodInfo) {
         Equipment equipment = Equipment.Factory.newInstance();
         EquipmentList[] equipmentArray = new EquipmentList[0];
-        List<EquipmentList> equipmentArrayList = new ArrayList<EquipmentList>();
+        List<EquipmentList> equipmentArrayList = new ArrayList<>();
         if (periodInfo.getEquipment() != null && periodInfo.getEquipment() != null && periodInfo.getEquipment().size() > 0) {
             if (periodInfo.getEquipment() != null) {
                 SummaryDataType totalFund = SummaryDataType.Factory.newInstance();
@@ -1214,11 +1210,11 @@ public class RRFedNonFedBudget10V1_1Generator extends RRFedNonFedBudgetBaseGener
             } catch(IOException e) {
                 throw new RuntimeException("the stream could not be opened",e);
             }
-			Map<String, Source> xSLTemplateWithBookmarks = new HashMap<String, Source>();
+			Map<String, Source> xSLTemplateWithBookmarks = new HashMap<>();
 			xSLTemplateWithBookmarks.put("", xsltSource);
 
 			String xmlData = additionalEquipmentDoc.xmlText();
-			Map<String, byte[]> streamMap = new HashMap<String, byte[]>();
+			Map<String, byte[]> streamMap = new HashMap<>();
 			streamMap.put("", xmlData.getBytes());
 			GenericPrintable printable = new GenericPrintable();
 			printable.setXSLTemplateWithBookmarks(xSLTemplateWithBookmarks);
@@ -1240,7 +1236,7 @@ public class RRFedNonFedBudget10V1_1Generator extends RRFedNonFedBudgetBaseGener
 	}
 	private gov.grants.apply.coeus.additionalEquipment.AdditionalEquipmentListDocument.AdditionalEquipmentList.EquipmentList[] getEquipmentListArray(
 			List<CostDto> extraEquipmentArrayList) {
-		List<AdditionalEquipmentList.EquipmentList> additionalEquipmentListList = new ArrayList<AdditionalEquipmentList.EquipmentList>();
+		List<AdditionalEquipmentList.EquipmentList> additionalEquipmentListList = new ArrayList<>();
 		AdditionalEquipmentList.EquipmentList equipmentList = null;
 		for (CostDto costInfo : extraEquipmentArrayList) {
 			equipmentList = AdditionalEquipmentList.EquipmentList.Factory
@@ -1268,7 +1264,7 @@ public class RRFedNonFedBudget10V1_1Generator extends RRFedNonFedBudgetBaseGener
 			extraKeyPersonList.setKeyPersonsArray(getExtraKeyPersons(periodInfo.getExtraKeyPersons()));
 			extraKeyPersonListDocument.setExtraKeyPersonList(extraKeyPersonList);
 			String xmlData = extraKeyPersonListDocument.xmlText();
-			Map<String, byte[]> streamMap = new HashMap<String, byte[]>();
+			Map<String, byte[]> streamMap = new HashMap<>();
 			streamMap.put("", xmlData.getBytes());
             Source xsltSource = null;
             try {
@@ -1276,7 +1272,7 @@ public class RRFedNonFedBudget10V1_1Generator extends RRFedNonFedBudgetBaseGener
             } catch(IOException e) {
                 throw new RuntimeException("the stream could not be opened",e);
             }
-			Map<String, Source> xSLTemplateWithBookmarks = new HashMap<String, Source>();
+			Map<String, Source> xSLTemplateWithBookmarks = new HashMap<>();
 			xSLTemplateWithBookmarks.put("", xsltSource);
 			
 			GenericPrintable printable = new GenericPrintable();
@@ -1293,7 +1289,7 @@ public class RRFedNonFedBudget10V1_1Generator extends RRFedNonFedBudgetBaseGener
 		return extraKPNarrative;
 	}
 	private gov.grants.apply.coeus.extraKeyPerson.ExtraKeyPersonListDocument.ExtraKeyPersonList.KeyPersons[] getExtraKeyPersons(List<KeyPersonDto> keyPersonList) {
-		List<gov.grants.apply.coeus.extraKeyPerson.ExtraKeyPersonListDocument.ExtraKeyPersonList.KeyPersons> keypersonslist = new ArrayList<gov.grants.apply.coeus.extraKeyPerson.ExtraKeyPersonListDocument.ExtraKeyPersonList.KeyPersons>();
+		List<gov.grants.apply.coeus.extraKeyPerson.ExtraKeyPersonListDocument.ExtraKeyPersonList.KeyPersons> keypersonslist = new ArrayList<>();
 		for(KeyPersonDto keyPersonInfo : keyPersonList){
 			gov.grants.apply.coeus.extraKeyPerson.ExtraKeyPersonListDocument.ExtraKeyPersonList.KeyPersons keyPerson = gov.grants.apply.coeus.extraKeyPerson.ExtraKeyPersonListDocument.ExtraKeyPersonList.KeyPersons.Factory.newInstance();
 			keyPerson.setFirstName(keyPersonInfo.getFirstName());
@@ -1396,7 +1392,7 @@ public class RRFedNonFedBudget10V1_1Generator extends RRFedNonFedBudgetBaseGener
     private OtherPersonnel getOtherPersonnel(BudgetPeriodDto periodInfo) {
         OtherPersonnel otherPersonnel = OtherPersonnel.Factory.newInstance();
         int OtherpersonalCount = 0;
-        List<OtherPersonnelDataType> otherPersonnelList = new ArrayList<OtherPersonnelDataType>();
+        List<OtherPersonnelDataType> otherPersonnelList = new ArrayList<>();
         OtherPersonnelDataType otherPersonnelDataTypeArray[] = new OtherPersonnelDataType[1];
         if (periodInfo != null) {
             if (periodInfo.getOtherPersonnel() != null) {
@@ -1582,7 +1578,6 @@ public class RRFedNonFedBudget10V1_1Generator extends RRFedNonFedBudgetBaseGener
      * FundsRequested,SummerMonths,and RequestedSalary based on KeyPersonInfo for the OtherPersonnel.
      * 
      * @param compensation (CompensationInfo) compensation entry.
-     * @return SectBCompensationDataType corresponding to the CompensationInfo object.
      */
     private void setSectBCompensationDataType(OtherPersonnelDataType otherPersonnelDataType,CompensationDto compensation) {
 
@@ -1635,7 +1630,7 @@ public class RRFedNonFedBudget10V1_1Generator extends RRFedNonFedBudgetBaseGener
         KeyPersons keyPersons = KeyPersons.Factory.newInstance();
         if (periodInfo != null) {
             if (periodInfo.getKeyPersons() != null) {
-                List<KeyPersonDataType> keyPersonList = new ArrayList<KeyPersonDataType>();
+                List<KeyPersonDataType> keyPersonList = new ArrayList<>();
                 int keyPersonCount = 0;
                 for (KeyPersonDto keyPerson : periodInfo.getKeyPersons()) {
                   if(keyPerson.getRole().equals(NID_PD_PI) || hasPersonnelBudget(keyPerson,periodInfo.getBudgetPeriod())){
@@ -1761,6 +1756,7 @@ public class RRFedNonFedBudget10V1_1Generator extends RRFedNonFedBudgetBaseGener
      * @param proposalDevelopmentDocument for which the {@link XmlObject} needs to be created
      * @return {@link XmlObject} which is generated using the given {@link ProposalDevelopmentDocumentContract}
      */
+    @Override
     public XmlObject getFormObject(ProposalDevelopmentDocumentContract proposalDevelopmentDocument) {
         this.pdDoc = proposalDevelopmentDocument;
         return getRRFedNonFedBudget();

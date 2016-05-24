@@ -36,11 +36,10 @@ public class ProposalPersonComparator implements Comparator<ProposalPersonContra
     /**
      * compare one <code>{@link ProposalPersonContract}</code> instance to another. Sort by the role of the
      *  <code>{@link ProposalPersonContract}</code>
-     * 
-     * @param person1
-     * @param person2
+     *
      * @return int
      */
+    @Override
     public int compare(ProposalPersonContract person1, ProposalPersonContract person2) {
         int retval = 0;
                

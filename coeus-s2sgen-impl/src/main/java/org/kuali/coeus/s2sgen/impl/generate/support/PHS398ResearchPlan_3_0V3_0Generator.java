@@ -158,6 +158,16 @@ public class PHS398ResearchPlan_3_0V3_0Generator extends
             }
         });
 
+        setMandatoryAttachments(researchPlanAttachments);
+    }
+
+    /**
+     * This set any mandatory attachments that aren't set to blank objects so that validation errors can be more user friendly.
+     */
+    private void setMandatoryAttachments(ResearchPlanAttachments researchPlanAttachments) {
+        if (researchPlanAttachments.getResearchStrategy() == null) {
+            researchPlanAttachments.setResearchStrategy(ResearchStrategy.Factory.newInstance());
+        }
     }
 
     /**
@@ -169,6 +179,7 @@ public class PHS398ResearchPlan_3_0V3_0Generator extends
      * @return {@link XmlObject} which is generated using the given
      * {@link ProposalDevelopmentDocumentContract}
      */
+    @Override
     public XmlObject getFormObject(
             ProposalDevelopmentDocumentContract proposalDevelopmentDocument) {
         this.pdDoc = proposalDevelopmentDocument;

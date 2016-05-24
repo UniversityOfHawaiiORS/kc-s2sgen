@@ -30,7 +30,6 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -42,8 +41,8 @@ public class FormMappingServiceImpl implements FormMappingService {
     private static final Logger LOG = LoggerFactory.getLogger(FormMappingServiceImpl.class);
 
 
-    private Map<String, FormMappingInfo> bindings = new ConcurrentHashMap<>();
-    private Map<Integer, Set<String>> sortedNameSpaces = new ConcurrentHashMap<>();
+    private final Map<String, FormMappingInfo> bindings = new ConcurrentHashMap<>();
+    private final Map<Integer, Set<String>> sortedNameSpaces = new ConcurrentHashMap<>();
 
     @Autowired
     @Qualifier("userAttachedFormService")
@@ -123,12 +122,12 @@ public class FormMappingServiceImpl implements FormMappingService {
 
     @Override
     public Map<String, FormMappingInfo> getBindings() {
-        return bindings == null ? Collections.<String, FormMappingInfo>emptyMap() : new HashMap<>(bindings);
+        return bindings == null ? Collections.emptyMap() : new HashMap<>(bindings);
     }
 
     @Override
     public Map<Integer, Set<String>> getSortedNameSpaces() {
-        return sortedNameSpaces == null ? Collections.<Integer, Set<String>>emptyMap() : new HashMap<>(sortedNameSpaces);
+        return sortedNameSpaces == null ? Collections.emptyMap() : new HashMap<>(sortedNameSpaces);
     }
 
     @Override

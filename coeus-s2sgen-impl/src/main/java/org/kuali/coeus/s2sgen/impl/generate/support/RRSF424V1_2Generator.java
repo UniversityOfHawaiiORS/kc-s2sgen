@@ -56,7 +56,6 @@ import org.kuali.coeus.propdev.api.core.ProposalDevelopmentDocumentContract;
 
 import org.kuali.coeus.sys.api.model.ScaleTwoDecimal;
 import org.kuali.coeus.s2sgen.api.core.ConfigurationConstants;
-import org.kuali.coeus.s2sgen.api.core.S2SException;
 import org.kuali.coeus.propdev.api.attachment.NarrativeContract;
 import org.kuali.coeus.s2sgen.impl.generate.FormGenerator;
 import org.kuali.coeus.s2sgen.impl.person.DepartmentalPersonDto;
@@ -154,7 +153,6 @@ public class RRSF424V1_2Generator extends RRSF424BaseGenerator {
 	 * This method is to get estimated project funds for RRSF424
 	 * 
 	 * @return EstimatedProjectFunding estimated total cost for the project.
-	 * @throws S2SException
 	 */
 	private EstimatedProjectFunding getProjectFunding() {
 		EstimatedProjectFunding funding = EstimatedProjectFunding.Factory
@@ -859,8 +857,7 @@ public class RRSF424V1_2Generator extends RRSF424BaseGenerator {
 		return title;
 	}
 	private String getAgencyRoutingNumber(){
-	       String sponserProgramCode= pdDoc.getDevelopmentProposal().getAgencyProgramCode();
-	       return sponserProgramCode;
+		return pdDoc.getDevelopmentProposal().getAgencyProgramCode();
 	    }
 	/**
 	 * This method creates {@link XmlObject} of type {@link RRSF42412Document}
@@ -871,6 +868,7 @@ public class RRSF424V1_2Generator extends RRSF424BaseGenerator {
 	 * @return {@link XmlObject} which is generated using the given
 	 *         {@link ProposalDevelopmentDocumentContract}
 	 */
+	@Override
 	public XmlObject getFormObject(
 			ProposalDevelopmentDocumentContract proposalDevelopmentDocument) {
 		this.pdDoc = proposalDevelopmentDocument;
