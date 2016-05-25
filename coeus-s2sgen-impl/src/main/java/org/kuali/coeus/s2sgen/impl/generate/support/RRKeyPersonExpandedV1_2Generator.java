@@ -31,6 +31,7 @@ import gov.grants.apply.system.attachmentsV10.AttachedFileDataType;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.xmlbeans.XmlObject;
+import org.kuali.coeus.common.api.person.KcPersonContract;
 import org.kuali.coeus.common.api.rolodex.RolodexContract;
 import org.kuali.coeus.common.api.rolodex.RolodexService;
 import org.kuali.coeus.common.api.unit.UnitContract;
