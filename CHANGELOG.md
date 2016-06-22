@@ -1,6 +1,37 @@
 
 
 ##CURRENT
+* RESKC-1426: Stop s2s service from sending the same attachments several times.
+  * I am unable to submit the PHS Fellowship Supplemental form 3.1 to Grants.gov. I get the following STE.
+  * See Proposal No: 1394 in res-demo1
+  * Incident Feedback
+  * This information will be forwarded to our support team. Please describe what action you were taking when the problem occurred
+  * Document Id:
+  * 17480
+  * View Id:
+  * PropDev-DefaultView
+  * Error Message:
+  * The system has encountered an error and is unable to complete your request at this time. Please provide more information regarding this error by completing this Incident Report.
+  * User Feedback:
+  * Enter user feedback here...
+  * Submit Report Retry Cancel
+  * Stacktrace (only in dev mode)
+  * org.kuali.coeus.propdev.impl.s2s.connect.S2sCommunicationException: Unable to accept application submission: The Number of attachment received from the Client [30] does not match The Number of attachment specified in the Grant XML [10]. at org.kuali.coeus.propdev.impl.s2s.connect.S2SConnectorServiceBase.submitApplication(S2SConnectorServiceBase.java:219) at org.kuali.coeus.propdev.impl.s2s.S2sSubmissionServiceImpl.submitApplication(S2sSubmissionServiceImpl.java:366) at org.kuali.coeus.propdev.impl.core.ProposalDevelopmentSubmitController.submitS2sApplication(ProposalDevelopmentSubmitController.java:930) at org.kuali.coeus.propdev.impl.core.ProposalDevelopmentSubmitController.handleSubmissionToS2S(ProposalDevelopmentSubmitController.java:391) at org.kuali.coeus.propdev.impl.core.ProposalDevelopmentSubmitController.submitToS2s(ProposalDevelopmentSubmitController.java:378)
+  * Gayathri Athreya on Wed, 22 Jun 2016 14:31:23 -0500 [View Commit](../../commit/6b9e688304f5e81a73691a2a0eeeec0ff506c292)
+
+##coeus-s2sgen-1606.0003
+* RESKC-1428, RESKC-1430: Fix PHS 3.1 supplemental issues.
+  * Gayathri Athreya on Wed, 22 Jun 2016 10:34:55 -0500 [View Commit](../../commit/8664fa4938b23e058a7424ba44bd1ddf7f9334da)
+
+##coeus-s2sgen-1606.0002
+* RESKC-941: Upgrade PHS xsl
+  * Gayathri Athreya on Sun, 19 Jun 2016 07:49:32 -0700 [View Commit](../../commit/9c2a2133a77e631b74fc23abb8a133b3d0106e03)
+
+##coeus-s2sgen-1606.0001
+* RESKC-941: S2S Form D: PHS Fellowship Supplemental 3.1 Form update for 2016
+  * Gayathri Athreya on Thu, 9 Jun 2016 13:05:46 -0700 [View Commit](../../commit/bde3b8eb05ea663ddedd9f44b1d555c5283d2666)
+
+##coeus-s2sgen-1605.0005
 * RESKC-1325: always setting mandatory attachments even when the narrative is not present.  This makes the error message presented to the screen more user friendly.
   * Travis Schneeberger on Mon, 23 May 2016 16:22:24 -0400 [View Commit](../../commit/2c81e0146ee73d25590c31f86a2f650c09dedd8a)
 
