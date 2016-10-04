@@ -1,6 +1,29 @@
 
 
 ##CURRENT
+* No Changes
+
+
+##coeus-s2sgen-1609.0004
+* RESKC-1691: removing generator that is not correctly implemented
+  * Travis Schneeberger on Mon, 12 Sep 2016 16:23:35 -0400 [View Commit](../../commit/0683dc947c340148e3c3d0496bfd98daab753f64)
+
+##coeus-s2sgen-1609.0003
+* RESKC-1683: Dates in generated S2S XML sometimes include DST offsets
+  * Terry Durkin on Wed, 7 Sep 2016 15:29:59 -0400 [View Commit](../../commit/496f20a48645e2e813195a258f35e1730acbb91d)
+
+##coeus-s2sgen-1609.0002
+* RESKC-1689: SF424A future year budget amount mapping
+  * Terry Durkin on Sat, 10 Sep 2016 14:05:47 -0400 [View Commit](../../commit/21b97b1512ba614b729e2d5293f4b6f16d2a0e70)
+
+##coeus-s2sgen-1609.0001
+* S2S submission issue due to bad date format on SF24 2.0   * vineeth on Wed, 7 Sep 2016 16:15:41 -0400 [View Commit](../../commit/5bf016654aadf01a5821c3c597a4e93c2d49b8b0)
+
+##coeus-s2sgen-1608.0004
+* RESKC-1571: Do not require validation of user attached forms
+  * Terry Durkin on Mon, 29 Aug 2016 17:36:04 -0400 [View Commit](../../commit/5d02197cb5a8a8ad073cc3dbfddce72d9b4215b5)
+
+##coeus-s2sgen-1608.0003
 * fix spelling errors
   * Travis Schneeberger on Fri, 12 Aug 2016 09:10:22 -0400 [View Commit](../../commit/cfcb314f30f5c58e47e55440c5396842ec705445)
 
