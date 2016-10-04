@@ -384,7 +384,7 @@ public class RRFedNonFedBudgetV1_1Generator extends RRFedNonFedBudgetBaseGenerat
     private CumulativeOtherDirect getCumulativeOtherDirect(BudgetSummaryDto budgetSummaryData) {
         CumulativeOtherDirect cumulativeOtherDirect = CumulativeOtherDirect.Factory.newInstance();
         SummaryDataType summary = SummaryDataType.Factory.newInstance();
-        if (budgetSummaryData != null && budgetSummaryData != null) {
+        if (budgetSummaryData != null) {
             for (OtherDirectCostInfoDto cumOtherDirect : budgetSummaryData.getOtherDirectCosts()) {
                 if (cumOtherDirect.gettotalOtherDirect() != null) {
                     summary.setFederalSummary(cumOtherDirect.gettotalOtherDirect().bigDecimalValue());
@@ -1247,8 +1247,7 @@ public class RRFedNonFedBudgetV1_1Generator extends RRFedNonFedBudgetBaseGenerat
         Equipment equipment = Equipment.Factory.newInstance();
         EquipmentList[] equipmentArray = new EquipmentList[0];
         List<EquipmentList> equipmentArrayList = new ArrayList<>();
-        if (periodInfo.getEquipment() != null && periodInfo.getEquipment() != null && periodInfo.getEquipment().size() > 0) {
-            if (periodInfo.getEquipment() != null) {
+        if (periodInfo.getEquipment() != null && periodInfo.getEquipment().size() > 0) {
                 SummaryDataType totalFund = SummaryDataType.Factory.newInstance();
                 totalFund.setFederalSummary(BigDecimal.ZERO);
                 totalFund.setNonFederalSummary(BigDecimal.ZERO);
@@ -1304,7 +1303,7 @@ public class RRFedNonFedBudgetV1_1Generator extends RRFedNonFedBudgetBaseGenerat
                 }
                 equipment.setTotalFund(summary);
                 
-            }
+
         }
         NarrativeContract narrative = saveExtraEquipment(periodInfo);
         AttachedFileDataType attachedFileDataType = null;
