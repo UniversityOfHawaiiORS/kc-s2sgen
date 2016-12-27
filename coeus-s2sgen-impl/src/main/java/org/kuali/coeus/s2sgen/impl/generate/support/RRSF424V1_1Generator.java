@@ -78,7 +78,7 @@ import java.util.*;
 @FormGenerator("RRSF424V1_1Generator")
 public class RRSF424V1_1Generator extends RRSF424BaseGenerator {
 
-	private static final Logger LOG = LoggerFactory.getLogger(RRSF424V1_0Generator.class);
+	private static final Logger LOG = LoggerFactory.getLogger(RRSF424V1_1Generator.class);
 
 	private DepartmentalPersonDto departmentalPerson;
     private List<? extends AnswerHeaderContract> answerHeaders;
@@ -749,7 +749,7 @@ public class RRSF424V1_1Generator extends RRSF424BaseGenerator {
 	 *         {@link ProposalDevelopmentDocumentContract}
 	 */
 	@Override
-	public XmlObject getFormObject(
+	public RRSF424Document getFormObject(
             ProposalDevelopmentDocumentContract proposalDevelopmentDocument) {
 		this.pdDoc = proposalDevelopmentDocument;
 		departmentalPerson = departmentalPersonService

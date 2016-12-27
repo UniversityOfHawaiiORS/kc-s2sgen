@@ -17,9 +17,15 @@
    - You should have received a copy of the GNU Affero General Public License
    - along with this program.  If not, see <http://www.gnu.org/licenses/>.
  -->
-<!-- edited with XMLSpy v2005 rel. 3 U (http://www.altova.com) by Nikisha Suresh Gala Rajiv Powani (Northrop Grumman Information Technology) -->
-<!-- $Revision:   1.2  $ -->
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:att="http://apply.grants.gov/system/Attachments-V1.0" xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:footer="http://apply.grants.gov/system/Footer-V1.0" xmlns:glob="http://apply.grants.gov/system/Global-V1.0" xmlns:RR_FedNonFed_SubawardBudget30="http://apply.grants.gov/forms/RR_FedNonFed_SubawardBudget30-V1.2" xmlns:globLib="http://apply.grants.gov/system/GlobalLibrary-V2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:RR_FedNonFedBudget="http://apply.grants.gov/forms/RR_FedNonFedBudget-V1.1">
+
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:att="http://apply.grants.gov/system/Attachments-V1.0"
+                xmlns:fo="http://www.w3.org/1999/XSL/Format"
+                xmlns:footer="http://apply.grants.gov/system/Footer-V1.0"
+                xmlns:glob="http://apply.grants.gov/system/Global-V1.0"
+                xmlns:RR_FedNonFed_SubawardBudget30="http://apply.grants.gov/forms/RR_FedNonFed_SubawardBudget30-V1.2"
+                xmlns:globLib="http://apply.grants.gov/system/GlobalLibrary-V2.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xmlns:RR_FedNonFedBudget="http://apply.grants.gov/forms/RR_FedNonFedBudget-V1.1">
 
 	<xsl:variable name="fo:layout-master-set">
 		<fo:layout-master-set>
@@ -773,7 +779,7 @@
 						
 						
 						<fo:block font-size="8pt">
-							<fo:table width="500pt" space-before.optimum="3pt" space-after.optimum="2pt">
+							<fo:table width="500pt" space-before.optimum="3pt" space-after.optimum="2pt" table-layout="fixed">
 								<fo:table-column column-width="proportional-column-width(70)"/>
 								<fo:table-column column-width="proportional-column-width(30)"/>
 								<fo:table-column column-width="proportional-column-width(30)"/>
@@ -2220,7 +2226,7 @@
 							<fo:table-cell border-style="solid" border-color="black" text-align="left" padding-start="1pt" padding-end="1pt" padding-before="1pt" padding-after="1pt" display-align="before">
 								<fo:block>
 									<fo:inline font-size="8pt" font-weight="bold">A. Senior/Key Person</fo:inline>
-									<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt">
+									<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt" table-layout="fixed">
 										<fo:table-column column-width="proportional-column-width(2)"/>
 										<fo:table-column column-width="proportional-column-width(4)"/>
 										<fo:table-column column-width="proportional-column-width(10)"/>
@@ -2318,7 +2324,7 @@
 										</fo:table-body>
 									</fo:table>
 									<xsl:for-each select="RR_FedNonFedBudget:KeyPerson">
-										<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt">
+										<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt" table-layout="fixed">
 											<fo:table-column column-width="proportional-column-width(2)"/>
 											<fo:table-column column-width="proportional-column-width(4)"/>
 											<fo:table-column column-width="proportional-column-width(10)"/>
@@ -2510,7 +2516,7 @@
 											</fo:table-body>
 										</fo:table>
 									</xsl:for-each>
-									<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt">
+									<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt" table-layout="fixed">
 										<fo:table-column column-width="proportional-column-width(2)"/>
 										<fo:table-column column-width="proportional-column-width(4)"/>
 										<fo:table-column column-width="proportional-column-width(10)"/>
@@ -2647,7 +2653,7 @@
 								<fo:block>
 									<xsl:text>&#xA;</xsl:text>
 								</fo:block>
-								<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt">
+								<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt" table-layout="fixed">
 									<fo:table-column column-width="proportional-column-width(10)"/>
 									<fo:table-column column-width="proportional-column-width(61)"/>
 									<fo:table-column column-width="proportional-column-width(6)"/>
@@ -3205,7 +3211,7 @@
 								</fo:table>
 								<xsl:for-each select="RR_FedNonFedBudget:OtherPersonnel">
 									<xsl:for-each select="RR_FedNonFedBudget:Other">
-										<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt">
+										<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt" table-layout="fixed">
 											<fo:table-column column-width="proportional-column-width(10)"/>
 											<fo:table-column column-width="proportional-column-width(61)"/>
 											<fo:table-column column-width="proportional-column-width(6)"/>
@@ -3329,7 +3335,7 @@
 										</fo:table>
 									</xsl:for-each>
 								</xsl:for-each>
-								<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt">
+								<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt" table-layout="fixed">
 									<fo:table-column column-width="proportional-column-width(10)"/>
 									<fo:table-column column-width="proportional-column-width(61)"/>
 									<fo:table-column column-width="proportional-column-width(6)"/>
@@ -3551,7 +3557,7 @@
                                        </fo:block>
 								<fo:inline font-size="8pt" font-weight="bold">List items and dollar amount for each item exceeding $5,000</fo:inline>
 								<xsl:if test="RR_FedNonFedBudget:RR_FedNonFedBudget:Equipment/RR_FedNonFedBudget:EquipmentList">
-								<fo:table width="100%" space-before.optimum="1pt" space-after.optimum="2pt">
+								<fo:table width="100%" space-before.optimum="1pt" space-after.optimum="2pt" table-layout="fixed">
 									<fo:table-column column-width="proportional-column-width(3)"/>
 									<fo:table-column column-width="proportional-column-width(50)"/>
 									<fo:table-column column-width="proportional-column-width(16)"/>
@@ -3641,7 +3647,7 @@
 									</fo:table-body>
 								</fo:table>
 								</xsl:if>
-								<fo:table width="100%" space-before.optimum="1pt" space-after.optimum="2pt">
+								<fo:table width="100%" space-before.optimum="1pt" space-after.optimum="2pt" table-layout="fixed">
 									<fo:table-column column-width="proportional-column-width(53)"/>
 									<fo:table-column column-width="proportional-column-width(16)"/>
 									<fo:table-column column-width="proportional-column-width(16)"/>
@@ -3777,7 +3783,7 @@
 			<fo:block>
 				<fo:leader leader-pattern="space"/>
 			</fo:block>
-			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt">
+			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt" table-layout="fixed">
 				<fo:table-column column-width="proportional-column-width(53)"/>
 				<fo:table-column column-width="proportional-column-width(16)"/>
 				<fo:table-column column-width="proportional-column-width(16)"/>
@@ -3912,7 +3918,7 @@
 			<fo:block>
 				<fo:leader leader-pattern="space"/>
 			</fo:block>
-			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt">
+			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt" table-layout="fixed">
 				<fo:table-column column-width="proportional-column-width(28)"/>
 				<fo:table-column column-width="proportional-column-width(25)"/>
 				<fo:table-column column-width="proportional-column-width(16)"/>
@@ -4286,7 +4292,7 @@
 					</fo:table-row>
 				</fo:table-body>
 			</fo:table>
-			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt">
+			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt" table-layout="fixed">
 				<fo:table-column column-width="proportional-column-width(53)"/>
 				<fo:table-column column-width="proportional-column-width(16)"/>
 				<fo:table-column column-width="proportional-column-width(16)"/>
@@ -4637,7 +4643,7 @@
 			<fo:block>
 				<fo:leader leader-pattern="space"/>
 			</fo:block>
-			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt">
+			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt" table-layout="fixed">
 				<fo:table-column column-width="proportional-column-width(53)"/>
 				<fo:table-column column-width="proportional-column-width(16)"/>
 				<fo:table-column column-width="proportional-column-width(16)"/>
@@ -4704,7 +4710,7 @@
 			<fo:block>
 				<fo:leader leader-pattern="space"/>
 			</fo:block>
-			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt">
+			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt" table-layout="fixed">
 				<fo:table-column column-width="proportional-column-width(31)"/>				
 				<fo:table-column column-width="proportional-column-width(17)"/>
 				<fo:table-column column-width="proportional-column-width(17)"/>
@@ -4860,7 +4866,7 @@
 					</fo:table-row>
 					<fo:table-row>
 						<fo:table-cell hyphenate="true" language="en" number-columns-spanned="6" text-align="left" padding-start="1pt" padding-end="1pt" padding-before="1pt" padding-after="0pt" display-align="before">
-							<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt">
+							<fo:table width="100%" space-before.optimum="0pt" space-after.optimum="0pt" table-layout="fixed">
 								<fo:table-column column-width="proportional-column-width(20)"/>
 								<fo:table-column column-width="proportional-column-width(60)"/>
 								<fo:table-column column-width="proportional-column-width(50)"/>
@@ -4896,7 +4902,7 @@
 			<fo:block>
 				<fo:leader leader-pattern="space"/>
 			</fo:block>
-			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt">
+			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt" table-layout="fixed">
 				<fo:table-column column-width="proportional-column-width(53)"/>
 				<fo:table-column column-width="proportional-column-width(16)"/>
 				<fo:table-column column-width="proportional-column-width(16)"/>
@@ -4963,7 +4969,7 @@
 			<fo:block>
 				<fo:leader leader-pattern="space"/>
 			</fo:block>
-			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt">
+			<fo:table border-style="solid" border-color="black" width="100%" space-before.optimum="1pt" space-after.optimum="2pt" table-layout="fixed">
 				<fo:table-column column-width="proportional-column-width(65)"/>
 				<fo:table-column column-width="proportional-column-width(15)"/>
 				<fo:table-column column-width="proportional-column-width(35)"/>

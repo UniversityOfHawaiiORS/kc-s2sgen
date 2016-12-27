@@ -47,7 +47,7 @@ import java.util.List;
 @FormGenerator("BudgetV1_1Generator")
 public class BudgetV1_1Generator extends S2SBaseFormGenerator {
 
-    private static final Logger LOG = LoggerFactory.getLogger(ProjectV1_0Generator.class);
+    private static final Logger LOG = LoggerFactory.getLogger(BudgetV1_1Generator.class);
     private static final int BUDGET_ATTACHMENTS = 57;
 
     @Value("http://apply.grants.gov/forms/Budget-V1.1")
@@ -120,7 +120,7 @@ public class BudgetV1_1Generator extends S2SBaseFormGenerator {
      * @return {@link XmlObject} which is generated using the given {@link ProposalDevelopmentDocumentContract}
      */
     @Override
-    public XmlObject getFormObject(ProposalDevelopmentDocumentContract proposalDevelopmentDocument) {
+    public BudgetNarrativeAttachmentsDocument getFormObject(ProposalDevelopmentDocumentContract proposalDevelopmentDocument) {
         this.pdDoc = proposalDevelopmentDocument;
         return getBudgetNarrativeAttachmentsDocument();
     }
