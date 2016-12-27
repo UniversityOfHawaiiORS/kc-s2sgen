@@ -1,6 +1,216 @@
 
 
 ##CURRENT
+* RESKC-1729: update coeus-api, aligning dependencies with the research project
+  * Travis Schneeberger on Thu, 15 Dec 2016 15:36:13 -0500 [View Commit](../../commit/948e7856e9e64d494f4f4ffd199d6d803c6d6ff2)
+
+##coeus-s2sgen-1612.0011
+* No Changes
+
+
+##coeus-s2sgen-1612.0010
+* No Changes
+
+
+##coeus-s2sgen-1612.0009
+* No Changes
+
+
+##coeus-s2sgen-1612.0008
+* RESKC-1602: fixing requested salary and fringe benefits calculation for the following forms: RR Fed Non Fed Budget 10 version 1.1 and RR Fed Non Fed Budget versions 1.0, 1.1, and 1.2
+  * Travis Schneeberger on Sat, 3 Dec 2016 13:03:54 -0500 [View Commit](../../commit/38056eaaf25dab8445562cc069c7b29121170fbc)
+
+##coeus-s2sgen-1612.0007
+* No Changes
+
+
+##coeus-s2sgen-1612.0006
+* RESKC-1608: Fixing Section D on Research & Related Budget (Total Fed + Non-Fed) Form V1.2
+  * Travis Schneeberger on Sat, 3 Dec 2016 09:23:01 -0500 [View Commit](../../commit/78126855ca79823e7e842e5fb600095dd38a9101)
+* RESKC-1608: Fixing Section D on Research & Related Subaward Budget (Total Fed + Non-Fed) Attachment(s) Form V1.3
+  * Travis Schneeberger on Sat, 3 Dec 2016 09:20:10 -0500 [View Commit](../../commit/b27eea593448bc8b23b8a507dff2e41413afdf5d)
+
+##coeus-s2sgen-1612.0005
+* RESKC-1606: More fixes.
+  * Gayathri Athreya on Fri, 2 Dec 2016 10:23:34 -0700 [View Commit](../../commit/b2201348757b2864f1f3ddfa87db588a35791090)
+* RESKC-1606: Fix xsl issues.
+  * Gayathri Athreya on Thu, 1 Dec 2016 15:32:29 -0700 [View Commit](../../commit/d9159610278b8016d990e2d1034fb050aa7e676f)
+
+##coeus-s2sgen-1612.0004
+* RESKC-1603, RESKC-1608, RESKC-1602, RESKC-1810: fix formatting issues
+  * Travis Schneeberger on Fri, 2 Dec 2016 14:03:34 -0500 [View Commit](../../commit/70e5e2c66dc61e32614881d65dbd0b77f0ee4904)
+
+##coeus-s2sgen-1612.0003
+* RESKC-1603: fixing display issues on cumulative page for RR Subaward Budget 1.3 & 1.4
+  * Travis Schneeberger on Fri, 2 Dec 2016 11:58:30 -0500 [View Commit](../../commit/8c3fa73a3e40c1fdf8bfeee58ac03b16b2d34e35)
+
+##coeus-s2sgen-1612.0002
+* RESKC-1603: fixing formatting on Budget Subaward forms 1.3 and 1.4
+  * Travis Schneeberger on Fri, 2 Dec 2016 09:50:55 -0500 [View Commit](../../commit/e0b4ef61cd8478e2f872464cae8ae6814b536260)
+
+##coeus-s2sgen-1612.0001
+* No Changes
+
+
+##coeus-s2sgen-1611.0022
+* No Changes
+
+
+##coeus-s2sgen-1611.0021
+* RESKC-1603: Fix page break issues in R & R Subaward Budget Attachment(s) Form V1.4 form
+  * Travis Schneeberger on Wed, 30 Nov 2016 10:54:15 -0500 [View Commit](../../commit/b5bab44bd1d500a5edeb6df232425a7004cb70eb)
+
+##coeus-s2sgen-1611.0020
+* RESKC-1810: adding total cost fee fields to printed form for R&R Subaward Budget Attachment Form 5 YR 30 ATT v1.4.  Fixing display issues in previous version of form.
+  * Travis Schneeberger on Tue, 29 Nov 2016 12:32:15 -0500 [View Commit](../../commit/688b1d296621c0e3b3d5675ff7e5a9b548cbb7a4)
+
+##coeus-s2sgen-1611.0019
+* RESKC-1812: adding total cost fee fields to printed form for RR_SubawardBudget10_10_1_4
+  * Travis Schneeberger on Tue, 29 Nov 2016 10:53:41 -0500 [View Commit](../../commit/20755211c102cc039980a8b634e506f14df87910)
+
+##coeus-s2sgen-1611.0018
+* RESKC-1795: supporting Attachments 1.2 (aka Other Attachments) and fixing the stylesheet for version 1.1
+  * Travis Schneeberger on Mon, 28 Nov 2016 13:49:09 -0500 [View Commit](../../commit/00f4f6c8ffb0d06c10038d7b1c462c344997c46a)
+
+##coeus-s2sgen-1611.0017
+* RESKC-1608: Fixing printing of Research & Related Subaward Budget (Total Fed + Non-Fed) Attachment(s) Form V1.2 when equipment line items exist
+  * Travis Schneeberger on Wed, 23 Nov 2016 18:22:54 -0500 [View Commit](../../commit/a49dbe2d0a7d9c22fd50896a95fc22ffd7eb2a05)
+
+##coeus-s2sgen-1611.0016
+* RESKC-1608: Fixing printing of Research & Related Subaward Budget (Total Fed + Non-Fed) Attachment(s) Form V1.3 when equipment line items exist
+  * Travis Schneeberger on Wed, 23 Nov 2016 18:02:29 -0500 [View Commit](../../commit/8c08302c7d2f6ede621e84da68aa96fc4c4c4468)
+
+##coeus-s2sgen-1611.0015
+* RESKC-1603: Fix page break issues in R & R Subaward Budget Attachment(s) Form V1.4 form
+  * Travis Schneeberger on Wed, 23 Nov 2016 15:07:59 -0500 [View Commit](../../commit/ec6845f79372593654500261a5b186c41ce4c405)
+
+##coeus-s2sgen-1611.0014
+* RESKC-1806: Supporting Research & Related Subaward Budget (Total Fed + Non-Fed) Attachment(s) Form V1.3.  Fixing other forms
+  * Travis Schneeberger on Wed, 23 Nov 2016 09:51:14 -0500 [View Commit](../../commit/6e53a034237213518ae5f0008131bcefcf3a7da9)
+
+##coeus-s2sgen-1611.0013
+* RESKC-1807: Changing expiration date.
+  * Gayathri Athreya on Tue, 22 Nov 2016 11:10:42 -0700 [View Commit](../../commit/1ffb7d9cf3e0be38bbfdd0808e6f70fb533109e4)
+
+##coeus-s2sgen-1611.0012
+* RESKC-1806: updating expiration date.
+  * Travis Schneeberger on Mon, 21 Nov 2016 12:38:01 -0500 [View Commit](../../commit/b4b431cd2880417faf68a0f18b21d40245b612db)
+
+##coeus-s2sgen-1611.0011
+* RESKC-1578: updating expiration date.
+  * Travis Schneeberger on Thu, 17 Nov 2016 19:31:11 -0500 [View Commit](../../commit/d7f22d30f67989b141a0516f3e4f6e2c47d4337d)
+
+##coeus-s2sgen-1611.0010
+* RESKC-1581: updating Expiraation Date
+  * Travis Schneeberger on Thu, 17 Nov 2016 13:37:00 -0500 [View Commit](../../commit/96c1593df74b96e2d205318f6a844081d90399a8)
+
+##coeus-s2sgen-1611.0009
+* RESKC-1606: Fix equipment and file attachment.
+  * Gayathri Athreya on Fri, 11 Nov 2016 15:44:18 -0700 [View Commit](../../commit/e2960de71067439cc34d4eb6a89be7b1f45eed74)
+
+##coeus-s2sgen-1611.0008
+* RESKC-1805: fixing older generators and stylesheets
+  * Travis Schneeberger on Fri, 11 Nov 2016 14:06:06 -0500 [View Commit](../../commit/49566a960c0871ddd37f3bd75b76e7480863b76f)
+
+##coeus-s2sgen-1611.0007
+* Added total costs and Fee
+  * Gayathri Athreya on Fri, 11 Nov 2016 09:33:43 -0700 [View Commit](../../commit/96232b82902059b22de1ba583413b12998655aba)
+* RESKC-1606: New form.
+  * Gayathri Athreya on Tue, 8 Nov 2016 12:26:49 -0700 [View Commit](../../commit/e70be1a4353a048fe3e984e7a4b2b1ed0f2085db)
+
+##coeus-s2sgen-1611.0006
+* RESKC-1811: Totals fix.
+  * Gayathri Athreya on Thu, 10 Nov 2016 15:42:15 -0700 [View Commit](../../commit/a4d9295995f5ba8df5776bd19629abb9aba20491)
+* RESKC-1805: updating the OMB Expiration Date
+  * Travis Schneeberger on Thu, 10 Nov 2016 16:26:57 -0500 [View Commit](../../commit/b2c478c3f671cd9bed54430bb531a377db071b08)
+
+##coeus-s2sgen-1611.0004
+* RESKC-1603: fixing Subaward budget 1.4 form.
+  * Travis Schneeberger on Thu, 10 Nov 2016 15:03:23 -0500 [View Commit](../../commit/36ee7767411561633a08e8717d621009a8442703)
+
+##coeus-s2sgen-1611.0003
+* RESKC-1603: support Subaward budget 1.4 form, fixing older versions of forms.
+  * Travis Schneeberger on Fri, 4 Nov 2016 12:44:20 -0400 [View Commit](../../commit/1c91ea58568dc9f51495e29f6d8021f49910350c)
+
+##coeus-s2sgen-1611.0002
+* RESKC-1602: supporting RR FedNonFed Budget 1.2, fixing stylesheet
+  * Travis Schneeberger on Thu, 3 Nov 2016 10:41:04 -0400 [View Commit](../../commit/c7384cb241836a39862ad8e3b62049faf7f3aee1)
+
+##coeus-s2sgen-1611.0001
+* RESKC-1602: supporting RR FedNonFed Budget 1.2
+  * Travis Schneeberger on Wed, 2 Nov 2016 17:22:55 -0400 [View Commit](../../commit/50415b0d6a07f474e4c5649810a55447c3957bab)
+
+##coeus-s2sgen-1610.0013
+* RESKC-1582: Added new version of R&R Subaward Budget Attachment Form 5 YR 30 ATT
+  * Gayathri Athreya on Thu, 27 Oct 2016 14:31:11 -0700 [View Commit](../../commit/dfd7020b2be3fd73cb9c74df22c53f59db052029)
+
+##coeus-s2sgen-1610.0012
+* RESKC-1584: Review comments.
+  * Gayathri Athreya on Thu, 27 Oct 2016 10:12:36 -0700 [View Commit](../../commit/83d26099ede9ad262d838cfc076beff66f4e268c)
+* RESKC-1584: Adding new version for form R&R Subaward Budget Attachment 10 YR 30 ATT
+  * Gayathri Athreya on Wed, 26 Oct 2016 16:39:17 -0700 [View Commit](../../commit/8441a5a63fbed0f9eaa6ea065fdb73d035547c95)
+
+##coeus-s2sgen-1610.0011
+* RESKC-1789: update the expiration date on several forms
+  * Travis Schneeberger on Thu, 27 Oct 2016 10:04:30 -0400 [View Commit](../../commit/d0efb8f5cf25732b36d8676cf515b2bb0cd20479)
+
+##coeus-s2sgen-1610.0010
+* RESKC-1577: RRSF424 stylesheet update.
+  * Gayathri Athreya on Wed, 26 Oct 2016 09:32:33 -0700 [View Commit](../../commit/b60f35b4ef94ceec2cfc064f8b59767c4c514ad7)
+
+##coeus-s2sgen-1610.0009
+* RESKC-1604: supporting RR Subaward Budget 10 10 version 1.4.  Fixing version 1.2 and 1.3 of the  RR Subaward Budget 10 10 forms' stylesheets when there is no equipment present.
+  * Travis Schneeberger on Tue, 25 Oct 2016 17:00:57 -0400 [View Commit](../../commit/372ba6d8cc4d9b8164406ee93877c2b78c6c959c)
+
+##coeus-s2sgen-1610.0008
+* RESKC-1784: Fix missing/broken NSF1.6 Funding Mechanisms
+  * Terry Durkin on Tue, 25 Oct 2016 14:03:06 -0400 [View Commit](../../commit/758db3bcc4f662a4c84318daf9191f4ddde613aa)
+
+##coeus-s2sgen-1610.0007
+* updating several dependencies, including commons-collections4
+  * Travis Schneeberger on Mon, 24 Oct 2016 10:31:57 -0400 [View Commit](../../commit/10bed29cf1a7fa8977673fd464399ad87548f84e)
+
+##coeus-s2sgen-1610.0006
+* RESKC-1580: fixing the stylesheet for a field label
+  * Travis Schneeberger on Thu, 20 Oct 2016 09:25:03 -0400 [View Commit](../../commit/847dd082763c535b82c524a1b16d92add47bf8aa)
+
+##coeus-s2sgen-1610.0005
+* RESKC-1580: fixing the stylesheet for certain field labels
+  * Travis Schneeberger on Tue, 18 Oct 2016 09:02:23 -0400 [View Commit](../../commit/403bda1e7a8fa6df74d876b0804a71551c9b8d89)
+
+##coeus-s2sgen-1610.0004
+* RESKC-1295: when search for form to print only look at the node directly under the Forms element rather than any matching nested element
+  * Travis Schneeberger on Thu, 13 Oct 2016 16:06:33 -0400 [View Commit](../../commit/9a739c817a4dd48d407e1bb38650d4c22703caa6)
+
+##coeus-s2sgen-1610.0003
+* RESKC-1583: allowing pdf files to be saved to the filesystem, code cleanup
+  * Travis Schneeberger on Wed, 12 Oct 2016 12:02:47 -0400 [View Commit](../../commit/29acaf524a2b0bd1282cf8b0b753682256e4968a)
+* RESKC-1583: support for Research & Related Budget 10 version 1.4
+  * Travis Schneeberger on Tue, 11 Oct 2016 16:56:47 -0400 [View Commit](../../commit/4dc3c437bc1e01efe63edc63d898af0c7fa5cbbb)
+
+##coeus-s2sgen-1610.0002
+* RESKC-1580: support for Research & Related Budget version 1.4
+  * Travis Schneeberger on Fri, 30 Sep 2016 13:36:16 -0400 [View Commit](../../commit/cec58b43034d50cdf7dce184dd150b340425c39e)
+
+##coeus-s2sgen-1610.0001
+* RESKC-1480: Fixing citizenship type error message.
+  * S2S PHS Career Development Award Supplement V3.0 will not validate and print/preview despite meeting the minimum required attachment validation if there is no PI/citizenship data.
+  * There must be a better validation that is specific to the missing PI and/or Citizenship data for this form to aid the user.
+  * Just stating the form is not valid makes for a totally NOT AWESOME experience.
+  * This is happening in Res Demo 1 (proposal 1470) and MIT QA.(pd 31033)
+  * This form had passed QA tests in the 1605+ for MIT.
+  * But 1607.5-MIT and Kuali 1607.7 07-07-2016 18:48 a consistent error appears stating the form is invalid.
+  * Create a proposal with minimum required data.
+  * S2S: search for Grants. gov; PA-DD-K99
+  * Try to print/preview the CareerDevelopmentAwardSupp_3_0:
+  * result: 2 error rows: 1st identifies the required Research Strategy attachment; 2nd states the form name and it is 'not valid'.
+  * Attachments > upload the Career research Strategy narrative
+  * Return to S2S opportunity screen; attempt to print Career Dev form.
+  * Result: Form error persists:
+  * GrantApplication/Forms/PHS398_CareerDevelopmentAwardSup_3_0 is not valid in PHS398_CareerDevelopmentAwardSup_3_0
+  * Gayathri Athreya on Mon, 3 Oct 2016 15:02:07 -0700 [View Commit](../../commit/7bc2ed709fc8db25df49d3362963e57a1f07cd2f)
+
+##coeus-s2sgen-1609.0007
 * KC system is populating form inappropriately with Yes to US Citizen by
   * default when MIT HR Data has non-citizen or null data. It is still
   * honoring the aggregator’s input data in key person extended attributes,

@@ -19,10 +19,10 @@
 package org.kuali.coeus.s2sgen.impl.generate;
 
 import org.apache.xmlbeans.XmlObject;
-import org.kuali.coeus.s2sgen.api.core.S2SException;
-import org.kuali.coeus.s2sgen.api.generate.AttachmentData;
 import org.kuali.coeus.propdev.api.core.ProposalDevelopmentDocumentContract;
 import org.kuali.coeus.s2sgen.api.core.AuditError;
+import org.kuali.coeus.s2sgen.api.core.S2SException;
+import org.kuali.coeus.s2sgen.api.generate.AttachmentData;
 
 import java.util.List;
 
@@ -40,7 +40,7 @@ public interface S2SFormGenerator {
      * This method creates an XML document using the APIs generated using XMLBeans by compiling the form's schema and returns it
      * as XmlObject.
      */
-    XmlObject getFormObject(ProposalDevelopmentDocumentContract proposalDevelopmentDocument) throws S2SException;
+    <T extends XmlObject> T getFormObject(ProposalDevelopmentDocumentContract proposalDevelopmentDocument) throws S2SException;
 
     List<AttachmentData> getAttachments();
 

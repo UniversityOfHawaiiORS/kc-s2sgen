@@ -71,7 +71,11 @@
 		<group prefer="public">
 	        <public publicId="http://apply.grants.gov/forms/Attachments-V1.1" uri="Attachments-V1.1.xsd"/>
 	    </group>
-		
+
+		<group prefer="public">
+			<public publicId="http://apply.grants.gov/forms/AttachmentForm_1_2-V1.2" uri="AttachmentForm_1_2-V1.2.xsd"/>
+		</group>
+
 		<group prefer="public">
 	        <public publicId="http://apply.grants.gov/forms/BasicBudget-V1.0" uri="BasicBudget-V1.0.xsd"/>
 	    </group>
@@ -850,10 +854,18 @@
 		<group prefer="public">
 	        <public publicId="http://apply.grants.gov/forms/RR_Budget10_1_3-V1.3" uri="RR_Budget10_1_3-V1.3.xsd"/>
 	    </group>
-		
+
+		<group prefer="public">
+			<public publicId="http://apply.grants.gov/forms/RR_Budget10_1_4-V1.4" uri="RR_Budget10_1_4-V1.4.xsd"/>
+		</group>
+
 		<group prefer="public">
 	        <public publicId="http://apply.grants.gov/forms/RR_Budget_1_3-V1.3" uri="RR_Budget_1_3-V1.3.xsd"/>
 	    </group>
+
+		<group prefer="public">
+			<public publicId="http://apply.grants.gov/forms/RR_Budget_1_4-V1.4" uri="RR_Budget_1_4-V1.4.xsd"/>
+		</group>
 
 		<group prefer="public">
 	        <public publicId="http://apply.grants.gov/forms/RR_Budget-V1.1" uri="RR_Budget_A-V1.1.xsd"/>
@@ -862,7 +874,11 @@
 		<group prefer="public">
 	        <public publicId="http://apply.grants.gov/forms/RR_FedNonFed_SubawardBudget-V1.2" uri="RR_FedNonFed_SubawardBudget-V1.2.xsd"/>
 	    </group>
-		
+
+		<group prefer="public">
+			<public publicId="http://apply.grants.gov/forms/RR_FedNonFed_SubawardBudget_1_3-V1.3" uri="RR_FedNonFed_SubawardBudget_1_3-V1.3.xsd"/>
+		</group>
+
 		<group prefer="public">
 	        <public publicId="http://apply.grants.gov/forms/RR_FedNonFed_SubawardBudget10_10-V1.2" uri="RR_FedNonFed_SubawardBudget10_10-V1.2.xsd"/>
 	    </group>
@@ -887,6 +903,15 @@
 	        <public publicId="http://apply.grants.gov/forms/RR_FedNonFedBudget-V1.1" uri="RR_FNF_A-V1.1.xsd"/>
 	    </group>
 		-->
+
+		<group prefer="public">
+			<public publicId="http://apply.grants.gov/forms/RR_FedNonFedBudget_1_2-V1.2" uri="RR_FedNonFedBudget_1_2-V1.2.xsd"/>
+		</group>
+
+        <group prefer="public">
+            <public publicId="http://apply.grants.gov/forms/RR_FedNonFed_SubawardBudget30-V1.3" uri="http://apply.grants.gov/forms/RR_FedNonFed_SubawardBudget30-V1.3.xsd"/>
+        </group>
+
 		<group prefer="public">
 	        <public publicId="http://apply.grants.gov/forms/RR_KeyPerson-V1.1" uri="RR_KeyPerson-V1.1.xsd"/>
 	    </group>
@@ -962,7 +987,11 @@
 		<group prefer="public">
 	        <public publicId="http://apply.grants.gov/forms/RR_SubawardBudget10_10_1_3-V1.3" uri="RR_SubawardBudget10_10_1_3-V1.3.xsd"/>
 	    </group>
-		
+
+		<group prefer="public">
+			<public publicId="http://apply.grants.gov/forms/RR_SubawardBudget10_10_1_4-V1.4" uri="RR_SubawardBudget10_10_1_4-V1.4.xsd"/>
+		</group>
+
 		<group prefer="public">
 	        <public publicId="http://apply.grants.gov/forms/RR_SubawardBudget10_30-V1.2" uri="RR_SubawardBudget10_30-V1.2.xsd"/>
 	    </group>
@@ -982,7 +1011,11 @@
 		<group prefer="public">
 	        <public publicId="http://apply.grants.gov/forms/RR_SubawardBudget_1_3-V1.3" uri="RR_SubawardBudget_1_3-V1.3.xsd"/>
 	    </group>
-		
+
+		<group prefer="public">
+			<public publicId="http://apply.grants.gov/forms/RR_SubawardBudget_1_4-V1.4" uri="RR_SubawardBudget_1_4-V1.4.xsd"/>
+		</group>
+
 		<group prefer="public">
 	        <public publicId="http://apply.grants.gov/forms/RRSF424_ED_80_0013-V1.1" uri="RRSF424_ED_80_0013-V1.1.xsd"/>
 	    </group>
